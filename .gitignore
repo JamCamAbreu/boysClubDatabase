@@ -1,9 +1,0 @@
-########################################
-## GIT IGNORE FILE FOR libraryDatabase
-########################################
-
-
-# Contains database keys
-./site/mysqlSetup.js
-
-./site/hidden.js
