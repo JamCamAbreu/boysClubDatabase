@@ -12,4 +12,4 @@ site/startServer.sh
 site/stopServer.sh
 
 # Those pesky recovery files:
-.*nfs
+.nfs*
