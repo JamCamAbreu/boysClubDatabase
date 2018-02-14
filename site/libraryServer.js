@@ -48,6 +48,12 @@ app.get("/", function (req, res, next) {
 
 
 
+app.get("/newStudent", function (req, res, next) {
+  res.render('newStudent');
+});
+
+
+
 
 // ============== ERRORS ================
 

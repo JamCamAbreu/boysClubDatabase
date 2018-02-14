@@ -3,7 +3,13 @@
 ########################################
 
 
-# Contains database keys
+# Contains protected data:
 site/mysqlSetup.js
-
 site/hidden.js
+
+# Just not needed:
+site/startServer.sh
+site/stopServer.sh
+
+# Those pesky recovery files:
+.*nfs
