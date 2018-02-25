@@ -45,6 +45,10 @@ app.get("/", function (req, res, next) {
 
 
 
+
+// +==========================================+
+// |        ADD NEW STUDENT TO DB             |
+// +==========================================+
 app.get("/newStudent", function (req, res, next) {
 
   // TODO: See escapePlan code for how to do POSTS
@@ -55,9 +59,7 @@ app.get("/newStudent", function (req, res, next) {
   res.render('newStudent');
 });
 
-
 app.post("/queryNewStudent", function (req, res, next) {
-
 
   // Get variables to be used for database Query:
   var studentNum = req.body.studentNumber;
@@ -92,14 +94,16 @@ app.post("/queryNewStudent", function (req, res, next) {
 
   // TEST CORRECT RESPONSE:
   if (completeForm) {
-    console.log(studentNum);
-    console.log(fName);
-    console.log(lName);
-    console.log(school_id);
+    console.log("New Student:");
+    console.log("\tStudent Number: " + studentNum);
+    console.log("\tFirst Name: " + fName);
+    console.log("\tLast Name: " + lName);
+    console.log("\tSchool ID: " + school_id);
+    console.log("\tHitlists: ");
     if (hitlists.length > 0)
-      console.log(hitlists);
+      console.log("\t\t" + hitlists);
     else
-      console.log("No hitlists were selected.");
+      console.log("\t\tNone");
 
     // Query the database (insert):
     var sqlString = "INSERT INTO tbl_student " + 
@@ -139,6 +143,46 @@ app.post("/queryNewStudent", function (req, res, next) {
 
   res.redirect('newStudent');
 });
+
+
+// +==========================================+
+// |        VIEW ALL STUDENTS IN DB           |
+// +==========================================+
+
+
+app.get("/allStudents", function(req, res, next) {
+
+  mysql.pool.query("SELECT studentNumber, school_id, ageGroup_id, " +
+                   "firstName, lastName FROM `tbl_student`",
+     function(err, rows, fields){
+      if (err) {
+        console.log("Error in selecting students from DB.");
+        next(err);
+        return;
+      }
+
+      // Gather student info and shoot it to handlebars:
+      var selectedData = {};
+      selectedData.numEntries = rows.length;
+      selectedData.row = [];
+
+      var index;
+      var row;
+      for (index = 0; index < selectedData.numEntries; index++) {
+        row = rows[index];
+        selectedData.row.push({
+          studentNumber : row.studentNumber,
+          school_id : row.school_id,
+          ageGroup_id : row.ageGroup_id,
+          firstName : row.firstName,
+          lastName : row.lastName
+        });
+      } // end for
+
+      res.render("students", selectedData);
+     });
+});
+
 
 
 

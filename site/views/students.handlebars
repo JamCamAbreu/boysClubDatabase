@@ -1,0 +1,44 @@
+
+<h2>All Students Listing</h2>
+
+
+<div id="studentListing">
+
+  <!-- IF STUDENTS EXIST IN DATABASE -->
+  {{#if numEntries}}
+    <h2>Students</h2>
+    <table id="allStudentTable">
+      <thead>
+        <tr>
+          <th>First Name
+          <th>Last Name
+          <th>Student Number
+          <th>Age Group
+          <th>School
+          <!-- LATER ADD: hit lists, in same row -->
+          <!-- LATER ADD: library points available -->
+
+    <!-- EACH ROW -->
+    <tbody>
+    {{#each row}}
+
+      <tr id="row{{this.studentNumber}}">
+        <td>{{this.firstName}}
+        <td>{{this.lastName}}
+        <td>{{this.studentNumber}}
+        <td>{{this.ageGroup_id}}
+        <td>{{this.school_id}}
+    {{/each}} <!-- END ROW -->
+
+    </table>
+
+  <!-- NO STUDENTS IN DATABASE -->
+  {{else}}
+    <p><i>No entries for students found in database!</i></p>
+    <p><i>Enter in new students at the new student page.</i></p>
+
+  {{/if}}
+</div>
+
+
+

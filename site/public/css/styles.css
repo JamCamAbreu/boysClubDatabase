@@ -23,3 +23,17 @@ form {
 .innerTable {
   background-color: #fff1cc;
 }
+
+
+#allStudentTable {
+  background-color: #fff1cc;
+}
+
+#allStudentTable tr {
+  text-align: center;
+}
+
+#allStudentTable td {
+  width: 140px;
+}
+
