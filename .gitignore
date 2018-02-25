@@ -11,7 +11,8 @@ site/hidden.js
 site/startServer.sh
 site/stopServer.sh
 
-# Those pesky recovery files:
+# Those pesky recovery files and swap files:
 .nfs*
+.*swp
 
 
