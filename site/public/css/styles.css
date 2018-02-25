@@ -11,4 +11,15 @@ body {
 }
 
 
+p {
+  max-width: 500px;
+}
 
+form {
+  max-width: 500px;
+}
+
+
+.innerTable {
+  background-color: #fff1cc;
+}

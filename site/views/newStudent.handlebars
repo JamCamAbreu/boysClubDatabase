@@ -3,45 +3,78 @@
 
 
 <!-- NEW STUDENT FIELD -->
-<fieldset class="newStudentField">
-  <legend><h2>New Student Information</h2></legend>
+<form method="post" action="/queryNewStudent">
+<fieldset class="innerTable">
+  <p><b>Note: <u>All fields required!</u></b></p>
 
-  <table>
-    <tr><th><label for="studentNumber">Student Number*:</label></th>
+  <table style="text-align: left;">
+    <!-- STUDENT NUMBER -->
+    <tr><th><label for="studentNumber">Student Number</label></th>
       <td><input name="studentNumber" id="studentNumber"></td></tr>
 
-    <tr><th><label for="firstName">First Name*:</label></th>
+    <!-- FIRST NAME -->
+    <tr><th><label for="firstName">First Name</label></th>
       <td><input name="firstName" id="studentFirstName"></td></tr>
 
-    <tr><th><label for="lastName">Last Name*:</label></th>
+    <!-- LAST NAME -->
+    <tr><th><label for="lastName">Last Name</label></th>
       <td><input name="lastName" id="studentLastName"></td></tr>
     
+
     <!-- I should really use sql to build this list up, but whatever... -->
+    <!-- SCHOOL -->
     <tr><th>School
-      <td><select name="school_id">
-        <option value=1>Robbinsdale Elementary</option>
-        <option value=2>Horace Mann Elementary</option>
-        <option value=3>General Beadle Elementary</option>
-        <option value=4>Grandview Elementary</option>
-        <option value=5>Knollwood Elementary</option>
-        <option value=6>South Park Elementary</option>
-        <option value=7>Rapid Valley Elementary</option>
-        <option value=8>Valley View Elementary</option>
-        <option value=9>South Middle</option>
-        <option value=10>North Middle</option>
-        <option value=11>Southwest Middle</option>
-        <option value=12>West Middle</option>
-        <option value=13>East Middle</option>
-        <option value=14>Stevens High</option>
-        <option value=15>Central High</option>
-        <option value=16>Rapid City Christian High</option>
+      <td><select name="school_id" id="school_id">
+        <option value="18">Home School</option>
+        <option value="19">Not Listed</option>
+        <option value="0" disabled>--------------</option>
+
+        <option value="3">General Beadle Elementary</option>
+        <option value="4">Grandview Elementary</option>
+        <option value="2">Horace Mann Elementary</option>
+        <option value="5">Knollwood Elementary</option>
+        <option value="9">Meadowbrook Elementary</option>
+        <option value="7">Rapid Valley Elementary</option>
+        <option value="1">Robbinsdale Elementary</option>
+        <option value="6">South Park Elementary</option>
+        <option value="8">Valley View Elementary</option>
+        <option value="0" disabled>--------------</option>
+
+        <option value="14">East Middle</option>
+        <option value="11">North Middle</option>
+        <option value="10">South Middle</option>
+        <option value="12">Southwest Middle</option>
+        <option value="13">West Middle</option>
+        <option value="0" disabled>--------------</option>
+
+        <option value="16">Central High</option>
+        <option value="17">Rapid City Christian High</option>
+        <option value="15">Stevens High</option>
+
       </select></td></tr>
 
+    <!-- AGE GROUP -->
+    <tr><th>Age Group
+      <td><select name="ageGroup_id" id="ageGroup_id">
+        <option value="1">Cadet</option>
+        <option value="2">Minor</option>
+        <option value="3">Junior</option>
+        <option value="4">Intermediate</option>
+        <option value="5">Senior</option>
+      </select></td></tr>
   </table>
-  <p><font size="2">*Indicates required fields</font><p>
+
+  <!-- HIT LIST -->
+  <div style="padding-top: 5px; padding-bottom: 10px;">
+    <span><b>Hit Lists</b> (check all that apply): </span>
+    <input name="hitlist_school" type="checkbox" value="1">School Work
+    <input name="hitlist_reading" type="checkbox" value="2">Reading
+    <input name="hitlist_math" type="checkbox" value="3">Math
+  </div>
   
-  <input type="submit" value="submit" id="newStudentSubmitButton">
+  <!-- SUBMIT BUTTON -->
+  <input type="submit" value="Submit" id="newStudentSubmitButton">
   
-</fieldset>
+</fieldset></form>
 <br>
 

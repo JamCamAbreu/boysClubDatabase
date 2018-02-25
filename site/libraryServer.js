@@ -17,24 +17,21 @@ var express = require('express');
 var app = express();
 app.set('port', portUsed);
 
-
 // ========== HANDLEBARS SETUP ==========
-
 var exphbs = require("express-handlebars");
-
 app.engine("handlebars", exphbs({defaultLayout: 'main'}));
 app.set("view engine", "handlebars"); // default use ".handlebars" files
-
 
 // for static pages
 app.use(express.static("public"));
 
-
+// ============= BODY PARSER ==========
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // ========== DATABASE SETUP ==========
 var mysql = require("./mysqlSetup.js");
-
-
 
 
 
@@ -49,7 +46,98 @@ app.get("/", function (req, res, next) {
 
 
 app.get("/newStudent", function (req, res, next) {
+
+  // TODO: See escapePlan code for how to do POSTS
+  // so that I don't have to have the /queryNewStudent page
+  //var context = {};
+  //var action = req.query.do;
+
   res.render('newStudent');
+});
+
+
+app.post("/queryNewStudent", function (req, res, next) {
+
+
+  // Get variables to be used for database Query:
+  var studentNum = req.body.studentNumber;
+  var fName = req.body.firstName;
+  var lName = req.body.lastName;
+  var school_id = req.body.school_id;
+  var ageG_id = req.body.ageGroup_id;
+  var hitlists = [];
+
+  // Check boxes:
+  var getString;
+  if (req.body.hitlist_school)   // school work
+    hitlists.push(req.body.hitlist_school);
+  if (req.body.hitlist_reading) // reading
+    hitlists.push(req.body.hitlist_reading);
+  if (req.body.hitlist_math)    // math
+    hitlists.push(req.body.hitlist_math);
+
+  // DATA VALIDATION BEFORE QUERY (make this more robust later..)
+  var completeForm = true;
+  if (!studentNum)
+    completeForm = false;
+  if (fName == "")
+    completeForm = false;
+  if (lName == "")
+    completeForm = false;
+  if (school_id == "")
+    completeForm = false;
+  if (ageG_id == "")
+    completeForm = false;
+
+
+  // TEST CORRECT RESPONSE:
+  if (completeForm) {
+    console.log(studentNum);
+    console.log(fName);
+    console.log(lName);
+    console.log(school_id);
+    if (hitlists.length > 0)
+      console.log(hitlists);
+    else
+      console.log("No hitlists were selected.");
+
+    // Query the database (insert):
+    var sqlString = "INSERT INTO tbl_student " + 
+                    "(`studentNumber`, `school_id`, " +  
+                    "`ageGroup_id`, `firstName`, `lastName`) " + 
+                    "VALUES (?, ?, ?, ?, ?)";
+
+    // array of parameters:
+    var inserts = [studentNum, school_id, ageG_id, fName, lName];
+
+    // SEND the query:
+    mysql.pool.query(sqlString, inserts, function(err, results){
+      if(err){
+        next(err);
+        return
+      }
+
+      // no res.write needed here yet...
+      console.log("Query sent successfully.");
+    }); // end query
+
+
+  } // end if test correct response
+  else {
+    // send data to res.render('newStudent') by 
+    // adding error message to context
+    // Note: could use an array to add an 
+    // error message for EACH missing piece of data
+    // such as:
+    // var errors = [];
+    // errors.push("required: student number");
+    // errors.push("required: first name");
+    // etc...
+  
+    console.log("invalid form filled out!");
+  }
+
+  res.redirect('newStudent');
 });
 
 
