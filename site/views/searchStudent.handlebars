@@ -1,0 +1,68 @@
+
+<script>
+  $(document).ready(function () {
+    // Default cursor at Student Number
+    $("#scanID").focus();
+
+  }); // end on document.ready
+</script>
+
+
+<h2>Search Student</h2>
+
+<!-- ERRORS -->
+{{#if errorList}}
+<div id="errors">
+  {{#each errorList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+
+
+<!-- SEARCH STUDENT BY SCANNING CARD -->
+<form method="post" action="/searchStudentScanCard">
+<fieldset class="innerTable">
+  <div><b>Note: <u>Scan ID Card Here:</u></b></div>
+  <table style="text-align: left;">
+
+    <!-- STUDENT NUMBER -->
+    <tr><th><label for="ScanID">Scan ID</label></th>
+      <td><input name="scanID" id="scanID" type="number"
+value="{{studentNum}}"></td></tr>
+  </table>
+
+  <div>
+    <!-- SUBMIT BUTTON -->
+    <input type="submit" value="Submit" id="scanSubmitButton">
+  </div>
+
+</fieldset></form>
+
+
+<br>
+
+
+
+<!-- SEARCH STUDENT BY NAME -->
+<form method="post" action="/searchStudentName">
+<fieldset class="innerTable">
+
+  <table style="text-align: left;">
+    <!-- FIRST NAME -->
+    <tr><th><label for="firstName">First Name</label></th>
+      <td><input name="firstName" id="firstName" value="{{fName}}"></td></tr>
+
+    <!-- LAST NAME -->
+    <tr><th><label for="lastName">Last Name</label></th>
+      <td><input name="lastName" id="lastName" value="{{lName}}"></td></tr>
+  </table>
+    
+  <!-- SUBMIT BUTTON -->
+  <input type="submit" value="Submit" id="searchStudentSubmitButton">
+  
+</fieldset></form>
+<br>
+

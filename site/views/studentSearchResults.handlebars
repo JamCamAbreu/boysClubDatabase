@@ -1,0 +1,60 @@
+
+<h2>Search Student Results</h2>
+
+<!-- TITLE -->
+<div>
+  <h3 style="margin: 0"> Results for: </h3>
+  {{#if fName}}
+    <div style="margin-left: 20px;">
+    First name = " {{fName}}" 
+    </div>
+  {{/if}}
+
+  {{#if lName}}
+    <div style="margin-left: 20px;">
+    Last name = " {{lName}}" 
+    </div>
+  {{/if}}
+</div>
+<br>
+
+
+
+<div id="studentListing">
+  <!-- IF STUDENTS EXIST IN DATABASE -->
+  {{#if numEntries}}
+    <table id="allStudentTable">
+      <thead>
+        <tr>
+          <th>First Name
+          <th>Last Name
+          <th>Student Number
+          <th>Age Group
+          <th>School
+          <!-- LATER ADD: hit lists, in same row -->
+          <!-- LATER ADD: library points available -->
+
+    <!-- EACH ROW -->
+    <tbody>
+    {{#each row}}
+
+      <tr id="row{{this.studentNumber}}">
+        <td>{{this.firstName}}
+        <td>{{this.lastName}}
+        <td>{{this.studentNumber}}
+        <td>{{this.ageGroup_id}}
+        <td>{{this.school_id}}
+    {{/each}} <!-- END ROW -->
+
+    </table>
+
+  <!-- NO STUDENTS IN DATABASE -->
+  {{else}}
+    <p><i>No entries with given information found</i></p>
+    <p><i>Enter in new students at the new student page.</i></p>
+
+  {{/if}}
+</div>
+
+
+

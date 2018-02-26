@@ -198,15 +198,15 @@ app.get("/allStudents", function(req, res, next) {
       }
 
       // Gather student info and shoot it to handlebars:
-      var selectedData = {};
-      selectedData.numEntries = rows.length;
-      selectedData.row = [];
+      var context = {};
+      context.numEntries = rows.length;
+      context.row = [];
 
       var index;
       var row;
-      for (index = 0; index < selectedData.numEntries; index++) {
+      for (index = 0; index < context.numEntries; index++) {
         row = rows[index];
-        selectedData.row.push({
+        context.row.push({
           studentNumber : row.studentNumber,
           school_id : row.school_id,
           ageGroup_id : row.ageGroup_id,
@@ -215,9 +215,141 @@ app.get("/allStudents", function(req, res, next) {
         });
       } // end for
 
-      res.render("students", selectedData);
+      res.render("students", context);
      });
+
+
+
 });
+
+
+
+
+
+
+
+
+
+
+// +==========================================+
+// |             SEARCH STUDENT               |
+// +==========================================+
+
+app.get("/search", function (req, res, next) {
+  res.render('searchStudent');
+});
+
+
+// USING SCAN MACHINE:
+app.post("/searchStudentScanCard", function (req, res, next) {
+
+  var context = {
+    errorList: []
+  };
+  var completeForm = true; // true until proven false
+
+  var fullNum = req.body.scanID;
+
+  // INVALID SCAN:
+  if (fullNum.length < 6) {
+    completeForm = false;
+    context.errorList.push("Invalid ID card");
+    res.render('searchStudent', context);
+  }
+
+  // VALID SCAN, SEARCH DATABASE:
+  else {
+    context.studentNum = fullNum.substr(fullNum.length - 6);
+    console.log(context.studentNum);
+    res.render('studentDisplay', context);
+  }
+});
+
+
+
+
+// USING NAME:
+app.post("/searchStudentName", function (req, res, next) {
+
+  var context = {
+    errorList: []
+  };
+  var completeForm = true; // true until proven false
+
+  context.fName = req.body.firstName;
+  context.lName = req.body.lastName;
+
+  if ((context.fName.length <= 0) && (context.lName.length <= 0)) {
+    completeForm = false;
+    context.errorList.push("Please Provide either a first or last name");
+    res.render('searchStudent', context);
+  }
+
+
+
+  // SEARCH DATABASE (no errors in input)
+  else {
+
+    // QUERY HERE:
+
+    var sqlString = "SELECT studentNumber, school_id, ageGroup_id, " +
+                     "firstName, lastName FROM `tbl_student` WHERE ";
+
+    // array of parameters:
+    var inserts = [];
+
+    // first name provided:
+    if (context.fName.length > 0) {
+      sqlString += "firstName = ?";
+      inserts.push(context.fName);
+    }
+
+    if (context.fName.length > 0 && context.lName.length > 0)
+      sqlString += "AND ";
+
+    if (context.lName.length > 0) {
+      sqlString += "lastName = ?";
+      inserts.push(context.lName);
+    }
+
+    // SEND the query:
+    mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+        if (err) {
+          console.log("Error in selecting students from DB.");
+          next(err);
+          return;
+        }
+
+        // Gather student info and shoot it to handlebars:
+        context.numEntries = rows.length;
+        context.row = [];
+
+        var index;
+        var row;
+        for (index = 0; index < context.numEntries; index++) {
+          row = rows[index];
+          context.row.push({
+            studentNumber : row.studentNumber,
+            school_id : row.school_id,
+            ageGroup_id : row.ageGroup_id,
+            firstName : row.firstName,
+            lastName : row.lastName
+          });
+        } // end for
+
+        res.render('studentSearchResults', context);
+       });
+  } // end no errors in input
+
+});
+
+
+
+
+
+
+
+
 
 
 
