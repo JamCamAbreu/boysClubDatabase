@@ -19,7 +19,16 @@ app.set('port', portUsed);
 
 // ========== HANDLEBARS SETUP ==========
 var exphbs = require("express-handlebars");
-app.engine("handlebars", exphbs({defaultLayout: 'main'}));
+app.engine("handlebars", 
+    exphbs({defaultLayout: 'main',
+
+      helpers: {
+        checkedIf:
+          function(condition) { return (condition) ? "checked" : "";}
+      } // end helpers
+
+
+}));
 app.set("view engine", "handlebars"); // default use ".handlebars" files
 
 // for static pages
@@ -59,7 +68,11 @@ app.get("/newStudent", function (req, res, next) {
   res.render('newStudent');
 });
 
-app.post("/queryNewStudent", function (req, res, next) {
+app.post("/newStudent", function (req, res, next) {
+
+  var context = {
+    errorList: []
+  };
 
   // Get variables to be used for database Query:
   var studentNum = req.body.studentNumber;
@@ -68,6 +81,7 @@ app.post("/queryNewStudent", function (req, res, next) {
   var school_id = req.body.school_id;
   var ageG_id = req.body.ageGroup_id;
   var hitlists = [];
+
 
   // Check boxes:
   var getString;
@@ -78,19 +92,56 @@ app.post("/queryNewStudent", function (req, res, next) {
   if (req.body.hitlist_math)    // math
     hitlists.push(req.body.hitlist_math);
 
+  // Save the data in case there were errors:
+  context.studentNum = req.body.studentNumber;
+  context.fName = req.body.firstName;
+  context.lName = req.body.lastName;
+  context.school_id = parseInt(req.body.school_id); // on load
+  context.ageG_id = parseInt(req.body.ageGroup_id); // on load
+  context.h_schoolWork = hitlists.includes("1"); // helper function
+  context.h_reading = hitlists.includes("2");    // helper function
+  context.h_math = hitlists.includes("3");       // helper function
+
   // DATA VALIDATION BEFORE QUERY (make this more robust later..)
   var completeForm = true;
-  if (!studentNum)
-    completeForm = false;
-  if (fName == "")
-    completeForm = false;
-  if (lName == "")
-    completeForm = false;
-  if (school_id == "")
-    completeForm = false;
-  if (ageG_id == "")
-    completeForm = false;
 
+
+  // STUDENT NUMBER
+  var studentNumInt = parseInt(studentNum);
+  if (studentNum == "") {
+    completeForm = false;
+    context.errorList.push("Required Field: Student Number");
+  } else if (studentNumInt < 0) {
+    completeForm = false;
+    context.errorList.push("Field Error: Student Number must be greater than zero.");
+  } else if (studentNumInt > 9999) {
+    completeForm = false;
+    context.errorList.push("Field Error: Student Number must be less than 9999.");
+  }
+
+  // FIRST NAME
+  if (fName == "") {
+    completeForm = false;
+    context.errorList.push("Required Field: First Name");
+  }
+
+  // LAST NAME
+  if (lName == "") {
+    completeForm = false;
+    context.errorList.push("Required Field: Last Name");
+  }
+
+  // SCHOOL ID
+  if (school_id == "") {
+    completeForm = false;
+    context.errorList.push("Required Field: School ID");
+  }
+
+  // AGE ID
+  if (ageG_id == "") {
+    completeForm = false;
+    context.errorList.push("Required Field: Age Group");
+  }
 
   // TEST CORRECT RESPONSE:
   if (completeForm) {
@@ -121,27 +172,12 @@ app.post("/queryNewStudent", function (req, res, next) {
         return
       }
 
-      // no res.write needed here yet...
       console.log("Query sent successfully.");
     }); // end query
 
-
   } // end if test correct response
-  else {
-    // send data to res.render('newStudent') by 
-    // adding error message to context
-    // Note: could use an array to add an 
-    // error message for EACH missing piece of data
-    // such as:
-    // var errors = [];
-    // errors.push("required: student number");
-    // errors.push("required: first name");
-    // etc...
-  
-    console.log("invalid form filled out!");
-  }
 
-  res.redirect('newStudent');
+  res.render('newStudent', context);
 });
 
 

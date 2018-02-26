@@ -10,13 +10,9 @@ body {
   padding: 20px;
 }
 
-
-p {
-  max-width: 500px;
-}
-
-form {
-  max-width: 500px;
+#container {
+  width: 500px;
+  margin: 0 auto;
 }
 
 
@@ -36,4 +32,15 @@ form {
 #allStudentTable td {
   width: 140px;
 }
+
+#errors {
+  color: #fff;
+  margin-bottom: 1em;
+}
+
+#errors > div {
+  background-color: #f33;
+  padding: 6px;
+}
+
 

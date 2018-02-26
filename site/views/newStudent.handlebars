@@ -1,56 +1,97 @@
 
+<script>
+  $(document).ready(function () {
+    // Default cursor at Student Number
+    $("#studentNumber").focus();
+
+    // REMEMBER which school id in case of error:
+    {{#if school_id}}
+      var num = {{school_id}} - 1;
+      var realIndex = num; // logic because of dashes in select
+      if (num >= 2)
+        realIndex++;
+      if (num >= 11)
+        realIndex++;
+      if (num >= 16)
+        realIndex++;
+      $("#school_id")[0].selectedIndex = realIndex;
+    {{/if}}
+
+
+    // REMEMBER age group id in case of error:
+    {{#if ageG_id}}
+      var num = {{ageG_id}} - 1;
+      $("#ageGroup_id")[0].selectedIndex = num;
+    {{/if}}
+  }); // end on document.ready
+</script>
+
 <h2>Add New Student to Database</h2>
 
 
+<!-- ERRORS -->
+{{#if errorList}}
+<div id="errors">
+  {{#each errorList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+
+
 <!-- NEW STUDENT FIELD -->
-<form method="post" action="/queryNewStudent">
+<form method="post" action="/newStudent">
 <fieldset class="innerTable">
   <p><b>Note: <u>All fields required!</u></b></p>
 
   <table style="text-align: left;">
+
+
     <!-- STUDENT NUMBER -->
     <tr><th><label for="studentNumber">Student Number</label></th>
-      <td><input name="studentNumber" id="studentNumber"></td></tr>
+      <td><input name="studentNumber" id="studentNumber" type="number"
+value="{{studentNum}}"></td></tr>
 
     <!-- FIRST NAME -->
     <tr><th><label for="firstName">First Name</label></th>
-      <td><input name="firstName" id="studentFirstName"></td></tr>
+      <td><input name="firstName" id="studentFirstName" value="{{fName}}"></td></tr>
 
     <!-- LAST NAME -->
     <tr><th><label for="lastName">Last Name</label></th>
-      <td><input name="lastName" id="studentLastName"></td></tr>
+      <td><input name="lastName" id="studentLastName" value="{{lName}}"></td></tr>
     
 
     <!-- I should really use sql to build this list up, but whatever... -->
     <!-- SCHOOL -->
     <tr><th>School
       <td><select name="school_id" id="school_id">
-        <option value="18">Home School</option>
-        <option value="19">Not Listed</option>
-        <option value="0" disabled>--------------</option>
+        <option value="1">Home School</option>
+        <option value="2">Not Listed</option>
+        <option disabled>--------------</option>
 
         <option value="3">General Beadle Elementary</option>
         <option value="4">Grandview Elementary</option>
-        <option value="2">Horace Mann Elementary</option>
-        <option value="5">Knollwood Elementary</option>
-        <option value="9">Meadowbrook Elementary</option>
-        <option value="7">Rapid Valley Elementary</option>
-        <option value="1">Robbinsdale Elementary</option>
-        <option value="6">South Park Elementary</option>
-        <option value="8">Valley View Elementary</option>
-        <option value="0" disabled>--------------</option>
+        <option value="5">Horace Mann Elementary</option>
+        <option value="6">Knollwood Elementary</option>
+        <option value="7">Meadowbrook Elementary</option>
+        <option value="8">Rapid Valley Elementary</option>
+        <option value="9">Robbinsdale Elementary</option>
+        <option value="10">South Park Elementary</option>
+        <option value="11">Valley View Elementary</option>
+        <option disabled>--------------</option>
 
-        <option value="14">East Middle</option>
-        <option value="11">North Middle</option>
-        <option value="10">South Middle</option>
-        <option value="12">Southwest Middle</option>
-        <option value="13">West Middle</option>
-        <option value="0" disabled>--------------</option>
+        <option value="12">East Middle</option>
+        <option value="13">North Middle</option>
+        <option value="14">South Middle</option>
+        <option value="15">Southwest Middle</option>
+        <option value="16">West Middle</option>
+        <option disabled>--------------</option>
 
-        <option value="16">Central High</option>
-        <option value="17">Rapid City Christian High</option>
-        <option value="15">Stevens High</option>
-
+        <option value="17">Central High</option>
+        <option value="18">Rapid City Christian High</option>
+        <option value="19">Stevens High</option>
       </select></td></tr>
 
     <!-- AGE GROUP -->
@@ -67,9 +108,15 @@
   <!-- HIT LIST -->
   <div style="padding-top: 5px; padding-bottom: 10px;">
     <span><b>Hit Lists</b> (check all that apply): </span>
-    <input name="hitlist_school" type="checkbox" value="1">School Work
-    <input name="hitlist_reading" type="checkbox" value="2">Reading
-    <input name="hitlist_math" type="checkbox" value="3">Math
+    <input name="hitlist_school" type="checkbox" value="1" 
+        {{checkedIf h_schoolWork}}>School Work
+
+    <input name="hitlist_reading" type="checkbox" value="2"
+        {{checkedIf h_reading}}>Reading
+
+    <input name="hitlist_math" type="checkbox" value="3"
+        {{checkedIf h_math}}>Math
+
   </div>
   
   <!-- SUBMIT BUTTON -->
