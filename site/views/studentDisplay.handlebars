@@ -3,38 +3,26 @@
 <!-- =========== GENERAL INFORMATION ====== -->
 <h2> Student Information </h2>
 
-<table class="studentInfo">
-  <tbody>
-    <tr>
-      <td>Name
-      <td><b>{{firstName}} {{lastName}}</b>
+<div class="studentInfo">
+      
+  <div><h3>{{lastName}}, {{firstName}}</h3></div>
 
-    <tr>
-      <td>Student Number
-      <td><b>{{studentNumber}}</b>
+  <div>Student Number: <b>{{studentNumber}}</b></div>
 
-    <tr>
-      <td>Age Group
-      <td><b>{{ageGroup}}</b>
+  <div>Age Group: <b>{{ageGroup}}</b></div>
 
-    <tr>
-      <td>School
-      <td><b>{{school}}</b>
+  <div>School: <b>{{school}}</b></div>
 
+  <table class="pointsTable"> <tbody>
     <tr>
-      <td>Lifetime Points Earned
-      <td><b>{{lifeTimeEarned}}</b>
-
+      <td>Lifetime Earned Points: <td><b>{{lifeTimeEarned}}</b>
     <tr>
-      <td>Lifetime Points Spent 
-      <td><b>{{lifeTimeSpent}}</b>
-
+      <td>Lifetime Spent Points:  <td><b>{{lifeTimeSpent}}</b>
     <tr id="balance">
-      <td>Current Balance
-      <td><b>{{balance}}</b>
+      <td>Balance:                <td><b>{{balance}}</b>
+  </tbody></table>
 
-  </tbody>
-</table>
+</div>
 
 
 

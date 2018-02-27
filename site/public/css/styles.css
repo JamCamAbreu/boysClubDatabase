@@ -15,15 +15,21 @@ p { margin: 2px; }
 h2 { margin: 2px; }
 h3 { margin: 2px; }
 
+th { padding: 2px; }
+
+
 #container {
   max-width: 800px;
   margin: 0 auto;
 }
 
+#footer { margin-top: 16px; }
 
-#footer {
-  margin-top: 16px;
+
+.innerTable {
+  border: none;
 }
+
 
 
 
@@ -69,9 +75,10 @@ h3 { margin: 2px; }
 /* ========= STUDENT INFO TABLE ============= */
 .studentInfo {
   background-color: #fff1cc;
-  padding: 8px;
+  padding: 2px 6px 6px 6px;
   border-spacing: 0;
   width: 400px;
+  border: 1px solid black;
 }
 
 .studentInfo tr { text-align: left; }
@@ -80,6 +87,18 @@ h3 { margin: 2px; }
   background: #5f5;
 }
 
+#desc { text-align: right; }
+
+.pointsTable {
+  margin-top: 8px;
+  margin-left: 16px;
+  border-spacing: 0;
+  border: 1px solid black;
+  border-collapse: collapse;
+  background: #eee1bb;
+}
+
+
 
 /* ========= TICKETS ======================== */
 .ticketTable {
@@ -87,6 +106,11 @@ h3 { margin: 2px; }
   padding: 8px;
   border-spacing: 0;
   width: 800px;
+  border: 1px solid black;
+}
+
+.ticketTable th {
+  border-bottom: 1px solid black;
 }
 
 .ticketTable tr { text-align: left; }
@@ -97,8 +121,8 @@ h3 { margin: 2px; }
 
 #T_DATE  {width: 15%}
 #T_WT    {width: 20%}
-#T_P     {width: 10%}
-#T_NOTE  {width: 55%}
+#T_P     {width: 15%}
+#T_NOTE  {width: 50%}
 
 
 
@@ -109,6 +133,11 @@ h3 { margin: 2px; }
   padding: 8px;
   border-spacing: 0;
   width: 800px;
+  border: 1px solid black;
+}
+
+.purchaseTable th {
+  border-bottom: 1px solid black;
 }
 
 .purchasesTable tr { text-align: left; }
@@ -118,8 +147,8 @@ h3 { margin: 2px; }
 .purchasesTable tr:nth-child(even) {background: #eee1bb;}
 
 #P_DATE  {width: 15%}
-#P_A     {width: 10%}
-#P_NOTE  {width: 75%}
+#P_A     {width: 15%}
+#P_NOTE  {width: 70%}
 
 
 

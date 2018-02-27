@@ -255,16 +255,35 @@ app.post("/searchStudentScanCard", function (req, res, next) {
 
   var fullNum = req.body.scanID;
 
-  // INVALID SCAN:
-  if (fullNum.length < 6) {
+  // EMPTY:
+  if (fullNum.length <= 0) {
     completeForm = false;
     context.errorList.push("Invalid ID card");
     res.render('searchStudent', context);
   }
 
+
   // VALID SCAN, SEARCH DATABASE:
-  else {
+  else { 
+
+    // fill string with zeros at the beginning if needed:
+    if (fullNum.length < 6) {
+      var neededZeros = 6 - fullNum.length;
+      var zString = "";
+      while (neededZeros > 0) {
+        zString += "0";
+        neededZeros--;
+      }
+
+      var newString = zString + fullNum;
+
+      // replace string here:
+      fullNum = newString;
+    }
+
     context.studentNum = fullNum.substr(fullNum.length - 6);
+
+    console.log(context.studentNum);
 
     var sqlString = "SELECT S.studentNumber, SCH.name AS 'school', " +
                     "AG.name AS 'ageGroup', " +
@@ -393,7 +412,7 @@ app.post("/searchStudentScanCard", function (req, res, next) {
           }); // end TICKET query
         } // END MAKE SURE THERE IS ONLY 1 ENTRY FOR STUDENT
         else if (numEntries <= 0){
-          context.errorList.push("Student with ID not found in database.");
+          context.errorList.push("Student with ID (" + context.studentNum + ") not found in database.");
           res.render('searchStudent', context);
         }
         else {
