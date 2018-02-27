@@ -6,13 +6,13 @@
   <h3 style="margin: 0"> Results for: </h3>
   {{#if fName}}
     <div style="margin-left: 20px;">
-    First name = " {{fName}}" 
+    First name is '{{fName}}' 
     </div>
   {{/if}}
 
   {{#if lName}}
     <div style="margin-left: 20px;">
-    Last name = " {{lName}}" 
+    Last name is '{{lName}}'
     </div>
   {{/if}}
 </div>
@@ -21,32 +21,33 @@
 
 
 <div id="studentListing">
+<table class="resultsTable">
+
   <!-- IF STUDENTS EXIST IN DATABASE -->
   {{#if numEntries}}
-    <table id="allStudentTable">
-      <thead>
-        <tr>
-          <th>First Name
-          <th>Last Name
-          <th>Student Number
-          <th>Age Group
-          <th>School
-          <!-- LATER ADD: hit lists, in same row -->
-          <!-- LATER ADD: library points available -->
+    <thead>
+      <tr>
+        <th id="c_FN">First Name
+        <th id="c_LN">Last Name
+        <th id="c_SN">Student Number
+        <th id="c_AG">Age Group
+        <th id="c_SCH">School
+        <!-- LATER ADD: hit lists, in same row -->
+        <!-- LATER ADD: library points available -->
+
 
     <!-- EACH ROW -->
     <tbody>
     {{#each row}}
-
       <tr id="row{{this.studentNumber}}">
         <td>{{this.firstName}}
         <td>{{this.lastName}}
         <td>{{this.studentNumber}}
-        <td>{{this.ageGroup_id}}
-        <td>{{this.school_id}}
+        <td>{{this.ageGroup}}
+        <td>{{this.school}}
     {{/each}} <!-- END ROW -->
+    </tbody>
 
-    </table>
 
   <!-- NO STUDENTS IN DATABASE -->
   {{else}}
@@ -54,7 +55,12 @@
     <p><i>Enter in new students at the new student page.</i></p>
 
   {{/if}}
+
+</table>
 </div>
+
+
+
 
 
 

@@ -26,8 +26,6 @@ app.engine("handlebars",
         checkedIf:
           function(condition) { return (condition) ? "checked" : "";}
       } // end helpers
-
-
 }));
 app.set("view engine", "handlebars"); // default use ".handlebars" files
 
@@ -42,7 +40,8 @@ app.use(bodyParser.json());
 // ========== DATABASE SETUP ==========
 var mysql = require("./mysqlSetup.js");
 
-
+// ========== MOMENT (EASY DATES) =====
+var moment = require("moment");
 
 
 
@@ -54,6 +53,9 @@ app.get("/", function (req, res, next) {
 
 
 
+
+// TODO: Error thrown when duplicate student already exists! (student number
+// already exists) - Crashes site. TODO TODO TODO
 
 // +==========================================+
 // |        ADD NEW STUDENT TO DB             |
@@ -188,8 +190,11 @@ app.post("/newStudent", function (req, res, next) {
 
 app.get("/allStudents", function(req, res, next) {
 
-  mysql.pool.query("SELECT studentNumber, school_id, ageGroup_id, " +
-                   "firstName, lastName FROM `tbl_student`",
+  mysql.pool.query("SELECT S.studentNumber, SCH.name AS 'school', " + 
+                   "AG.name AS 'ageGroup', " +
+                   "S.firstName, S.lastName FROM tbl_student S INNER JOIN " + 
+                   "tbl_school SCH ON SCH.id = S.school_id INNER JOIN " + 
+                   "tbl_ageGroup AG ON AG.id = S.ageGroup_id",
      function(err, rows, fields){
       if (err) {
         console.log("Error in selecting students from DB.");
@@ -208,14 +213,14 @@ app.get("/allStudents", function(req, res, next) {
         row = rows[index];
         context.row.push({
           studentNumber : row.studentNumber,
-          school_id : row.school_id,
-          ageGroup_id : row.ageGroup_id,
+          school : row.school,
+          ageGroup : row.ageGroup,
           firstName : row.firstName,
           lastName : row.lastName
         });
       } // end for
 
-      res.render("students", context);
+      res.render("allStudents", context);
      });
 
 
@@ -260,10 +265,148 @@ app.post("/searchStudentScanCard", function (req, res, next) {
   // VALID SCAN, SEARCH DATABASE:
   else {
     context.studentNum = fullNum.substr(fullNum.length - 6);
-    console.log(context.studentNum);
-    res.render('studentDisplay', context);
-  }
+
+    var sqlString = "SELECT S.studentNumber, SCH.name AS 'school', " +
+                    "AG.name AS 'ageGroup', " +
+                     "S.firstName, S.lastName FROM tbl_student S " +
+                     "INNER JOIN tbl_school SCH ON SCH.id = S.school_id " + 
+                     "INNER JOIN tbl_ageGroup AG ON AG.id = S.ageGroup_id " + 
+                     "WHERE S.studentNumber = ?";
+
+    // array of parameters:
+    var inserts = [context.studentNum];
+
+    // SEND the query:
+    mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+        if (err) {
+          console.log("Error in selecting student from DB.");
+          next(err);
+          return;
+        }
+
+
+        // Gather student info and shoot it to handlebars:
+        var numEntries = rows.length;
+
+        if (numEntries == 1) {
+          row = rows[0];
+          context.studentNumber = row.studentNumber;
+          context.school = row.school;
+          context.ageGroup = row.ageGroup;
+          context.firstName = row.firstName;
+          context.lastName = row.lastName;
+          context.lifeTimeEarned = 0; // starts at zero, incremented further down
+          context.lifeTimeSpent = 0; // starts at zero, incremented further down
+
+
+
+
+          // RUN ANOTHER QUERY FOR TICKETS:
+          var ticketSql = "SELECT T.id, " + 
+                          "T.dateCompleted AS 'dateCompleted', " + 
+                          "WT.name AS 'workType', " + 
+                          "T.pointEarnedAmount, " + 
+                          "T.notes " + 
+                          "FROM tbl_libraryTicket T " +
+                          "INNER JOIN tbl_student S ON S.studentNumber = T.student_id " +
+                          "INNER JOIN tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
+                          "WHERE S.studentNumber = ? " +
+                          "ORDER BY T.dateCompleted DESC LIMIT 15";
+
+          var ticketInsert = [context.studentNumber];
+
+          // SEND the query:
+          mysql.pool.query(ticketSql, ticketInsert, function(err, Trows, fields){
+              if (err) {
+                console.log("Error in selecting student tickets from DB.");
+                next(err);
+                return;
+              }
+
+              // Gather ticket info and shoot it to handlebars:
+              context.numTickets = Trows.length;
+              context.ticket = [];
+
+              var index;
+              var Trow;
+              for (index = 0; index < context.numTickets; index++) {
+                Trow = Trows[index];
+                context.ticket.push({
+                  id : Trow.id,
+                  date : moment(Trow.dateCompleted).format("MM.DD.YYYY"),
+                  workType : Trow.workType,
+                  pointsEarned : Trow.pointEarnedAmount,
+                  notes : Trow.notes
+                });
+
+                context.lifeTimeEarned += parseInt(Trow.pointEarnedAmount); // started at zero above
+
+              } // end for
+
+
+          
+
+
+              // RUN ANOTHER QUERY FOR PURCHASES:
+              var purchaseSql = "SELECT P.id, " + 
+                              "P.dateOfPurchase AS 'date', " + 
+                              "P.pointAmount, " + 
+                              "P.notes " + 
+                              "FROM tbl_libraryPurchase P " +
+                              "INNER JOIN tbl_student S ON S.studentNumber = P.student_id " +
+                              "WHERE S.studentNumber = ? " +
+                              "ORDER BY P.dateOfPurchase DESC LIMIT 15";
+
+              var purchaseInsert = [context.studentNumber];
+
+              // SEND the query:
+              mysql.pool.query(purchaseSql, purchaseInsert, function(err, Prows, fields){
+                  if (err) {
+                    console.log("Error in selecting student purchases from DB.");
+                    next(err);
+                    return;
+                  }
+
+                  // Gather purchase info and shoot it to handlebars:
+                  context.numPurchases = Prows.length;
+                  context.purchase = [];
+
+                  var index;
+                  var Prow;
+                  for (index = 0; index < context.numPurchases; index++) {
+                    Prow = Prows[index];
+                    context.purchase.push({
+                      id : Prow.id,
+                      date : moment(Prow.date).format("MM.DD.YYYY"),
+                      amount : Prow.pointAmount,
+                      notes : Prow.notes
+                    });
+
+                    context.lifeTimeSpent += parseInt(Prow.pointAmount); // started at zero above
+                  } // end for
+
+                  // FINALLYYYY DISPLAY THE PAGE:
+                  context.balance = parseInt(context.lifeTimeEarned) - parseInt(context.lifeTimeSpent);
+                  res.render('studentDisplay', context);
+
+            }); // end PURCHASES query
+          }); // end TICKET query
+        } // END MAKE SURE THERE IS ONLY 1 ENTRY FOR STUDENT
+        else if (numEntries <= 0){
+          context.errorList.push("Student with ID not found in database.");
+          res.render('searchStudent', context);
+        }
+        else {
+          context.errorList.push("Multiple students found with same id! Please update database.");
+          res.render('searchStudent', context);
+        }
+
+       }); // end query
+  } // end no errors in input
 });
+
+
+
 
 
 
@@ -292,8 +435,12 @@ app.post("/searchStudentName", function (req, res, next) {
 
     // QUERY HERE:
 
-    var sqlString = "SELECT studentNumber, school_id, ageGroup_id, " +
-                     "firstName, lastName FROM `tbl_student` WHERE ";
+    var sqlString = "SELECT S.studentNumber, SCH.name AS 'school', " +
+                    "AG.name AS 'ageGroup', " +
+                     "S.firstName, S.lastName FROM tbl_student S " +
+                     "INNER JOIN tbl_school SCH ON SCH.id = S.school_id " + 
+                     "INNER JOIN tbl_ageGroup AG ON AG.id = S.ageGroup_id " + 
+                     "WHERE ";
 
     // array of parameters:
     var inserts = [];
@@ -330,8 +477,8 @@ app.post("/searchStudentName", function (req, res, next) {
           row = rows[index];
           context.row.push({
             studentNumber : row.studentNumber,
-            school_id : row.school_id,
-            ageGroup_id : row.ageGroup_id,
+            school : row.school,
+            ageGroup : row.ageGroup,
             firstName : row.firstName,
             lastName : row.lastName
           });

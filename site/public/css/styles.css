@@ -10,29 +10,123 @@ body {
   padding: 20px;
 }
 
+p { margin: 2px; }
+
+h2 { margin: 2px; }
+h3 { margin: 2px; }
+
 #container {
-  width: 500px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 
-.innerTable {
+#footer {
+  margin-top: 16px;
+}
+
+
+
+/* ========= GENERAL RESULTS TABLE ========== */
+.resultsTable {
   background-color: #fff1cc;
+  padding: 8px;
+  border-spacing: 0;
 }
 
+.resultsTable tr { text-align: left; }
 
-#allStudentTable {
+/* Every other row color change: */
+.resultsTable tr:nth-child(odd) {background: #fff1cc;}
+.resultsTable tr:nth-child(even) {background: #eee1bb;}
+
+/* Column Specific width by percentages: */
+#c_FN  {width: 20%}
+#c_LN  {width: 20%}
+#c_SN  {width: 10%}
+#c_AG  {width: 15%}
+#c_SCH {width: 35%}
+
+
+
+
+
+/* ========= NEW STUDENT TABLE ============== */
+.newStudentTable {
   background-color: #fff1cc;
+  padding: 8px;
+  border-spacing: 0;
+  width: 500px;
 }
 
-#allStudentTable tr {
-  text-align: center;
+.newStudentTable tr { text-align: left; }
+
+
+
+
+
+
+/* ========= STUDENT INFO TABLE ============= */
+.studentInfo {
+  background-color: #fff1cc;
+  padding: 8px;
+  border-spacing: 0;
+  width: 400px;
 }
 
-#allStudentTable td {
-  width: 140px;
+.studentInfo tr { text-align: left; }
+
+#balance {
+  background: #5f5;
 }
 
+
+/* ========= TICKETS ======================== */
+.ticketTable {
+  background-color: #fff1cc;
+  padding: 8px;
+  border-spacing: 0;
+  width: 800px;
+}
+
+.ticketTable tr { text-align: left; }
+
+/* Every other row color change: */
+.ticketTable tr:nth-child(odd) {background: #fff1cc;}
+.ticketTable tr:nth-child(even) {background: #eee1bb;}
+
+#T_DATE  {width: 15%}
+#T_WT    {width: 20%}
+#T_P     {width: 10%}
+#T_NOTE  {width: 55%}
+
+
+
+
+/* ========= PURCHASES ====================== */
+.purchasesTable {
+  background-color: #fff1cc;
+  padding: 8px;
+  border-spacing: 0;
+  width: 800px;
+}
+
+.purchasesTable tr { text-align: left; }
+
+/* Every other row color change: */
+.purchasesTable tr:nth-child(odd) {background: #fff1cc;}
+.purchasesTable tr:nth-child(even) {background: #eee1bb;}
+
+#P_DATE  {width: 15%}
+#P_A     {width: 10%}
+#P_NOTE  {width: 75%}
+
+
+
+
+
+
+/* ========= ERRORS ========================= */
 #errors {
   color: #fff;
   margin-bottom: 1em;

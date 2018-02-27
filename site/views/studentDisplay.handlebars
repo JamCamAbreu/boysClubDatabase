@@ -1,8 +1,109 @@
 
 
-<p> Student Information </p>
+<!-- =========== GENERAL INFORMATION ====== -->
+<h2> Student Information </h2>
+
+<table class="studentInfo">
+  <tbody>
+    <tr>
+      <td>Name
+      <td><b>{{firstName}} {{lastName}}</b>
+
+    <tr>
+      <td>Student Number
+      <td><b>{{studentNumber}}</b>
+
+    <tr>
+      <td>Age Group
+      <td><b>{{ageGroup}}</b>
+
+    <tr>
+      <td>School
+      <td><b>{{school}}</b>
+
+    <tr>
+      <td>Lifetime Points Earned
+      <td><b>{{lifeTimeEarned}}</b>
+
+    <tr>
+      <td>Lifetime Points Spent 
+      <td><b>{{lifeTimeSpent}}</b>
+
+    <tr id="balance">
+      <td>Current Balance
+      <td><b>{{balance}}</b>
+
+  </tbody>
+</table>
 
 
+
+
+<!-- =========== TICKETS EARNED =========== -->
+<br>
+<h2> Recent Tickets </h2>
+<i>(Most recent at top)</i>
+<!-- IF TICKETS EXIST FOR STUDENT -->
+{{#if numTickets}}
+  <table class="ticketTable">
+    <thead>
+      <tr>
+        <th id="T_DATE">DATE
+        <th id="T_WT">Work Type
+        <th id="T_P">Points Earned
+        <th id="T_NOTE">Notes
+
+    <!-- EACH TICKET -->
+    <tbody>
+    {{#each ticket}}
+      <tr id="row{{this.id}}">
+        <td>{{this.date}}
+        <td>{{this.workType}}
+        <td>{{this.pointsEarned}}
+        <td>{{this.notes}}
+    {{/each}} <!-- END ROW -->
+    </tbody>
+  </table>
+
+<!-- NO TICKETS YET -->
+{{else}}
+    <p><i>No entries for library tickets yet...</i></p>
+    <br>
+{{/if}}
+
+
+
+
+
+<!-- =========== PURCHASES ================ -->
+<br>
+<h2> Recent Purchases </h2>
+<i>(Most recent at top)</i>
+<!-- IF PURCHASES EXIST FOR STUDENT -->
+{{#if numPurchases}}
+  <table class="purchasesTable">
+    <thead>
+      <tr>
+        <th id="P_DATE">DATE
+        <th id="P_A">Points Spent
+        <th id="P_NOTE">Notes
+
+    <!-- EACH TICKET -->
+    <tbody>
+    {{#each purchase}}
+      <tr id="row{{this.id}}">
+        <td>{{this.date}}
+        <td>{{this.amount}}
+        <td>{{this.notes}}
+    {{/each}} <!-- END ROW -->
+    </tbody>
+  </table>
+
+<!-- NO PURCHASES YET -->
+{{else}}
+    <p><i>No entries for library purchases yet...</i></p>
+    <br>
+{{/if}}
 
 
 
