@@ -1,13 +1,4 @@
 
-<script>
-  $(document).ready(function () {
-    // Default cursor at Student Number
-    $("#scanID").focus();
-
-  }); // end on document.ready
-</script>
-
-
 <h2>Search Student</h2>
 
 <!-- ERRORS -->
@@ -20,29 +11,6 @@
 {{/if}}
 
 
-
-
-<!-- SEARCH STUDENT BY SCANNING CARD -->
-<i>Scan or type the student card number for this box:</i>
-<form method="post" action="/searchStudentScanCard">
-<fieldset class="innerTable">
-  <table style="text-align: left;">
-
-    <!-- STUDENT NUMBER -->
-    <tr><th><label for="ScanID">Student ID Number</label></th>
-      <td><input name="scanID" id="scanID" type="number"
-value="{{studentNum}}"></td></tr>
-  </table>
-
-  <div>
-    <!-- SUBMIT BUTTON -->
-    <input type="submit" value="Search" id="scanSubmitButton">
-  </div>
-
-</fieldset></form>
-
-
-<br>
 
 
 

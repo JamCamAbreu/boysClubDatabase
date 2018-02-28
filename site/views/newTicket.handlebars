@@ -1,0 +1,121 @@
+
+
+<!-- ERRORS -->
+{{#if errorList}}
+<div id="errors">
+  {{#each errorList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+<!-- SUCCESSES -->
+{{#if successList}}
+<div id="successes">
+  {{#each successList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+
+<!-- NEW TICKET FIELD -->
+<h2>New Library Ticket</h2>
+<form method="post" action="/newTicket">
+<fieldset class="newStudentTable">
+  <p><b>Note: <u>All fields required!</u></b></p>
+
+  <table style="text-align: left;">
+
+    <!-- STUDENT NUMBER -->
+    <tr><th><label for="studentNumber">Student Number</label></th>
+      <td><input name="studentNumber" id="studentNumber" type="number"
+value="{{studentNum}}"></td></tr>
+
+    <!-- DATE -->
+    <tr><th><label for="date">Date</label></th>
+      <td><input name="date" id="date" type="date" value="{{todayDate}}"></td></tr>
+
+    <!-- WORK TYPE -->
+    <tr><th>Work Type
+      <td><select name="workType" id="workType">
+
+        <option value="1">School Work</option>
+        <option value="2">Reading</option>
+        <option value="3">Math Worksheet</option>
+        <option value="4">Writing Worksheet</option>
+        <option value="5">Clock/Time Worksheet</option>
+        <option value="6">Miscellaneous Worksheet</option>
+        <option disabled>--------------</option>
+        <option value="7">School Work Computer</option>
+        <option value="8">Dreambox</option>
+        <option value="9">Reading Plus</option>
+        <option value="10">Mindplay</option>
+        <option value="11">abcya</option>
+        <option value="12">Typing</option>
+        <option value="13">Prodigy</option>
+        <option value="14">Miscellaneous Computer</option>
+        <option disabled>--------------</option>
+        <option value="15">Unknown</option>
+      </select></td></tr>
+
+
+    <!-- Point Amount -->
+    <tr><th><label for="amount">Point Amount</label></th>
+      <td><input name="amount" id="amount" type="number"
+value="{{amount}}"></td></tr>
+
+  </table>
+
+  <!-- NOTES -->
+  <div class="noteBox">
+    <div><b>Notes/Comments:</b></div>
+    <textarea rows="4" cols="50" name="notes">{{notes}}</textarea>
+  </div>
+  
+  <!-- SUBMIT BUTTON -->
+  <input type="submit" value="Submit" id="submitButton">
+  
+</fieldset></form>
+
+
+<!-- =========== RECENT TICKETS =========== -->
+<br>
+<h2>Most Recent Tickets</h2>
+<i>(Most recent at top)</i>
+<!-- IF TICKETS EXIST -->
+{{#if numTT}}
+  <table class="ticketTable">
+    <thead>
+      <tr>
+        <th id="TT_DATE">DATE
+        <th id="TT_LN">Last Name
+        <th id="TT_FN">First Name
+        <th id="TT_T">Type
+        <th id="TT_A">Amount
+        <th id="TT_NOTE">Notes
+
+    <!-- EACH TICKET -->
+    <tbody>
+    {{#each TT}}
+      <tr id="row{{this.id}}">
+        <td>{{this.date}}
+        <td>{{this.fName}}
+        <td>{{this.lName}}
+        <td>{{this.type}}
+        <td>{{this.amount}}
+        <td>{{this.notes}}
+    {{/each}} <!-- END ROW -->
+    </tbody>
+  </table>
+
+<!-- NO Tickets YET -->
+{{else}}
+    <p><i>No entries for library tickets yet...</i></p>
+    <br>
+{{/if}}
+
+
+

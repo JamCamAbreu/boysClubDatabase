@@ -6,8 +6,8 @@
  * **********************************/
 
 body {
-  background-color: #ffffcc;
   padding: 20px;
+  background-color: #ffffcc;
 }
 
 p { margin: 2px; }
@@ -19,17 +19,61 @@ th { padding: 2px; }
 
 
 #container {
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
-#footer { margin-top: 16px; }
+#innerContainer {
+  padding: 8px;
+}
+
+#footer { margin-top: 64px; }
 
 
 .innerTable {
   border: none;
 }
 
+#titleBar {
+  padding: 4px;
+  background-color: #88f;
+  margin-bottom: 8px;
+}
+
+.barWhole {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.barWhole li {
+  float: left;
+  display: block;
+  text-align: center;
+  background-color: #44f;
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  display: inline;
+}
+
+.barWhole li:hover {
+  background-color: #00b;
+  cursor: pointer;
+}
+
+#title {
+  margin: 0px;
+}
+
+#titleDiv {
+  margin-top: 0px;
+  margin-bottom: 4px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0px;
+}
 
 
 
@@ -84,7 +128,7 @@ th { padding: 2px; }
 .studentInfo tr { text-align: left; }
 
 #balance {
-  background: #5f5;
+  background: #8f5;
 }
 
 #desc { text-align: right; }
@@ -119,10 +163,21 @@ th { padding: 2px; }
 .ticketTable tr:nth-child(odd) {background: #fff1cc;}
 .ticketTable tr:nth-child(even) {background: #eee1bb;}
 
+
+/* In Student Profile Page */
 #T_DATE  {width: 15%}
 #T_WT    {width: 20%}
 #T_P     {width: 15%}
 #T_NOTE  {width: 50%}
+
+
+/* In Ticket Page */
+#TT_DATE  {width: 15%}
+#TT_LN    {width: 15%}
+#TT_FN    {width: 15%}
+#TT_T     {width: 15%}
+#TT_A     {width: 10%}
+#TT_NOTE  {width: 30%}
 
 
 
@@ -165,5 +220,23 @@ th { padding: 2px; }
   background-color: #f33;
   padding: 6px;
 }
+
+
+
+
+/* ======== SUCCESSES ======================= */
+#successes {
+  color: #fff;
+  margin-bottom: 1em;
+}
+
+#successes > div {
+  background-color: #3A2;
+  padding: 6px;
+}
+
+
+
+
 
 

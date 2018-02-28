@@ -1,34 +1,4 @@
 
-<script>
-  $(document).ready(function () {
-    // Default cursor at Student Number
-    $("#studentNumber").focus();
-
-    // REMEMBER which school id in case of error:
-    {{#if school_id}}
-      var num = {{school_id}} - 1;
-      var realIndex = num; // logic because of dashes in select
-      if (num >= 2)
-        realIndex++;
-      if (num >= 11)
-        realIndex++;
-      if (num >= 16)
-        realIndex++;
-      $("#school_id")[0].selectedIndex = realIndex;
-    {{/if}}
-
-
-    // REMEMBER age group id in case of error:
-    {{#if ageG_id}}
-      var num = {{ageG_id}} - 1;
-      $("#ageGroup_id")[0].selectedIndex = num;
-    {{/if}}
-  }); // end on document.ready
-</script>
-
-<h2>Add New Student to Database</h2>
-
-
 <!-- ERRORS -->
 {{#if errorList}}
 <div id="errors">
@@ -39,9 +9,22 @@
 {{/if}}
 
 
+<!-- SUCCESSES -->
+{{#if successList}}
+<div id="successes">
+  {{#each successList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+
+
 
 
 <!-- NEW STUDENT FIELD -->
+<h2>Add New Student to Database</h2>
 <form method="post" action="/newStudent">
 <fieldset class="newStudentTable">
   <p><b>Note: <u>All fields required!</u></b></p>
@@ -124,4 +107,37 @@ value="{{studentNum}}"></td></tr>
   
 </fieldset></form>
 <br>
+
+
+
+
+<script>
+  //$(document).ready(function () {
+
+    // REMEMBER which school id in case of error:
+    {{#if school_id}}
+      var num = {{school_id}} - 1;
+      var realIndex = num; // logic because of dashes in select
+      if (num >= 2)
+        realIndex++;
+      if (num >= 11)
+        realIndex++;
+      if (num >= 16)
+        realIndex++;
+      $("#school_id")[0].selectedIndex = realIndex;
+    {{/if}}
+
+
+    // REMEMBER age group id in case of error:
+    {{#if ageG_id}}
+      var num = {{ageG_id}} - 1;
+      $("#ageGroup_id")[0].selectedIndex = num;
+    {{/if}}
+
+  //}); // end on document.ready
+</script>
+
+
+
+
 

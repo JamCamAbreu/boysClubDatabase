@@ -21,10 +21,9 @@
 
 
 <div id="studentListing">
-<table class="resultsTable">
-
+{{#if numEntries}}
+  <table class="resultsTable">
   <!-- IF STUDENTS EXIST IN DATABASE -->
-  {{#if numEntries}}
     <thead>
       <tr>
         <th id="c_FN">First Name
@@ -47,16 +46,15 @@
         <td>{{this.school}}
     {{/each}} <!-- END ROW -->
     </tbody>
+  </table>
 
 
-  <!-- NO STUDENTS IN DATABASE -->
-  {{else}}
-    <p><i>No entries with given information found</i></p>
-    <p><i>Enter in new students at the new student page.</i></p>
+<!-- NO STUDENTS IN DATABASE -->
+{{else}}
+  <p><i>No entries with given information found</i></p>
+  <p><i>Enter in new students at the new student page.</i></p>
+{{/if}}
 
-  {{/if}}
-
-</table>
 </div>
 
 
