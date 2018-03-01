@@ -1,4 +1,33 @@
 
+
+
+
+<!-- SEARCH STUDENT BY NAME -->
+<i>Search by first or last name</i>
+<form method="post" action="/searchStudentName">
+<fieldset class="innerTable">
+
+  <table style="text-align: left;">
+    <!-- FIRST NAME -->
+    <tr><th><label for="firstName">First Name</label></th>
+      <td><input name="firstName" id="firstName" value="{{fName}}"></td></tr>
+
+    <!-- LAST NAME -->
+    <tr><th><label for="lastName">Last Name</label></th>
+      <td><input name="lastName" id="lastName" value="{{lName}}"></td></tr>
+  </table>
+    
+  <!-- SUBMIT BUTTON -->
+  <input type="submit" value="Search" id="searchStudentSubmitButton">
+  
+</fieldset></form>
+<br>
+
+
+
+
+
+
 <h2>Search Student Results</h2>
 
 <!-- TITLE -->

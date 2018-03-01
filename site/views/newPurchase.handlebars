@@ -1,0 +1,94 @@
+
+<!-- ERRORS -->
+{{#if errorList}}
+<div id="errors">
+  {{#each errorList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+<!-- SUCCESSES -->
+{{#if successList}}
+<div id="successes">
+  {{#each successList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+
+<!-- NEW Purchase FIELD -->
+<h2>New Library Purchase</h2>
+<form method="post" action="/newPurchase">
+<fieldset class="newStudentTable">
+  <p><b>Note: <u>All fields required!</u></b></p>
+
+  <table style="text-align: left;">
+
+    <!-- STUDENT NUMBER -->
+    <tr><th><label for="studentNumber">Student Number</label></th>
+      <td><input name="studentNumber" id="studentNumber" type="number"
+value="{{studentNum}}"></td></tr>
+
+    <!-- DATE -->
+    <tr><th><label for="date">Date</label></th>
+      <td><input name="date" id="date" type="date" value="{{todayDate}}"></td></tr>
+
+    <!-- Amount -->
+    <tr><th><label for="amount">Total Purchase Amount</label></th>
+      <td><input name="amount" id="amount" type="number"
+value="{{amount}}"></td></tr>
+
+  </table>
+
+  <!-- NOTES -->
+  <div class="noteBox">
+    <div><b>Notes/Comments:</b></div>
+    <textarea rows="4" cols="50" name="notes">{{notes}}</textarea>
+  </div>
+  
+  <!-- SUBMIT BUTTON -->
+  <input type="submit" value="Submit" id="submitButton">
+  
+</fieldset></form>
+
+
+<!-- =========== RECENT PURCHASES =========== -->
+<br>
+<h2>Most Recent Purchases</h2>
+<i>(Most recent at top)</i>
+<!-- IF PURCHASES EXIST -->
+{{#if numPT}}
+  <table class="ticketTable">
+    <thead>
+      <tr>
+        <th id="PT_DATE">DATE
+        <th id="PT_LN">Last Name
+        <th id="PT_FN">First Name
+        <th id="PT_A">Amount
+        <th id="PT_NOTE">Notes
+
+    <!-- EACH PURCHASE -->
+    <tbody>
+    {{#each PT}}
+      <tr id="row{{this.id}}">
+        <td>{{this.date}}
+        <td>{{this.lName}}
+        <td>{{this.fName}}
+        <td>{{this.amount}}
+        <td>{{this.notes}}
+    {{/each}} <!-- END ROW -->
+    </tbody>
+  </table>
+
+<!-- NO Purchases YET -->
+{{else}}
+    <p><i>No entries for library purchases yet...</i></p>
+    <br>
+{{/if}}
+
+
+
