@@ -1,0 +1,275 @@
+
+<h2>Generate Reports</h2>
+
+<!-- ERRORS -->
+{{#if errorList}}
+<div id="errors">
+  {{#each errorList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+<form method="post" action="/reports/studentWork">
+
+
+<div class="reportBox" style="width: 320px;">
+
+  <h3>Student Work Report</h3>
+  Note: <u>Leave fields blank or select 'any' as desired</u>
+
+  <table style="margin-top: 8px;">
+  <!-- STUDENT NUMBER -->
+  <tr>
+    <td>
+      Student Number
+    <td>
+      <input  name="studentNumber" id="studentNumber" 
+              type="number" value="{{studentNum}}">
+
+  <!-- FIRST NAME -->
+  <tr>
+    <td>
+      First Name
+    <td>
+      <input name="firstName" id="firstName" value="{{fName}}">
+  </div>
+
+  <!-- LAST NAME -->
+  <tr>
+    <td>
+      Last Name
+    <td>
+      <input name="lastName" id="lastName" value="{{lName}}">
+
+  <!-- DATE BEGIN -->
+  <tr>
+    <td>
+      Date Begin
+    <td>
+      <input name="dateB" id="dateB" type="date" value="{{todayDate}}">
+
+  <!-- DATE END -->
+  <tr>
+    <td>
+      Date End
+    <td>
+      <input name="dateE" id="dateE" type="date" value="{{todayDate}}">
+
+  <!-- WORK TYPE -->
+  <tr>
+    <td>
+      Work Type
+    <td>
+      <select name="workType" id="workType">
+        <option value="0">ANY</option>
+        <option value="1">School Work</option>
+        <option value="2">Reading</option>
+        <option value="3">Math Worksheet</option>
+        <option value="4">Writing Worksheet</option>
+        <option value="5">Clock/Time Worksheet</option>
+        <option value="6">Miscellaneous Worksheet</option>
+        <option disabled>--------------</option>
+        <option value="7">School Work Computer</option>
+        <option value="8">Dreambox</option>
+        <option value="9">Reading Plus</option>
+        <option value="10">Mindplay</option>
+        <option value="11">abcya</option>
+        <option value="12">Typing</option>
+        <option value="13">Prodigy</option>
+        <option value="14">Miscellaneous Computer</option>
+        <option disabled>--------------</option>
+        <option value="15">Unknown</option>
+      </select>
+
+
+  <!-- SCHOOL -->
+  <tr>
+    <td>
+      School
+    <td>
+      <select name="school_id" id="school_id">
+        <option value="0">ANY</option>
+        <option value="1">Home School</option>
+        <option value="2">Not Listed</option>
+        <option disabled>--------------</option>
+
+        <option value="3">General Beadle Elementary</option>
+        <option value="4">Grandview Elementary</option>
+        <option value="5">Horace Mann Elementary</option>
+        <option value="6">Knollwood Elementary</option>
+        <option value="7">Meadowbrook Elementary</option>
+        <option value="8">Rapid Valley Elementary</option>
+        <option value="9">Robbinsdale Elementary</option>
+        <option value="10">South Park Elementary</option>
+        <option value="11">Valley View Elementary</option>
+        <option disabled>--------------</option>
+
+        <option value="12">East Middle</option>
+        <option value="13">North Middle</option>
+        <option value="14">South Middle</option>
+        <option value="15">Southwest Middle</option>
+        <option value="16">West Middle</option>
+        <option disabled>--------------</option>
+
+        <option value="17">Central High</option>
+        <option value="18">Rapid City Christian High</option>
+        <option value="19">Stevens High</option>
+      </select>
+
+
+  <!-- AGE GROUP -->
+  <tr>
+    <td>
+      Age Group
+    <td>
+      <select name="ageGroup_id" id="ageGroup_id">
+        <option value="0">ANY</option>
+        <option value="1">Cadet</option>
+        <option value="2">Minor</option>
+        <option value="3">Junior</option>
+        <option value="4">Intermediate</option>
+        <option value="5">Senior</option>
+      </select>
+  </table>
+
+  <!-- HIT LIST -->
+  <div class="hl"> 
+    Hit Lists
+    <input name="hitlist_school" type="checkbox" value="1" 
+        {{checkedIf h_schoolWork}}>School Work
+
+    <input name="hitlist_reading" type="checkbox" value="2"
+        {{checkedIf h_reading}}>Reading
+
+    <input name="hitlist_math" type="checkbox" value="3"
+        {{checkedIf h_math}}>Math
+  </div>
+
+
+  <!-- SORT BY -->
+  <div style="margin-top: 4px"> 
+    <span>
+      Sort By
+    </span>
+
+    <span style="left-margin: 4px;"> 
+      <select name="sortBy" id="sortBy">
+        <option value="1">Last Name</option>
+        <option value="1">First Name</option>
+        <option value="2">Age Group</option>
+        <option value="3">School</option>
+      </select>
+    </span>
+
+    <span>
+      <!-- SUBMIT BUTTON -->
+      <input type="submit" value="submit" id="reportSubmitButton">
+    </span>
+
+  </div>
+</div>
+</form>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+<div class="wrapper" style="width: 320px;">
+
+
+  <!-- HIT LISTS -->
+  <form method="post" action="/reports/hitList">
+  <h3>Hit List Roster</h3>
+  <div class="reportBox" style="width: 140px;">
+    <div>
+      Select Hit List
+    </div>
+
+    <div>
+      <select name="selectHitList" id="selectHitList">
+        <option value="1">ALL</option>
+        <option value="2">Home Work</option>
+        <option value="3">Reading</option>
+        <option value="4">Math</option>
+      </select>
+    </div>
+
+    <!-- SORT BY -->
+    <div>
+      Sort By
+    </div>
+
+    <div>
+      <select name="sortBy" id="sortBy">
+        <option value="1">Last Name</option>
+        <option value="1">First Name</option>
+        <option value="2">Age Group</option>
+        <option value="3">School</option>
+      </select>
+    </div>
+
+    <!-- SUBMIT BUTTON -->
+    <div style="margin-top: 6px"> 
+      <input type="submit" value="submit" id="reportSubmitButton">
+    </div>
+  </div>
+  </form>
+
+
+
+
+  <!-- HIT LISTS -->
+  <form method="post" action="/reports/hitList">
+  <h3>Example Box</h3>
+  <div class="reportBox">
+    <div>
+      Select Hit List
+    </div>
+
+    <div>
+      <select name="selectHitList" id="selectHitList">
+        <option value="1">ALL</option>
+        <option value="2">Home Work</option>
+        <option value="3">Reading</option>
+        <option value="4">Math</option>
+      </select>
+    </div>
+
+    <!-- SORT BY -->
+    <div>
+      Sort By
+    </div>
+
+    <div>
+      <select name="sortBy" id="sortBy">
+        <option value="1">Last Name</option>
+        <option value="1">First Name</option>
+        <option value="2">Age Group</option>
+        <option value="3">School</option>
+      </select>
+    </div>
+
+    <!-- SUBMIT BUTTON -->
+    <div style="margin-top: 6px"> 
+      <input type="submit" value="submit" id="reportSubmitButton">
+    </div>
+  </div>
+  </form>
+
+</div>
+
+
+
+
+
+

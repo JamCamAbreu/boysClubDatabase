@@ -23,7 +23,7 @@
 <!-- NEW Purchase FIELD -->
 <h2>New Library Purchase</h2>
 <form method="post" action="/newPurchase">
-<fieldset class="newStudentTable">
+<fieldset class="newPurchaseTable">
   <p><b>Note: <u>All fields required!</u></b></p>
 
   <table style="text-align: left;">
@@ -62,7 +62,7 @@ value="{{amount}}"></td></tr>
 <i>(Most recent at top)</i>
 <!-- IF PURCHASES EXIST -->
 {{#if numPT}}
-  <table class="ticketTable">
+  <table class="recentPurchaseTable">
     <thead>
       <tr>
         <th id="PT_DATE">DATE

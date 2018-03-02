@@ -33,17 +33,14 @@
 
     <!-- TITLE BAR -->
     <div id=titleBar>
-
       <!-- NEED TO USE onClick event with my functions! See ENGR1 project -->
-      <ul class="barWhole">
-        <li id="l_home">Home</li>
-        <li id="l_search">Search</li>
-        <li id="l_allStudents">All Students</li>
-        <li id="l_newStudent">New Student</li>
-        <li id="l_ticket">Tickets</li>
-        <li id="l_purchase">Purchases</li>
-      </ul>
-
+        <div id="l_home">Home</div>
+        <div id="l_search">Search</div>
+        <div id="l_allStudents">All Students</div>
+        <div id="l_newStudent">New Student</div>
+        <div id="l_ticket">Tickets</div>
+        <div id="l_purchase">Purchases</div>
+        <div id="l_reports">Reports</div>
     </div>
 
 
@@ -90,6 +87,7 @@
       $("#l_newStudent").click(function() {window.location = "/newStudent";});
       $("#l_ticket").click(function() {window.location = "/newTicket";});
       $("#l_purchase").click(function() {window.location = "/newPurchase";});
+      $("#l_reports").click(function() {window.location = "/reports";});
  </script>
 
 </body>

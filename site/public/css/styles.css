@@ -19,7 +19,7 @@ th { padding: 2px; }
 
 
 #container {
-  max-width: 700px;
+  max-width: 700px; 
   margin: 0 auto;
 }
 
@@ -34,34 +34,44 @@ th { padding: 2px; }
   border: none;
 }
 
+
+
+
+
+/* ======== TITLE BAR ======== */
+
 #titleBar {
   padding: 4px;
   background-color: #88f;
   margin-bottom: 8px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#titleBar div {
+  flex-grow: 1;
+  text-align: center;
+  background-color: #44f;
+  color: white;
+  padding: 14px 16px;
+}
+
+#titleBar div:hover {
+  background-color: #00b;
+  cursor: pointer;
 }
 
 .barWhole {
-  list-style-type: none;
   margin: 0px;
   padding: 0px;
   overflow: hidden;
 }
 
-.barWhole li {
-  float: left;
-  display: block;
-  text-align: center;
-  background-color: #44f;
-  color: white;
-  padding: 14px 16px;
-  text-decoration: none;
-  display: inline;
-}
 
-.barWhole li:hover {
-  background-color: #00b;
-  cursor: pointer;
-}
+
+
 
 #title {
   margin: 0px;
@@ -145,7 +155,15 @@ th { padding: 2px; }
 
 
 /* ========= TICKETS ======================== */
-.ticketTable {
+
+.newTicketTable {
+  background-color: #fff1cc;
+  width: 400px;
+}
+
+
+.recentTicketTable {
+  text-align: left;
   background-color: #fff1cc;
   padding: 8px;
   border-spacing: 0;
@@ -153,15 +171,15 @@ th { padding: 2px; }
   border: 1px solid black;
 }
 
-.ticketTable th {
+.recentTicketTable th {
   border-bottom: 1px solid black;
 }
 
-.ticketTable tr { text-align: left; }
+.recentTicketTable tr { text-align: left; }
 
 /* Every other row color change: */
-.ticketTable tr:nth-child(odd) {background: #fff1cc;}
-.ticketTable tr:nth-child(even) {background: #eee1bb;}
+.recentTicketTable tr:nth-child(odd) {background: #fff1cc;}
+.recentTicketTable tr:nth-child(even) {background: #eee1bb;}
 
 
 /* In Student Profile Page */
@@ -183,7 +201,16 @@ th { padding: 2px; }
 
 
 /* ========= PURCHASES ====================== */
-.purchasesTable {
+
+.newPurchaseTable {
+  background-color: #fff1cc;
+  width: 400px;
+}
+
+
+
+.recentPurchaseTable {
+  text-align: left;
   background-color: #fff1cc;
   padding: 8px;
   border-spacing: 0;
@@ -191,15 +218,15 @@ th { padding: 2px; }
   border: 1px solid black;
 }
 
-.purchaseTable th {
+.recentPurchaseTable th {
   border-bottom: 1px solid black;
 }
 
-.purchasesTable tr { text-align: left; }
+.recentPurchasesTable tr { text-align: left; }
 
 /* Every other row color change: */
-.purchasesTable tr:nth-child(odd) {background: #fff1cc;}
-.purchasesTable tr:nth-child(even) {background: #eee1bb;}
+.recentPurchasesTable tr:nth-child(odd) {background: #fff1cc;}
+.recentPurchasesTable tr:nth-child(even) {background: #eee1bb;}
 
 #P_DATE  {width: 15%}
 #P_A     {width: 15%}
@@ -236,6 +263,29 @@ th { padding: 2px; }
 }
 
 
+
+
+
+/* ======== Reports ================ */
+
+.reportBox {
+  background-color: #fff1cc;
+  padding: 6px;
+  border: 1px black solid;
+  margin-top: 8px;
+}
+
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.wrapper > div {
+  flex-grow: 1;
+}
 
 
 

@@ -58,6 +58,15 @@ app.get("/", function (req, res, next) {
 
 
 
+
+
+
+
+
+
+
+
+
 // TODO: Error thrown when duplicate student already exists! (student number
 // already exists) - Crashes site. TODO TODO TODO
 
@@ -83,9 +92,32 @@ app.post("/newStudent", function (req, res, next) {
     successList: []
   };
 
+  // DATA VALIDATION BEFORE QUERY (make this more robust later..)
+  var completeForm = true;
 
   // Get variables to be used for database Query:
   var studentNum = req.body.studentNumber;
+
+
+  mysql.pool.query("SELECT S.studentNumber, S.firstName, S.lastName " + 
+                   " FROM tbl_student S " + 
+                   "WHERE S.studentNumber = ?", [studentNum], 
+     function(err, rows, fields){
+      if (err) {
+        console.log("Error in selecting students from DB.");
+        next(err);
+        return;
+      }
+
+      if (rows.length > 0) {
+        completeForm = false;
+        var student_fName = rows[0].firstName;
+        var student_lName = rows[0].lastName;
+        context.errorList.push("Student with ID number " + studentNum + 
+          " already exists in database with name: " + 
+          student_lName + ", " + student_fName);
+      }
+
   var fName = req.body.firstName;
   var lName = req.body.lastName;
   var school_id = req.body.school_id;
@@ -111,9 +143,6 @@ app.post("/newStudent", function (req, res, next) {
   context.h_schoolWork = hitlists.includes("1"); // helper function
   context.h_reading = hitlists.includes("2");    // helper function
   context.h_math = hitlists.includes("3");       // helper function
-
-  // DATA VALIDATION BEFORE QUERY (make this more robust later..)
-  var completeForm = true;
 
 
   // STUDENT NUMBER
@@ -187,10 +216,21 @@ app.post("/newStudent", function (req, res, next) {
 
     var name = context.lName + ", " + context.fName;
     context.successList.push(name + " added successfully.");
+
   } // end if test correct response
 
   res.render('newStudent', context);
+
+  }); // end query for student already exists
 });
+
+
+
+
+
+
+
+
 
 
 
@@ -247,6 +287,20 @@ app.get("/allStudents", function(req, res, next) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // +==========================================+
 // |             NEW LIBRARY TICKET           |
 // +==========================================+
@@ -263,11 +317,11 @@ app.get("/newTicket", function (req, res, next) {
 
   var sqlString =  "SELECT T.id, T.dateCompleted AS 'date', " + 
                    "S.firstName, S.lastName, WT.name AS 'type', " +
-                   "T.pointEarnedAmount AS 'amount', T.notes " + 
+                   "T.pointEarnedAmount AS 'amount', T.notes, T.submitTimestamp " + 
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
                    "tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
-                   "ORDER BY T.dateCompleted DESC LIMIT 25";
+                   "ORDER BY T.submitTimestamp DESC LIMIT 25";
 
     var inserts = [];
 
@@ -303,6 +357,11 @@ app.get("/newTicket", function (req, res, next) {
 
      }); // end query select all students
 });
+
+
+
+
+
 
 
 
@@ -425,11 +484,12 @@ app.post("/newTicket", function (req, res, next) {
   // QUERY FOR MOST RECENT TICKETS
   var sqlString =  "SELECT T.id, T.dateCompleted AS 'date', " + 
                    "S.firstName, S.lastName, WT.name AS 'type', " +
-                   "T.pointEarnedAmount AS 'amount', T.notes " + 
+                   "T.pointEarnedAmount AS 'amount', T.notes, T.submitTimestamp " + 
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
                    "tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
-                   "ORDER BY T.dateCompleted DESC LIMIT 25";
+                   "ORDER BY T.submitTimestamp DESC LIMIT 25";
+
 
     var inserts = [];
 
@@ -477,11 +537,11 @@ app.post("/newTicket", function (req, res, next) {
   // QUERY FOR MOST RECENT TICKETS
   var sqlString =  "SELECT T.id, T.dateCompleted AS 'date', " + 
                    "S.firstName, S.lastName, WT.name AS 'type', " +
-                   "T.pointEarnedAmount AS 'amount', T.notes " + 
+                   "T.pointEarnedAmount AS 'amount', T.notes, T.submitTimestamp " + 
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
                    "tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
-                   "ORDER BY T.dateCompleted DESC LIMIT 25";
+                   "ORDER BY T.submitTimestamp DESC LIMIT 25";
 
     var inserts = [];
 
@@ -528,6 +588,14 @@ app.post("/newTicket", function (req, res, next) {
 
 
 
+
+
+
+
+
+
+
+
 // +==========================================+
 // |             NEW LIBRARY PURCHASE         |
 // +==========================================+
@@ -542,12 +610,13 @@ app.get("/newPurchase", function (req, res, next) {
   // Default date is today's date:
   context.todayDate = moment().format("YYYY-MM-DD");
 
+
   var sqlString =  "SELECT P.id, P.dateOfPurchase AS 'date', " + 
                    "S.firstName, S.lastName, " +
-                   "P.pointAmount AS 'amount', P.notes " + 
+                   "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_libraryPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
-                   "ORDER BY P.dateOfPurchase DESC LIMIT 25";
+                   "ORDER BY P.submitTimestamp DESC LIMIT 25";
 
     var inserts = [];
 
@@ -699,10 +768,10 @@ app.post("/newPurchase", function (req, res, next) {
 
   var sqlString =  "SELECT P.id, P.dateOfPurchase AS 'date', " + 
                    "S.firstName, S.lastName, " +
-                   "P.pointAmount AS 'amount', P.notes " + 
+                   "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_libraryPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
-                   "ORDER BY P.dateOfPurchase DESC LIMIT 25";
+                   "ORDER BY P.submitTimestamp DESC LIMIT 25";
 
     var inserts = [];
 
@@ -752,10 +821,10 @@ app.post("/newPurchase", function (req, res, next) {
   // QUERY FOR MOST RECENT PURCHASES:
   var sqlString =  "SELECT P.id, P.dateOfPurchase AS 'date', " + 
                    "S.firstName, S.lastName, " +
-                   "P.pointAmount AS 'amount', P.notes " + 
+                   "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_libraryPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
-                   "ORDER BY P.dateOfPurchase DESC LIMIT 25";
+                   "ORDER BY P.submitTimestamp DESC LIMIT 25";
 
     var inserts = [];
 
@@ -791,40 +860,6 @@ app.post("/newPurchase", function (req, res, next) {
     } // END ELSE (student did not exist in database)
   }); // end query for test student number
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1128,6 +1163,85 @@ app.post("/searchStudentName", function (req, res, next) {
   } // end no errors in input
 
 });
+
+
+
+
+
+
+
+
+// +==========================================+
+// |             REPORTS                      |
+// +==========================================+
+
+app.get("/reports", function (req, res, next) {
+
+  var context = {
+    errorList: [],
+    successList: []
+  };
+
+  // DATA VALIDATION BEFORE QUERY (make this more robust later..)
+  var completeForm = true;
+
+  // Default date is today's date:
+  context.todayDate = moment().format("YYYY-MM-DD");
+
+
+
+
+
+
+
+  res.render('reports', context);
+
+});
+
+
+
+
+
+
+
+
+
+
+app.post("/reports", function (req, res, next) {
+
+  var context = {
+    errorList: [],
+    successList: []
+  };
+
+  // DATA VALIDATION BEFORE QUERY (make this more robust later..)
+  var completeForm = true;
+
+  // Default date is today's date:
+  context.todayDate = moment().format("YYYY-MM-DD");
+
+
+
+
+
+
+
+  res.render('reports', context);
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

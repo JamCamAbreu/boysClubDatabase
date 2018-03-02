@@ -24,7 +24,7 @@
 <!-- NEW TICKET FIELD -->
 <h2>New Library Ticket</h2>
 <form method="post" action="/newTicket">
-<fieldset class="newStudentTable">
+<fieldset class="newTicketTable">
   <p><b>Note: <u>All fields required!</u></b></p>
 
   <table style="text-align: left;">
@@ -87,7 +87,7 @@ value="{{amount}}"></td></tr>
 <i>(Most recent at top)</i>
 <!-- IF TICKETS EXIST -->
 {{#if numTT}}
-  <table class="ticketTable">
+  <table class="recentTicketTable">
     <thead>
       <tr>
         <th id="TT_DATE">DATE
