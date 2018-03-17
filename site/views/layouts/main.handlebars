@@ -11,6 +11,11 @@
 
 
 <body>
+
+  <!-- LOAD ALL UTILITY FUNCTIONS -->
+  <script src="scripts/appFunctions.js" type="text/javascript" charset="utf-8">
+  </script>
+
   <script>
 
     // AUTO FOCUS THE SEARCH STUDENT FIELD (on all pages)
@@ -50,7 +55,8 @@
 
     <!-- SEARCH STUDENT BY SCANNING CARD -->
     <div><i>Scan or type the student card number for this box:</i></div>
-    <form method="post" action="/searchStudentScanCard">
+    <form method="get" action="/student">
+    <!-- <form method="post" action="/searchStudentScanCard"> -->
       <span>Student ID Number</span>
       <span><input name="scanID" id="scanID" type="number" value=""
         autofocus></span>

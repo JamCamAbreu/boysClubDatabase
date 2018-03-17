@@ -20,6 +20,20 @@
       <td>Lifetime Spent Points:  <td><b>{{lifeTimeSpent}}</b>
     <tr id="balance">
       <td>Balance:                <td><b>{{balance}}</b>
+
+      <!-- Change color of balance based on amount -->
+      {{#if balanceRed}}
+        <script>$('#balance').css("background", "#f31");</script>
+      {{/if}}
+      {{#if balanceYellow}}
+        <script>$('#balance').css("background", "#ffe311");</script>
+      {{/if}}
+      {{#if balanceGreen}}
+        <script>$('#balance').css("background", "#81ff11");</script>
+      {{/if}}
+
+
+
   </tbody></table>
 
 </div>

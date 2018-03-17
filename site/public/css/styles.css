@@ -19,7 +19,7 @@ th { padding: 2px; }
 
 
 #container {
-  max-width: 700px; 
+  max-width: 800px; 
   margin: 0 auto;
 }
 
@@ -100,12 +100,63 @@ th { padding: 2px; }
 .resultsTable tr:nth-child(odd) {background: #fff1cc;}
 .resultsTable tr:nth-child(even) {background: #eee1bb;}
 
+.resultsTable tr:hover { 
+  background-color: #b6befa; 
+  cursor: pointer;
+}
+
 /* Column Specific width by percentages: */
 #c_FN  {width: 20%}
 #c_LN  {width: 20%}
 #c_SN  {width: 10%}
 #c_AG  {width: 15%}
 #c_SCH {width: 35%}
+
+
+
+
+/* RECENT TICKET TABLE */
+.ticketTable {
+  background-color: #fff1cc;
+  padding: 8px;
+  border-spacing: 0;
+}
+
+.ticketTable tr { text-align: left; }
+
+/* Every other row color change: */
+.ticketTable tr:nth-child(odd) {background: #fff1cc;}
+.ticketTable tr:nth-child(even) {background: #eee1bb;}
+
+.ticketTable tr:hover { 
+  background-color: #b6befa; 
+  cursor: pointer;
+}
+
+
+
+/* RECENT PURCHASE TABLE */
+.purchasesTable {
+  background-color: #fff1cc;
+  padding: 8px;
+  border-spacing: 0;
+}
+
+.purchasesTable tr { text-align: left; }
+
+/* Every other row color change: */
+.purchasesTable tr:nth-child(odd) {background: #fff1cc;}
+.purchasesTable tr:nth-child(even) {background: #eee1bb;}
+
+.purchasesTable tr:hover { 
+  background-color: #b6befa; 
+  cursor: pointer;
+}
+
+
+
+
+
 
 
 
@@ -233,6 +284,12 @@ th { padding: 2px; }
 #P_NOTE  {width: 70%}
 
 
+.deleteButton {
+  background: #b62;
+  border: none;
+  color: white;
+  font-size: 12px;
+}
 
 
 

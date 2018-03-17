@@ -11,6 +11,7 @@
  * *************************************************/
 
 var portUsed = 55850;
+  // NOTE: If I change this I also need to change in scripts/appFunctions.js
 
 // ============= SETUP ==================
 var express = require('express');
@@ -67,18 +68,11 @@ app.get("/", function (req, res, next) {
 
 
 
-// TODO: Error thrown when duplicate student already exists! (student number
-// already exists) - Crashes site. TODO TODO TODO
 
 // +==========================================+
 // |        ADD NEW STUDENT TO DB             |
 // +==========================================+
 app.get("/newStudent", function (req, res, next) {
-
-  // TODO: See escapePlan code for how to do POSTS
-  // so that I don't have to have the /queryNewStudent page
-  //var context = {};
-  //var action = req.query.do;
 
   res.render('newStudent');
 });
@@ -225,6 +219,36 @@ app.post("/newStudent", function (req, res, next) {
 });
 
 
+
+
+
+// +==========================================+
+// |        REMOVE STUDENT FROM DB            |
+// +==========================================+
+
+app.get("/remove", function(req,res,next) {
+
+  var idString = "" + req.query["id"];
+
+  mysql.pool.query("DELETE FROM tbl_student WHERE studentNumber = ?", 
+
+    // array of parameters:
+    [idString],
+
+    function(err, results) {
+      if(err){
+        next(err);
+        return;
+      }
+
+      // HTTP RESPONSE:
+      var deleteSuccess = "" + results.affectedRows;
+
+      res.setHeader("Content-Type", "application/json");
+      res.write(deleteSuccess);
+      res.end();
+    });
+});
 
 
 
@@ -892,10 +916,7 @@ app.get("/search", function (req, res, next) {
 
 
 
-
-
-// USING SCAN MACHINE:
-app.post("/searchStudentScanCard", function (req, res, next) {
+app.get("/student", function (req, res, next) {
 
   var context = {
     errorList: []
@@ -903,7 +924,7 @@ app.post("/searchStudentScanCard", function (req, res, next) {
   var completeForm = true; // true until proven false
 
   // This is the passed in scanID:
-  var fullNum = req.body.scanID;
+  var fullNum = req.query.scanID;
 
   // EMPTY:
   if (fullNum.length <= 0) {
@@ -1056,7 +1077,20 @@ app.post("/searchStudentScanCard", function (req, res, next) {
                   } // end for
 
                   // FINALLYYYY DISPLAY THE PAGE:
-                  context.balance = parseInt(context.lifeTimeEarned) - parseInt(context.lifeTimeSpent);
+
+                  // Here is the current balance
+                  var balance = parseInt(context.lifeTimeEarned) - 
+                    parseInt(context.lifeTimeSpent);
+
+                  // set balance color depending on balance:
+                  if (balance < 0) 
+                    context.balanceRed = "true";
+                  else if (balance == 0)
+                    context.balanceYellow = "true";
+                  else 
+                    context.balanceGreen = "true";
+
+                  context.balance = balance;
                   res.render('studentDisplay', context);
 
             }); // end PURCHASES query
@@ -1078,6 +1112,7 @@ app.post("/searchStudentScanCard", function (req, res, next) {
        }); // end student query
   } // end no errors in input
 });
+
 
 
 
@@ -1188,12 +1223,6 @@ app.get("/reports", function (req, res, next) {
   // Default date is today's date:
   context.todayDate = moment().format("YYYY-MM-DD");
 
-
-
-
-
-
-
   res.render('reports', context);
 
 });
@@ -1219,12 +1248,6 @@ app.post("/reports", function (req, res, next) {
 
   // Default date is today's date:
   context.todayDate = moment().format("YYYY-MM-DD");
-
-
-
-
-
-
 
   res.render('reports', context);
 

@@ -1,4 +1,26 @@
 
+<script>
+
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove student " + rowNum + " from database? Warning, " + 
+                "this can NOT be undone!")) {
+      deleteButtonAction(rowNum, "resultsTable");
+    }
+  }
+
+
+
+  // clicking a row takes you to that student page
+  function clickRow(rowNum) {
+
+    var url = "http://flip2.engr.oregonstate.edu:" + portUsed + 
+              "/student?scanID=" + rowNum;
+    window.location = url;
+  }
+</script>
+
+
 
 
 
@@ -51,10 +73,11 @@
 
 <div id="studentListing">
 {{#if numEntries}}
-  <table class="resultsTable">
+  <table class="resultsTable" id="resultsTable">
   <!-- IF STUDENTS EXIST IN DATABASE -->
     <thead>
       <tr>
+        <th style="background: #fff1cc;">
         <th id="c_FN">First Name
         <th id="c_LN">Last Name
         <th id="c_SN">Student Number
@@ -67,7 +90,12 @@
     <!-- EACH ROW -->
     <tbody>
     {{#each row}}
-      <tr id="row{{this.studentNumber}}">
+      <tr id="row{{this.studentNumber}}" onclick="clickRow({{this.studentNumber}})">
+        <td style="text-align: center; background: #fff1cc;">
+          <button class="deleteButton"
+            onclick="clickDelete({{this.studentNumber}})"
+            style="margin-right: 8px;">X
+          </button>
         <td>{{this.firstName}}
         <td>{{this.lastName}}
         <td>{{this.studentNumber}}
