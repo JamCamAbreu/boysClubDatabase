@@ -1268,6 +1268,111 @@ app.post("/reports", function (req, res, next) {
 
 
 
+app.get("/minecraftClub", function (req, res, next) {
+
+  var context = {
+    errorList: [],
+    successList: []
+  };
+
+	// DEFAULT settings:
+	var daysRequirement = 3;
+  var beg = "\"" + moment(moment().startOf('isoWeek')).format("YYYY-MM-DD") + "\"";
+  var end = "\"" + moment(moment().endOf('isoWeek')).format("YYYY-MM-DD") + "\"";
+	context.beg = beg;
+	context.end = end;
+	console.log("Generating Minecraft Club report between " + beg + " and " + end + "...");
+
+
+/* THIS WORKS (in PHPmyAdmin):
+SELECT temp.id, temp.fn, temp.ln, temp.w
+FROM 
+    (SELECT temp2.ID AS "id", temp2.fName AS "fn", temp2.lName AS "ln", COUNT(*) AS "w"
+    FROM 
+        (SELECT S.studentNumber AS "ID", S.firstName AS "fName", S.lastName AS "lName", 
+         LT.dateCompleted, COUNT(*) AS "num" FROM tbl_student S 
+         INNER JOIN tbl_libraryTicket LT ON LT.student_id = S.studentNumber 
+         WHERE LT.dateCompleted BETWEEN "2018-04-02" AND "2018-04-06" 
+         GROUP BY S.studentNumber, LT.dateCompleted) AS temp2
+    GROUP BY temp2.ID) AS temp
+    
+WHERE temp.w >= 3
+*/
+
+	var sqlString = "SELECT temp.id, temp.fn, temp.ln, temp.w " + 
+									"FROM " + 
+    								"(SELECT temp2.ID AS 'id', temp2.fName AS 'fn', temp2.lName AS 'ln', COUNT(*) AS 'w' " + 
+    								"FROM " + 
+        							"(SELECT S.studentNumber AS 'ID', S.firstName AS 'fName', S.lastName AS 'lName', " + 
+         							"LT.dateCompleted, COUNT(*) AS 'num' FROM tbl_student S " + 
+         							"INNER JOIN tbl_libraryTicket LT ON LT.student_id = S.studentNumber " + 
+											"WHERE LT.dateCompleted BETWEEN " + beg + " AND " + end + " " + 
+         							"GROUP BY S.studentNumber, LT.dateCompleted) AS temp2 " + 
+    							"GROUP BY temp2.ID) AS temp " + 
+									"WHERE temp.w >= " + daysRequirement;
+
+
+	// array of parameters:
+	var inserts = [];
+
+	// SEND the query:
+	mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+
+		// SQL ERROR
+		if (err) {
+			console.log("Error in selecting student from DB.");
+			next(err);
+			return;
+		}
+
+		// Gather student info and shoot it to handlebars:
+		context.numStudents = rows.length;
+		context.S = []; // Each student in returned table
+
+		var index;
+		var row;
+
+		for (index = 0; index < context.numStudents; index++) {
+			row = rows[index];
+			context.S.push({
+				id : row.id,
+				fName : row.fn,
+				lName : row.ln,
+				works : row.w
+			});
+
+		} // end for
+
+		// RENDER PAGE:
+		res.render('minecraft', context);
+
+	}); // end query for insert
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

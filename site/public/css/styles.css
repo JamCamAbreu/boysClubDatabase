@@ -63,6 +63,9 @@ th { padding: 2px; }
   cursor: pointer;
 }
 
+#l_minecraft { background-color: #454 !important; }
+#l_minecraft:hover { background-color: #030 !important; }
+
 .barWhole {
   margin: 0px;
   padding: 0px;
@@ -104,6 +107,7 @@ th { padding: 2px; }
   background-color: #b6befa; 
   cursor: pointer;
 }
+
 
 /* Column Specific width by percentages: */
 #c_FN  {width: 20%}
@@ -290,6 +294,18 @@ th { padding: 2px; }
   color: white;
   font-size: 12px;
 }
+
+
+
+
+
+/* ========= MINECRAFT TABLE ================ */
+
+
+#MC_SC  {width: 15%}
+#MC_LN  {width: 35%}
+#MC_FN  {width: 35%}
+#MC_WC  {width: 15%}
 
 
 

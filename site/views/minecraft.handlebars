@@ -1,0 +1,52 @@
+
+<script>
+  // clicking a row takes you to that student page
+  function clickRow(rowNum) {
+
+    var url = URL + portUsed + "/student?scanID=" + rowNum;
+    window.location = url;
+  }
+</script>
+
+
+
+<h2>Minecraft Club <i>Eligible Students</i></h2>
+<h3>Week of: <b>{{beg}}</b> through <b>{{end}}</b></h3>
+
+<div id="studentListing">
+
+{{#if numStudents}}
+<table class="resultsTable" id="resultsTable">
+
+  <!-- IF STUDENTS EXIST IN DATABASE -->
+    <thead>
+      <tr>
+        <th style="background: #fff1cc;">
+        <th id="MC_SN">Student Number
+        <th id="MC_LN">Last Name
+        <th id="MC_FN">First Name
+        <th id="MC_WC">Days Worked this Week
+
+    <!-- EACH ROW -->
+    <tbody>
+    {{#each S}}
+      <tr id="row{{this.studentNumber}}" onclick="clickRow({{this.id}})">
+        <td style="text-align: center; background: #fff1cc;">
+        <td>{{this.id}}
+        <td>{{this.fName}}
+        <td>{{this.lName}}
+        <td>{{this.works}}
+    {{/each}} <!-- END ROW -->
+    </tbody>
+</table>
+
+<!-- NO STUDENTS IN DATABASE -->
+{{else}}
+  <p><i>No students eligible for minecraft yet this week! </i></p>
+  <p><i>Check date range to ensure correct results.</i></p>
+{{/if}}
+
+
+</div>
+
+
