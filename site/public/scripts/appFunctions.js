@@ -10,6 +10,8 @@
 
 var portUsed = 55850;
   // NOTE: If I change this I also need to change in the javascript server
+var URL = "http://192.168.0.22:";
+  // NOTE: If I change this I also need to change in the javascript server
 
 
 
@@ -19,8 +21,7 @@ var portUsed = 55850;
 function deleteButtonAction(rowNum, ID_table) {
   
   var req = new XMLHttpRequest();
-  req.open("GET", "http://flip2.engr.oregonstate.edu:" + 
-                  portUsed + "/remove?" + "id=" + rowNum, true);
+  req.open("GET", URL + portUsed + "/remove?" + "id=" + rowNum, true);
   req.setRequestHeader("Content-Type", "application/json");
   req.send(null);
   req.addEventListener("load", function() {

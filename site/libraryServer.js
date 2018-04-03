@@ -1301,7 +1301,7 @@ app.use(function (err, req, res, next) {
 // ============ PORT SETUP ==============
 
 app.listen(app.get('port'), function(){
-    console.log('Express started on flip2.engr.oregonstate.edu:' + 
+    console.log('Express started with local ip and port ' + 
       app.get('port') + '; press Ctrl-C to terminate.');
 });
 
