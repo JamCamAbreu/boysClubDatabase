@@ -1,4 +1,18 @@
 
+<script>
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove purchase from database? Warning, " + 
+                "this can NOT be undone!")) {
+			deletePurchase(rowNum, "recentPurchaseTable");
+    }
+  }
+</script>
+
+
+
+
+
 <!-- ERRORS -->
 {{#if errorList}}
 <div id="errors">
@@ -62,10 +76,12 @@ value="{{amount}}"></td></tr>
 <i>(Most recent at top)</i>
 <!-- IF PURCHASES EXIST -->
 {{#if numPT}}
-  <table class="recentPurchaseTable">
+  <table class="recentPurchaseTable" id="recentPurchaseTable">
     <thead>
       <tr>
+        <th style="background: #fff1cc;">
         <th id="PT_DATE">DATE
+        <th id="PT_ID">Student ID
         <th id="PT_LN">Last Name
         <th id="PT_FN">First Name
         <th id="PT_A">Amount
@@ -74,8 +90,14 @@ value="{{amount}}"></td></tr>
     <!-- EACH PURCHASE -->
     <tbody>
     {{#each PT}}
-      <tr id="row{{this.id}}">
+      <tr id="Prow{{this.id}}">
+        <td style="text-align: center; background: #fff1cc;">
+          <button class="deleteButton"
+            onclick="clickDelete({{this.id}})"
+            style="margin-right: 8px;">X
+          </button>
         <td>{{this.date}}
+        <td>{{this.num}}
         <td>{{this.lName}}
         <td>{{this.fName}}
         <td>{{this.amount}}

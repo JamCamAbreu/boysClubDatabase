@@ -1,0 +1,70 @@
+
+
+
+<script>
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove ticket " + rowNum + " from database? Warning, " + 
+                "this can NOT be undone!")) {
+      deleteTicket(rowNum, "ticketTable");
+    }
+  }
+</script>
+
+
+
+
+
+<h1>Student Work</h1>
+
+<div>
+	{{#if numEntries}}
+	<table class="resultsTable" id="resultsTable" style="width: 1100px">
+
+		<!-- IF STUDENTS EXIST IN DATABASE -->
+			<thead>
+				<tr>
+					<th style="background: #fff1cc;">
+					<th>Date Completed
+					<th>Student Number
+					<th>First Name
+					<th>Last Name
+					<th>Age Group
+					<th>School
+					<th>Work Type
+					<th>Points
+					<th>Notes/comments
+
+			<!-- EACH ROW -->
+			<tbody>
+			{{#each row}}
+				<tr id="row{{this.studentNumber}}" onclick="clickRow({{this.tid}})">
+					<td style="text-align: center; background: #fff1cc;">
+						<button class="deleteButton"
+							onclick="clickDelete({{this.tid}})"
+							style="margin-right: 8px;">X
+						</button>
+					<td>{{this.date}}
+					<td>{{this.studentNumber}}
+					<td>{{this.firstName}}
+					<td>{{this.lastName}}
+					<td>{{this.ageGroup}}
+					<td>{{this.school}}
+					<td>{{this.workType}}
+					<td>{{this.points}}
+					<td>{{this.notes}}
+			{{/each}} <!-- END ROW -->
+			</tbody>
+	</table>
+
+	<!-- NO STUDENTS IN DATABASE -->
+	{{else}}
+		<p><i>No entries for given information found in database!</i></p>
+	{{/if}}
+
+</div>
+
+
+
+
+

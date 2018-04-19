@@ -1,4 +1,16 @@
 
+<script>
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove ticket from database? Warning, " + 
+                "this can NOT be undone!")) {
+			deleteTicket(rowNum, "recentTicketTable");
+    }
+  }
+</script>
+
+
+
 
 <!-- ERRORS -->
 {{#if errorList}}
@@ -22,9 +34,9 @@
 
 
 <!-- NEW TICKET FIELD -->
-<h2>New Library Ticket</h2>
 <form method="post" action="/newTicket">
 <fieldset class="newTicketTable">
+	<h2>New Library Ticket</h2>
   <p><b>Note: <u>All fields required!</u></b></p>
 
   <table style="text-align: left;">
@@ -87,10 +99,12 @@ value="{{amount}}"></td></tr>
 <i>(Most recent at top)</i>
 <!-- IF TICKETS EXIST -->
 {{#if numTT}}
-  <table class="recentTicketTable">
+  <table class="recentTicketTable" id="recentTicketTable">
     <thead>
       <tr>
+        <th style="background: #fff1cc;">
         <th id="TT_DATE">DATE
+        <th id="TT_ID">Student ID
         <th id="TT_LN">Last Name
         <th id="TT_FN">First Name
         <th id="TT_T">Type
@@ -100,8 +114,14 @@ value="{{amount}}"></td></tr>
     <!-- EACH TICKET -->
     <tbody>
     {{#each TT}}
-      <tr id="row{{this.id}}">
+      <tr id="Trow{{this.id}}">
+        <td style="text-align: center; background: #fff1cc;">
+          <button class="deleteButton"
+            onclick="clickDelete({{this.id}})"
+            style="margin-right: 8px;">X
+          </button>
         <td>{{this.date}}
+        <td>{{this.num}}
         <td>{{this.fName}}
         <td>{{this.lName}}
         <td>{{this.type}}

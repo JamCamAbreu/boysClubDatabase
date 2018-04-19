@@ -1,0 +1,9 @@
+{
+    // Comments are allowed!
+    "uid": "libraryApp",
+    "append": true,
+    "watch": true,
+    "script": "libraryServer.js",
+    "sourceDir": "/opt/c4bLibraryDB/boysClubDatabase/site/libraryServer.js",
+    "command": /usr/local/bin/node
+}

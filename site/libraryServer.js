@@ -116,10 +116,10 @@ app.post("/newStudent", function (req, res, next) {
   var lName = req.body.lastName;
   var school_id = req.body.school_id;
   var ageG_id = req.body.ageGroup_id;
-  var hitlists = [];
 
 
   // Check boxes:
+  var hitlists = [];
   var getString;
   if (req.body.hitlist_school)   // school work
     hitlists.push(req.body.hitlist_school);
@@ -252,6 +252,70 @@ app.get("/remove", function(req,res,next) {
 
 
 
+// +==========================================+
+// |        DELETE TICKET FROM DB             |
+// +==========================================+
+
+app.get("/removeTicket", function(req,res,next) {
+
+  var idString = "" + req.query["id"];
+
+  mysql.pool.query("DELETE FROM tbl_libraryTicket WHERE id = ?", 
+
+    // array of parameters:
+    [idString],
+
+    function(err, results) {
+      if(err){
+        next(err);
+        return;
+      }
+
+      // HTTP RESPONSE:
+      var deleteSuccess = "" + results.affectedRows;
+
+      res.setHeader("Content-Type", "application/json");
+      res.write(deleteSuccess);
+      res.end();
+    });
+});
+
+
+
+
+// +==========================================+
+// |        DELETE PURCHASE FROM DB           |
+// +==========================================+
+
+app.get("/removePurchase", function(req,res,next) {
+
+  var idString = "" + req.query["id"];
+
+  mysql.pool.query("DELETE FROM tbl_libraryPurchase WHERE id = ?", 
+
+    // array of parameters:
+    [idString],
+
+    function(err, results) {
+      if(err){
+        next(err);
+        return;
+      }
+
+      // HTTP RESPONSE:
+      var deleteSuccess = "" + results.affectedRows;
+
+      res.setHeader("Content-Type", "application/json");
+      res.write(deleteSuccess);
+      res.end();
+    });
+});
+
+
+
+
+
+
 
 
 
@@ -340,6 +404,7 @@ app.get("/newTicket", function (req, res, next) {
   context.todayDate = moment().format("YYYY-MM-DD");
 
   var sqlString =  "SELECT T.id, T.dateCompleted AS 'date', " + 
+									 "S.studentNumber, " + 
                    "S.firstName, S.lastName, WT.name AS 'type', " +
                    "T.pointEarnedAmount AS 'amount', T.notes, T.submitTimestamp " + 
                    "FROM tbl_libraryTicket T INNER JOIN " +
@@ -366,6 +431,7 @@ app.get("/newTicket", function (req, res, next) {
         row = rows[index];
         context.TT.push({
           id : row.id,
+					num : row.studentNumber,
           date : moment(row.date).format("MM-DD-YYYY"),
           fName : row.firstName,
           lName : row.lastName,
@@ -500,7 +566,7 @@ app.post("/newTicket", function (req, res, next) {
       }
 
       console.log("Query sent successfully.");
-      context.successList.push("Ticket for " + amount + " points added successfully.");
+      context.successList.push("Ticket for " + amount + " points added successfully to account: " + studentNum);
 
 
 
@@ -508,6 +574,7 @@ app.post("/newTicket", function (req, res, next) {
   // QUERY FOR MOST RECENT TICKETS
   var sqlString =  "SELECT T.id, T.dateCompleted AS 'date', " + 
                    "S.firstName, S.lastName, WT.name AS 'type', " +
+									 "S.studentNumber, " + 
                    "T.pointEarnedAmount AS 'amount', T.notes, T.submitTimestamp " + 
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
@@ -534,6 +601,7 @@ app.post("/newTicket", function (req, res, next) {
         row = rows[index];
         context.TT.push({
           id : row.id,
+					num : row.studentNumber,
           date : moment(row.date).format("MM-DD-YYYY"),
           fName : row.firstName,
           lName : row.lastName,
@@ -561,6 +629,7 @@ app.post("/newTicket", function (req, res, next) {
   // QUERY FOR MOST RECENT TICKETS
   var sqlString =  "SELECT T.id, T.dateCompleted AS 'date', " + 
                    "S.firstName, S.lastName, WT.name AS 'type', " +
+									 "S.studentNumber, " + 
                    "T.pointEarnedAmount AS 'amount', T.notes, T.submitTimestamp " + 
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
@@ -586,6 +655,7 @@ app.post("/newTicket", function (req, res, next) {
         row = rows[index];
         context.TT.push({
           id : row.id,
+				  num : row.studentNumber,
           date : moment(row.date).format("MM-DD-YYYY"),
           fName : row.firstName,
           lName : row.lastName,
@@ -602,8 +672,6 @@ app.post("/newTicket", function (req, res, next) {
     } // END ELSE
   }); // end query for test student number
 });
-
-
 
 
 
@@ -637,6 +705,7 @@ app.get("/newPurchase", function (req, res, next) {
 
   var sqlString =  "SELECT P.id, P.dateOfPurchase AS 'date', " + 
                    "S.firstName, S.lastName, " +
+									 "S.studentNumber, " + 
                    "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_libraryPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
@@ -661,6 +730,7 @@ app.get("/newPurchase", function (req, res, next) {
         row = rows[index];
         context.PT.push({
           id : row.id,
+				  num : row.studentNumber,
           date : moment(row.date).format("MM-DD-YYYY"),
           fName : row.firstName,
           lName : row.lastName,
@@ -792,6 +862,7 @@ app.post("/newPurchase", function (req, res, next) {
 
   var sqlString =  "SELECT P.id, P.dateOfPurchase AS 'date', " + 
                    "S.firstName, S.lastName, " +
+									 "S.studentNumber, " + 
                    "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_libraryPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
@@ -816,6 +887,7 @@ app.post("/newPurchase", function (req, res, next) {
         row = rows[index];
         context.PT.push({
           id : row.id,
+					num : row.studentNumber,
           date : moment(row.date).format("MM-DD-YYYY"),
           fName : row.firstName,
           lName : row.lastName,
@@ -845,6 +917,7 @@ app.post("/newPurchase", function (req, res, next) {
   // QUERY FOR MOST RECENT PURCHASES:
   var sqlString =  "SELECT P.id, P.dateOfPurchase AS 'date', " + 
                    "S.firstName, S.lastName, " +
+									 "S.studentNumber, " + 
                    "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_libraryPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
@@ -869,6 +942,7 @@ app.post("/newPurchase", function (req, res, next) {
         row = rows[index];
         context.PT.push({
           id : row.id,
+				  num : row.studentNumber, 
           date : moment(row.date).format("MM-DD-YYYY"),
           fName : row.firstName,
           lName : row.lastName,
@@ -922,6 +996,10 @@ app.get("/student", function (req, res, next) {
     errorList: []
   };
   var completeForm = true; // true until proven false
+
+  // Default date is today's date:
+  context.todayDate = moment().format("YYYY-MM-DD");
+
 
   // This is the passed in scanID:
   var fullNum = req.query.scanID;
@@ -1126,6 +1204,7 @@ app.post("/searchStudentName", function (req, res, next) {
   var context = {
     errorList: []
   };
+
   var completeForm = true; // true until proven false
 
   context.fName = req.body.firstName;
@@ -1236,7 +1315,7 @@ app.get("/reports", function (req, res, next) {
 
 
 
-app.post("/reports", function (req, res, next) {
+app.post("/reports-studentWork", function (req, res, next) {
 
   var context = {
     errorList: [],
@@ -1249,7 +1328,217 @@ app.post("/reports", function (req, res, next) {
   // Default date is today's date:
   context.todayDate = moment().format("YYYY-MM-DD");
 
-  res.render('reports', context);
+  context.id = req.body.studentNumber;
+  context.fName = req.body.firstName;
+  context.lName = req.body.lastName;
+  context.dateBeg = req.body.dateB;
+  context.dateEnd = req.body.dateE;
+  context.WT = req.body.workType;
+  context.school = req.body.school_id;
+  context.AG = req.body.ageGroup_id;
+	context.sort = req.body.sortBy;
+
+  // Check boxes:
+  var hitlists = [];
+  var getString;
+  if (req.body.hitlist_school)   // school work
+    hitlists.push(req.body.hitlist_school);
+  if (req.body.hitlist_reading) // reading
+    hitlists.push(req.body.hitlist_reading);
+  if (req.body.hitlist_math)    // math
+    hitlists.push(req.body.hitlist_math);
+
+  // Save the data in case there were errors:
+  context.h_schoolWork = hitlists.includes("1"); // helper function
+  context.h_reading = hitlists.includes("2");    // helper function
+  context.h_math = hitlists.includes("3");       // helper function
+
+	// ERROR CHECKING:
+  // STUDENT NUMBER
+  var studentNumInt = parseInt(context.id);
+  if (studentNumInt < 0) {
+    completeForm = false;
+    context.errorList.push("Field Error: Student Number must be greater than zero.");
+  } else if (studentNumInt > MAX_STUDENT_NUM) {
+    completeForm = false;
+    context.errorList.push("Field Error: Student Number must be less than " + MAX_STUDENT_NUM + ".");
+  }
+
+
+	// CHECK BEGIN DATE EARLIER THAN END DATE:
+  if (moment(context.dateEnd, 'DD-MM-YYYY').isBefore(moment(context.dateBeg, 'DD-MM-YYYY'))) {
+    context.errorList.push("Field Error: Beginning date must be earlier or the same as the end date");
+		completeForm = false;
+	}
+
+
+	if (completeForm) {
+
+		// QUERY HERE:
+		var sqlString = "SELECT S.studentNumber, S.firstName, S.lastName, " + 
+										"SCH.name AS 'school', " + "AG.name AS 'ageGroup', " + "WT.name AS 'workType', " + 
+										"T.id AS 'tid', T.pointEarnedAmount AS 'amount', T.dateCompleted AS 'dateC', T.notes " + 
+										 "FROM tbl_student S " +
+										 "INNER JOIN tbl_school SCH ON SCH.id = S.school_id " + 
+										 "INNER JOIN tbl_ageGroup AG ON AG.id = S.ageGroup_id " + 
+										 "INNER JOIN tbl_libraryTicket T ON T.student_id = S.studentNumber " + 
+										 "INNER JOIN tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
+										 "WHERE ";
+
+
+		// array of parameters:
+		var inserts = [];
+
+		// helps us know when to use 'AND' in query
+		var conditionCount = 0;
+
+		// student number provided:
+		if (context.id != "") {
+			if (conditionCount > 0)
+				sqlString += " AND ";
+			sqlString += "studentNumber = ?";
+			inserts.push(context.id);
+			conditionCount++;
+		}
+
+		// first name provided:
+		if (context.fName.length > 0) {
+			if (conditionCount > 0)
+				sqlString += " AND ";
+			sqlString += "firstName = ?";
+			inserts.push(context.fName);
+			conditionCount++;
+		}
+
+		// Last name provided:
+		if (context.lName.length > 0) {
+			if (conditionCount > 0)
+				sqlString += " AND ";
+			sqlString += "lastName = ?";
+			inserts.push(context.lName);
+			conditionCount++;
+		}
+
+		// WORK TYPE (if provided)
+		if (parseInt(context.WT) != 0) {
+			if (conditionCount > 0)
+				sqlString += " AND ";
+			sqlString += "T.libraryWorkType = ?";
+			inserts.push(context.WT);
+			conditionCount++;
+		}
+
+		// SCHOOL (if provided)
+		if (parseInt(context.school) != 0) {
+			if (conditionCount > 0)
+				sqlString += " AND ";
+			sqlString += "S.school_id = ?";
+			inserts.push(context.school);
+			conditionCount++;
+		}
+
+		// AGE GROUP (if provided)
+		if (parseInt(context.AG) != 0) {
+			if (conditionCount > 0)
+				sqlString += " AND ";
+			sqlString += "S.ageGroup_id = ?";
+			inserts.push(context.school);
+			conditionCount++;
+		}
+
+
+		// HIT LISTS HERE:
+
+
+
+
+		// dates
+		var dayBeg = moment(context.dateBeg).format('YYYY-MM-DD');
+		var dayEnd = moment(context.dateEnd).format('YYYY-MM-DD');
+		//console.log("searching from " + dayBeg + " to " + dayEnd);
+
+		if (conditionCount > 0)
+			sqlString += " AND ";
+		sqlString += "T.dateCompleted BETWEEN '" + dayBeg + "' AND '" + dayEnd + "' ";
+
+
+		// One result per ticket:
+    sqlString += "GROUP BY T.id ";
+
+
+		// HOW TO ORDER RESULTS:
+		sqlString += "ORDER BY T.dateCompleted, ";
+
+		// SORT BY LAST NAME
+		if (parseInt(context.sort) == 1) {
+			sqlString += "S.lastName ";
+		}
+
+		// SORT BY FIRST NAME
+		else if (parseInt(context.sort) == 2) {
+			sqlString += "S.firstName ";
+		}
+
+		// SORT BY AGE GROUP 
+		else if (parseInt(context.sort) == 3) {
+			sqlString += "S.ageGroup_id ";
+		}
+
+		// SORT BY SCHOOL
+		//else if (parseInt(context.sort) == 4) 
+		else {
+			sqlString += "S.school_id ";
+		}
+
+
+		console.log("total string = " + sqlString);
+		//console.log("TOTAL CONDITIONS = " + conditionCount);
+		//console.log("INSERTS = " + inserts.length);
+
+
+		// SEND the query:
+		mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+				if (err) {
+					console.log("Error in selecting students from DB.");
+					next(err);
+					return;
+				}
+
+				// Gather student info and shoot it to handlebars:
+				context.numEntries = rows.length;
+				context.row = [];
+
+				var index;
+				var row;
+				for (index = 0; index < context.numEntries; index++) {
+					row = rows[index];
+					context.row.push({
+						studentNumber : row.studentNumber,
+						school : row.school,
+						ageGroup : row.ageGroup,
+						firstName : row.firstName,
+						lastName : row.lastName,
+
+						tid : row.tid,
+						date : moment(row.dateC).format("MM.DD.YYYY"),
+						workType : row.workType,
+						points : row.amount,
+						notes : row.notes
+					});
+				} // end for
+
+
+				res.render('report-studentWork', context);
+
+			 });
+
+		//alert("Error in report query, contact web app admin (Cam)");
+
+	} // there was input field errors in the form
+
+	else {
+		res.render('reports', context);
+	}
 
 });
 
@@ -1276,12 +1565,19 @@ app.get("/minecraftClub", function (req, res, next) {
   };
 
 	// DEFAULT settings:
-	var daysRequirement = 3;
+	var daysRequirement = 2;
   var beg = "\"" + moment(moment().startOf('isoWeek')).format("YYYY-MM-DD") + "\"";
   var end = "\"" + moment(moment().endOf('isoWeek')).format("YYYY-MM-DD") + "\"";
 	context.beg = beg;
 	context.end = end;
 	console.log("Generating Minecraft Club report between " + beg + " and " + end + "...");
+
+
+	
+  var reqDays = req.query.days;
+	if (reqDays > 0)
+		daysRequirement = reqDays;
+	context.days = daysRequirement;
 
 
 /* THIS WORKS (in PHPmyAdmin):
@@ -1309,7 +1605,8 @@ WHERE temp.w >= 3
 											"WHERE LT.dateCompleted BETWEEN " + beg + " AND " + end + " " + 
          							"GROUP BY S.studentNumber, LT.dateCompleted) AS temp2 " + 
     							"GROUP BY temp2.ID) AS temp " + 
-									"WHERE temp.w >= " + daysRequirement;
+									"WHERE temp.w >= " + daysRequirement +
+									" ORDER BY temp.w DESC, temp.ln";
 
 
 	// array of parameters:

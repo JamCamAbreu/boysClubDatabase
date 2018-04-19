@@ -12,6 +12,13 @@
 
 <h2>Minecraft Club <i>Eligible Students</i></h2>
 <h3>Week of: <b>{{beg}}</b> through <b>{{end}}</b></h3>
+<br>
+<form method="get" action="/minecraftClub">
+	<h3>Required Days Worked (this week): 
+		<input type="number" value="{{days}}" id="days" name="days">
+	</h3>
+	
+</form>
 
 <div id="studentListing">
 
@@ -23,8 +30,8 @@
       <tr>
         <th style="background: #fff1cc;">
         <th id="MC_SN">Student Number
-        <th id="MC_LN">Last Name
         <th id="MC_FN">First Name
+        <th id="MC_LN">Last Name
         <th id="MC_WC">Days Worked this Week
 
     <!-- EACH ROW -->

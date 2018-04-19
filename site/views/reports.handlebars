@@ -11,180 +11,196 @@
 {{/if}}
 
 
-<form method="post" action="/reports/studentWork">
 
 
-<div class="reportBox" style="width: 320px;">
+<div class="wrapper">
 
-  <h3>Student Work Report</h3>
-  Note: <u>Leave fields blank or select 'any' as desired</u>
+<form method="post" action="/reports-studentWork">
+<h3>Student Work Report</h3>
 
-  <table style="margin-top: 8px;">
-  <!-- STUDENT NUMBER -->
-  <tr>
-    <td>
-      Student Number
-    <td>
-      <input  name="studentNumber" id="studentNumber" 
-              type="number" value="{{studentNum}}">
+	<div class="reportBox">
 
-  <!-- FIRST NAME -->
-  <tr>
-    <td>
-      First Name
-    <td>
-      <input name="firstName" id="firstName" value="{{fName}}">
-  </div>
+		Note: <u>Leave fields blank or select 'any' as desired</u>
 
-  <!-- LAST NAME -->
-  <tr>
-    <td>
-      Last Name
-    <td>
-      <input name="lastName" id="lastName" value="{{lName}}">
+		<table style="margin-top: 8px;">
+		<!-- STUDENT NUMBER -->
+		<tr>
+			<td>
+				Student Number
+			<td>
+				<input  name="studentNumber" id="studentNumber" 
+								type="number" value="{{studentNum}}">
 
-  <!-- DATE BEGIN -->
-  <tr>
-    <td>
-      Date Begin
-    <td>
-      <input name="dateB" id="dateB" type="date" value="{{todayDate}}">
+		<!-- FIRST NAME -->
+		<tr>
+			<td>
+				First Name
+			<td>
+				<input name="firstName" id="firstName" value="{{fName}}">
+		</div>
 
-  <!-- DATE END -->
-  <tr>
-    <td>
-      Date End
-    <td>
-      <input name="dateE" id="dateE" type="date" value="{{todayDate}}">
+		<!-- LAST NAME -->
+		<tr>
+			<td>
+				Last Name
+			<td>
+				<input name="lastName" id="lastName" value="{{lName}}">
 
-  <!-- WORK TYPE -->
-  <tr>
-    <td>
-      Work Type
-    <td>
-      <select name="workType" id="workType">
-        <option value="0">ANY</option>
-        <option value="1">School Work</option>
-        <option value="2">Reading</option>
-        <option value="3">Math Worksheet</option>
-        <option value="4">Writing Worksheet</option>
-        <option value="5">Clock/Time Worksheet</option>
-        <option value="6">Miscellaneous Worksheet</option>
-        <option disabled>--------------</option>
-        <option value="7">School Work Computer</option>
-        <option value="8">Dreambox</option>
-        <option value="9">Reading Plus</option>
-        <option value="10">Mindplay</option>
-        <option value="11">abcya</option>
-        <option value="12">Typing</option>
-        <option value="13">Prodigy</option>
-        <option value="14">Miscellaneous Computer</option>
-        <option disabled>--------------</option>
-        <option value="15">Unknown</option>
-      </select>
+		<!-- DATE BEGIN -->
+		<tr>
+			<td>
+				Date Begin
+			<td>
+				<input name="dateB" id="dateB" type="date" value="{{todayDate}}">
+
+		<!-- DATE END -->
+		<tr>
+			<td>
+				Date End
+			<td>
+				<input name="dateE" id="dateE" type="date" value="{{todayDate}}">
+
+		<!-- WORK TYPE -->
+		<tr>
+			<td>
+				Work Type
+			<td>
+				<select name="workType" id="workType">
+
+					<option value="0">ANY</option>
 
 
-  <!-- SCHOOL -->
-  <tr>
-    <td>
-      School
-    <td>
-      <select name="school_id" id="school_id">
-        <option value="0">ANY</option>
-        <option value="1">Home School</option>
-        <option value="2">Not Listed</option>
-        <option disabled>--------------</option>
-
-        <option value="3">General Beadle Elementary</option>
-        <option value="4">Grandview Elementary</option>
-        <option value="5">Horace Mann Elementary</option>
-        <option value="6">Knollwood Elementary</option>
-        <option value="7">Meadowbrook Elementary</option>
-        <option value="8">Rapid Valley Elementary</option>
-        <option value="9">Robbinsdale Elementary</option>
-        <option value="10">South Park Elementary</option>
-        <option value="11">Valley View Elementary</option>
-        <option disabled>--------------</option>
-
-        <option value="12">East Middle</option>
-        <option value="13">North Middle</option>
-        <option value="14">South Middle</option>
-        <option value="15">Southwest Middle</option>
-        <option value="16">West Middle</option>
-        <option disabled>--------------</option>
-
-        <option value="17">Central High</option>
-        <option value="18">Rapid City Christian High</option>
-        <option value="19">Stevens High</option>
-      </select>
-
-
-  <!-- AGE GROUP -->
-  <tr>
-    <td>
-      Age Group
-    <td>
-      <select name="ageGroup_id" id="ageGroup_id">
-        <option value="0">ANY</option>
-        <option value="1">Cadet</option>
-        <option value="2">Minor</option>
-        <option value="3">Junior</option>
-        <option value="4">Intermediate</option>
-        <option value="5">Senior</option>
-      </select>
-  </table>
-
-  <!-- HIT LIST -->
-  <div class="hl"> 
-    Hit Lists
-    <input name="hitlist_school" type="checkbox" value="1" 
-        {{checkedIf h_schoolWork}}>School Work
-
-    <input name="hitlist_reading" type="checkbox" value="2"
-        {{checkedIf h_reading}}>Reading
-
-    <input name="hitlist_math" type="checkbox" value="3"
-        {{checkedIf h_math}}>Math
-  </div>
-
-
-  <!-- SORT BY -->
-  <div style="margin-top: 4px"> 
-    <span>
-      Sort By
-    </span>
-
-    <span style="left-margin: 4px;"> 
-      <select name="sortBy" id="sortBy">
-        <option value="1">Last Name</option>
-        <option value="1">First Name</option>
-        <option value="2">Age Group</option>
-        <option value="3">School</option>
-      </select>
-    </span>
-
-    <span>
-      <!-- SUBMIT BUTTON -->
-      <input type="submit" value="submit" id="reportSubmitButton">
-    </span>
-
-  </div>
-</div>
-</form>
+					<option value="1">School Work</option>
+					<option value="2">Reading</option>
+					<option value="3">Math Worksheet</option>
+					<option value="4">Writing Worksheet</option>
+					<option value="5">Clock/Time Worksheet</option>
+					<option value="6">Miscellaneous Worksheet</option>
+					<option disabled>--------------</option>
+					<option value="7">School Work Computer</option>
+					<option value="8">Dreambox</option>
+					<option value="9">Reading Plus</option>
+					<option value="10">Mindplay</option>
+					<option value="11">abcya</option>
+					<option value="12">Typing</option>
+					<option value="13">Prodigy</option>
+					<option value="14">Miscellaneous Computer</option>
+					<option disabled>--------------</option>
+					<option value="15">Unknown</option>
+				</select>
 
 
 
 
 
 
+		<!-- SCHOOL -->
+		<tr>
+			<td>
+				School
+			<td>
+				<select name="school_id" id="school_id">
+					<option value="0">ANY</option>
+
+					<option value="1">Home School</option>
+					<option value="2">Not Listed</option>
+					<option disabled>--------------</option>
+					<option value="24">Black Hawk Elementary</option>
+					<option value="23">Canyon Lake Elementary</option>
+					<option value="3">General Beadle Elementary</option>
+					<option value="4">Grandview Elementary</option>
+					<option value="5">Horace Mann Elementary</option>
+					<option value="6">Knollwood Elementary</option>
+					<option value="7">Meadowbrook Elementary</option>
+					<option value="21">Pinedale Elementary</option>
+					<option value="8">Rapid Valley Elementary</option>
+					<option value="9">Robbinsdale Elementary</option>
+					<option value="20">South Canyon Elementary</option>
+					<option value="10">South Park Elementary</option>
+					<option value="11">Valley View Elementary</option>
+					<option value="22">Wilson Elementary</option>
+					<option disabled>--------------</option> 
+
+					<option value="12">East Middle</option>
+					<option value="13">North Middle</option>
+					<option value="14">South Middle</option>
+					<option value="15">Southwest Middle</option>
+					<option value="16">West Middle</option>
+					<option disabled>--------------</option>
+
+					<option value="17">Central High</option>
+					<option value="25">Jefferson Academy</option>
+					<option value="18">Rapid City Christian High</option>
+					<option value="19">Stevens High</option>
+				</select>
 
 
 
 
-<br>
+		<!-- AGE GROUP -->
+		<tr>
+			<td>
+				Age Group
+			<td>
+				<select name="ageGroup_id" id="ageGroup_id">
+					<option value="0">ANY</option>
+					<option value="1">Cadet</option>
+					<option value="2">Minor</option>
+					<option value="3">Junior</option>
+					<option value="4">Intermediate</option>
+					<option value="5">Senior</option>
+				</select>
+		</table>
 
 
-<div class="wrapper" style="width: 320px;">
+
+
+		<!-- HIT LIST -->
+		<div class="hl"> 
+			Hit Lists
+			<input name="hitlist_school" type="checkbox" value="1" 
+					{{checkedIf h_schoolWork}}>School Work
+
+			<input name="hitlist_reading" type="checkbox" value="2"
+					{{checkedIf h_reading}}>Reading
+
+			<input name="hitlist_math" type="checkbox" value="3"
+					{{checkedIf h_math}}>Math
+		</div>
+
+
+
+
+
+
+		<!-- SORT BY -->
+		<div style="margin-top: 4px"> 
+			<span>
+				Sort By
+			</span>
+
+			<span style="left-margin: 4px;"> 
+				<select name="sortBy" id="sortBy">
+					<option value="1">Last Name</option>
+					<option value="2">First Name</option>
+					<option value="3">Age Group</option>
+					<option value="4">School</option>
+				</select>
+			</span>
+
+			<span>
+				<!-- SUBMIT BUTTON -->
+				<input type="submit" value="submit" id="reportSubmitButton">
+			</span>
+
+		</div>
+
+	</form>
+	</div>
+
+
+
+
 
 
   <!-- HIT LISTS -->

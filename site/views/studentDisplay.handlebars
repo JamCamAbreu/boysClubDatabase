@@ -1,40 +1,133 @@
 
 
+<script>
+
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove ticket " + rowNum + " from database? Warning, " + 
+                "this can NOT be undone!")) {
+      deleteTicket(rowNum, "ticketTable");
+    }
+  }
+
+
+  // onclick event for the X delete buttons
+  function clickDeleteP(rowNum) {
+    if (confirm("Remove purchase " + rowNum + " from database? Warning, " + 
+                "this can NOT be undone!")) {
+      deletePurchase(rowNum, "purchasesTable"); // START HERE, create this function
+    }
+  }
+
+</script>
+
+
+
+
+
+
 <!-- =========== GENERAL INFORMATION ====== -->
-<h2> Student Information </h2>
 
-<div class="studentInfo">
-      
-  <div><h3>{{lastName}}, {{firstName}}</h3></div>
+<div id="studentInfoTopRow">
 
-  <div>Student Number: <b>{{studentNumber}}</b></div>
+	<div class="studentInfo" style="padding: 15px;">
+		<h2> Student Information </h2>
 
-  <div>Age Group: <b>{{ageGroup}}</b></div>
+		<div><h3>{{lastName}}, {{firstName}}</h3></div>
 
-  <div>School: <b>{{school}}</b></div>
+		<div>Student Number: <b>{{studentNumber}}</b></div>
 
-  <table class="pointsTable"> <tbody>
-    <tr>
-      <td>Lifetime Earned Points: <td><b>{{lifeTimeEarned}}</b>
-    <tr>
-      <td>Lifetime Spent Points:  <td><b>{{lifeTimeSpent}}</b>
-    <tr id="balance">
-      <td>Balance:                <td><b>{{balance}}</b>
+		<div>Age Group: <b>{{ageGroup}}</b></div>
 
-      <!-- Change color of balance based on amount -->
-      {{#if balanceRed}}
-        <script>$('#balance').css("background", "#f31");</script>
-      {{/if}}
-      {{#if balanceYellow}}
-        <script>$('#balance').css("background", "#ffe311");</script>
-      {{/if}}
-      {{#if balanceGreen}}
-        <script>$('#balance').css("background", "#81ff11");</script>
-      {{/if}}
+		<div>School: <b>{{school}}</b></div>
+
+		<table class="pointsTable"> <tbody>
+			<tr>
+				<td>Lifetime Earned Points: <td><b>{{lifeTimeEarned}}</b>
+			<tr>
+				<td>Lifetime Spent Points:  <td><b>{{lifeTimeSpent}}</b>
+			<tr id="balance">
+				<td>Balance:                <td><b>{{balance}}</b>
+
+				<!-- Change color of balance based on amount -->
+				{{#if balanceRed}}
+					<script>$('#balance').css("background", "#f31");</script>
+				{{/if}}
+				{{#if balanceYellow}}
+					<script>$('#balance').css("background", "#ffe311");</script>
+				{{/if}}
+				{{#if balanceGreen}}
+					<script>$('#balance').css("background", "#81ff11");</script>
+				{{/if}}
+		</tbody></table>
+
+	</div>
 
 
 
-  </tbody></table>
+	<div style="padding: 15px;">
+		<!-- NEW TICKET FIELD -->
+		<form method="post" action="/newTicket">
+		<fieldset class="newTicketTable">
+			<h2>New Library Ticket</h2>
+			<p><b>Note: <u>All fields required!</u></b></p>
+
+			<table style="text-align: left;">
+
+				<!-- STUDENT NUMBER -->
+				<tr><th><label for="studentNumber">Student Number</label></th>
+					<td><input name="studentNumber" id="studentNumber" type="number"
+		value="{{studentNum}}"></td></tr>
+
+				<!-- DATE -->
+				<tr><th><label for="date">Date</label></th>
+					<td><input name="date" id="date" type="date" value="{{todayDate}}"></td></tr>
+
+				<!-- WORK TYPE -->
+				<tr><th>Work Type
+					<td><select name="workType" id="workType">
+
+						<option value="1">School Work</option>
+						<option value="2">Reading</option>
+						<option value="3">Math Worksheet</option>
+						<option value="4">Writing Worksheet</option>
+						<option value="5">Clock/Time Worksheet</option>
+						<option value="6">Miscellaneous Worksheet</option>
+						<option disabled>--------------</option>
+						<option value="7">School Work Computer</option>
+						<option value="8">Dreambox</option>
+						<option value="9">Reading Plus</option>
+						<option value="10">Mindplay</option>
+						<option value="11">abcya</option>
+						<option value="12">Typing</option>
+						<option value="13">Prodigy</option>
+						<option value="14">Miscellaneous Computer</option>
+						<option disabled>--------------</option>
+						<option value="15">Unknown</option>
+					</select></td></tr>
+
+				<!-- Point Amount -->
+				<tr><th><label for="amount">Point Amount</label></th>
+					<td><input name="amount" id="amount" type="number"
+		value="{{amount}}"></td></tr>
+
+			</table>
+
+			<!-- NOTES -->
+			<div class="noteBox">
+				<div><b>Notes/Comments:</b></div>
+				<textarea rows="4" cols="50" name="notes">{{notes}}</textarea>
+			</div>
+			
+			<!-- SUBMIT BUTTON -->
+			<input type="submit" value="Submit" id="submitButton">
+			
+		</fieldset></form>
+
+
+
+	</div>
+
 
 </div>
 
@@ -47,9 +140,10 @@
 <i>(Most recent at top)</i>
 <!-- IF TICKETS EXIST FOR STUDENT -->
 {{#if numTickets}}
-  <table class="ticketTable">
+  <table class="ticketTable" id="ticketTable">
     <thead>
       <tr>
+        <th style="background: #fff1cc;">
         <th id="T_DATE">DATE
         <th id="T_WT">Work Type
         <th id="T_P">Points Earned
@@ -58,7 +152,12 @@
     <!-- EACH TICKET -->
     <tbody>
     {{#each ticket}}
-      <tr id="row{{this.id}}">
+      <tr id="Trow{{this.id}}">
+        <td style="text-align: center; background: #fff1cc;">
+          <button class="deleteButton"
+            onclick="clickDelete({{this.id}})"
+            style="margin-right: 8px;">X
+          </button>
         <td>{{this.date}}
         <td>{{this.workType}}
         <td>{{this.pointsEarned}}
@@ -83,7 +182,7 @@
 <i>(Most recent at top)</i>
 <!-- IF PURCHASES EXIST FOR STUDENT -->
 {{#if numPurchases}}
-  <table class="purchasesTable">
+  <table class="purchasesTable" id="purchasesTable">
     <thead>
       <tr>
         <th id="P_DATE">DATE
@@ -93,7 +192,7 @@
     <!-- EACH TICKET -->
     <tbody>
     {{#each purchase}}
-      <tr id="row{{this.id}}">
+      <tr id="Prow{{this.id}}">
         <td>{{this.date}}
         <td>{{this.amount}}
         <td>{{this.notes}}

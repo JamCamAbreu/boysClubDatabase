@@ -181,12 +181,11 @@ th { padding: 2px; }
 
 
 
-/* ========= STUDENT INFO TABLE ============= */
+/* ========= STUDENT INFO ============= */
 .studentInfo {
   background-color: #fff1cc;
   padding: 2px 6px 6px 6px;
   border-spacing: 0;
-  width: 400px;
   border: 1px solid black;
 }
 
@@ -206,6 +205,29 @@ th { padding: 2px; }
   border-collapse: collapse;
   background: #eee1bb;
 }
+ 
+#studentInfoTopRow {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	align-items: stretch;
+}
+
+#studentInfoTopRow div {
+	flex-grow: 1;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -246,12 +268,23 @@ th { padding: 2px; }
 
 /* In Ticket Page */
 #TT_DATE  {width: 15%}
+#TT_ID  	{width: 10%}
 #TT_LN    {width: 15%}
 #TT_FN    {width: 15%}
 #TT_T     {width: 15%}
-#TT_A     {width: 10%}
-#TT_NOTE  {width: 30%}
+#TT_A     {width: 5%}
+#TT_NOTE  {width: 25%}
 
+
+
+
+/* In Purchase Page */
+#PT_DATE  {width: 15%}
+#PT_ID  	{width: 15%}
+#PT_LN    {width: 15%}
+#PT_FN    {width: 15%}
+#PT_A     {width: 10%}
+#PT_NOTE  {width: 30%}
 
 
 
@@ -351,14 +384,20 @@ th { padding: 2px; }
 
 .wrapper {
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
+	flex-wrap: wrap;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: stretch;
 }
 
 .wrapper > div {
   flex-grow: 1;
 }
+
+
+
+
+
 
 
 

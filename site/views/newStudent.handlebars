@@ -53,17 +53,21 @@ value="{{studentNum}}"></td></tr>
         <option value="1">Home School</option>
         <option value="2">Not Listed</option>
         <option disabled>--------------</option>
-
+        <option value="24">Black Hawk Elementary</option>
+        <option value="23">Canyon Lake Elementary</option>
         <option value="3">General Beadle Elementary</option>
         <option value="4">Grandview Elementary</option>
         <option value="5">Horace Mann Elementary</option>
         <option value="6">Knollwood Elementary</option>
         <option value="7">Meadowbrook Elementary</option>
+        <option value="21">Pinedale Elementary</option>
         <option value="8">Rapid Valley Elementary</option>
         <option value="9">Robbinsdale Elementary</option>
+        <option value="20">South Canyon Elementary</option>
         <option value="10">South Park Elementary</option>
         <option value="11">Valley View Elementary</option>
-        <option disabled>--------------</option>
+        <option value="22">Wilson Elementary</option>
+        <option disabled>--------------</option> 
 
         <option value="12">East Middle</option>
         <option value="13">North Middle</option>
@@ -73,6 +77,7 @@ value="{{studentNum}}"></td></tr>
         <option disabled>--------------</option>
 
         <option value="17">Central High</option>
+        <option value="25">Jefferson Academy</option>
         <option value="18">Rapid City Christian High</option>
         <option value="19">Stevens High</option>
       </select></td></tr>
@@ -111,30 +116,19 @@ value="{{studentNum}}"></td></tr>
 
 
 
+<!-- REMEMBERING DATA IN CASE OF ERRORS -->
 <script>
-  //$(document).ready(function () {
-
     // REMEMBER which school id in case of error:
     {{#if school_id}}
-      var num = {{school_id}} - 1;
-      var realIndex = num; // logic because of dashes in select
-      if (num >= 2)
-        realIndex++;
-      if (num >= 11)
-        realIndex++;
-      if (num >= 16)
-        realIndex++;
-      $("#school_id")[0].selectedIndex = realIndex;
+			var id = {{school_id}};
+			document.getElementById('school_id').value = id;
     {{/if}}
-
 
     // REMEMBER age group id in case of error:
     {{#if ageG_id}}
-      var num = {{ageG_id}} - 1;
-      $("#ageGroup_id")[0].selectedIndex = num;
+      var AG = {{ageG_id}};
+			document.getElementById('ageGroup_id').value = AG;
     {{/if}}
-
-  //}); // end on document.ready
 </script>
 
 

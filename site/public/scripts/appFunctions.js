@@ -8,16 +8,18 @@
  * *******************************************/
 
 
+// NOTE: If I change these I also need to change in the javascript server
 var portUsed = 55850;
-  // NOTE: If I change this I also need to change in the javascript server
-var URL = "http://192.168.16.89:";
-  // NOTE: If I change this I also need to change in the javascript server
+
+var URL = "http://192.168.16.89:"; // BOYS CLUB IP
+//var URL = "http://192.168.0.22:"; // Cam's House IP
 
 
 
 /* *******************************************
- * DELETE BUTTON ACTION
+ * DELETE BUTTON ACTION (STUDENT ONLY...)
  * ******************************************/
+
 function deleteButtonAction(rowNum, ID_table) {
   
   var req = new XMLHttpRequest();
@@ -45,6 +47,85 @@ function deleteButtonAction(rowNum, ID_table) {
 
   });
 }
+
+
+
+/* *******************************************
+ * DELETE TICKET
+ * ******************************************/
+
+function deleteTicket(rowNum, ID_table) {
+
+  var req = new XMLHttpRequest();
+  req.open("GET", URL + portUsed + "/removeTicket?" + "id=" + rowNum, true);
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(null);
+  req.addEventListener("load", function() {
+
+    // successfully deleted from database??:
+    var responseRequest = parseInt(req.responseText);
+    if (req.status >= 200 & req.status < 400 & responseRequest == 1) {
+
+      // DELETE BY ACCESSING DOM:
+      var rowToDelete = document.getElementById("Trow" + rowNum).rowIndex;
+      document.getElementById(ID_table).deleteRow(rowToDelete);
+      alert("Ticket successfully deleted.");
+    }
+
+    // COULD NOT DELETE FROM DATABASE:
+    else {
+      alert("Ticket could NOT be deleted from database!\n" + 
+        "Please wait and try again in a few seconds");
+      console.log("responseRequest = " + responseRequest);
+    }
+
+  });
+}
+
+
+
+
+/* *******************************************
+ * DELETE PURCHASE
+ * ******************************************/
+
+function deletePurchase(rowNum, ID_table) {
+  
+  var req = new XMLHttpRequest();
+  req.open("GET", URL + portUsed + "/removePurchase?" + "id=" + rowNum, true);
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(null);
+  req.addEventListener("load", function() {
+
+    // successfully deleted from database??:
+    var responseRequest = parseInt(req.responseText);
+    if (req.status >= 200 & req.status < 400 & responseRequest == 1) {
+
+      // DELETE BY ACCESSING DOM:
+      var rowToDelete = document.getElementById("Prow" + rowNum).rowIndex;
+      document.getElementById(ID_table).deleteRow(rowToDelete);
+      alert("Purchase successfully deleted.");
+    }
+
+    // COULD NOT DELETE FROM DATABASE:
+    else {
+      alert("Purchase could NOT be deleted from database!\n" + 
+        "Please wait and try again in a few seconds");
+      console.log("responseRequest = " + responseRequest);
+    }
+
+  });
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
