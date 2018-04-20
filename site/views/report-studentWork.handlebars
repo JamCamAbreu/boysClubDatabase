@@ -25,15 +25,15 @@
 			<thead>
 				<tr>
 					<th style="background: #fff1cc;">
-					<th>Date Completed
-					<th>Student Number
-					<th>First Name
-					<th>Last Name
-					<th>Age Group
-					<th>School
-					<th>Work Type
-					<th>Points
-					<th>Notes/comments
+						<small><th>Date Completed</small>
+						<small><th>Student Number</small>
+						<small><th>First Name</small>
+						<small><th>Last Name</small>
+						<small><th>Age Group</small>
+						<small><th>School</small>
+						<small><th>Work Type</small>
+						<small><th>Points</small>
+						<small><th>Notes/comments</small>
 
 			<!-- EACH ROW -->
 			<tbody>
@@ -46,13 +46,13 @@
 						</button>
 					<td>{{this.date}}
 					<td>{{this.studentNumber}}
-					<td>{{this.firstName}}
-					<td>{{this.lastName}}
-					<td>{{this.ageGroup}}
-					<td>{{this.school}}
-					<td>{{this.workType}}
+					<td><small>{{this.firstName}}</small>
+					<td><small>{{this.lastName}}</small>
+					<td><small>{{this.ageGroup}}</small>
+					<td><small>{{this.school}}</small>
+					<td><small>{{this.workType}}</small>
 					<td>{{this.points}}
-					<td>{{this.notes}}
+					<td><small>{{this.notes}}</small>
 			{{/each}} <!-- END ROW -->
 			</tbody>
 	</table>

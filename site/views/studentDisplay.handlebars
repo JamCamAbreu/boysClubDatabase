@@ -185,14 +185,20 @@
   <table class="purchasesTable" id="purchasesTable">
     <thead>
       <tr>
+        <th style="background: #fff1cc;">
         <th id="P_DATE">DATE
         <th id="P_A">Points Spent
         <th id="P_NOTE">Notes
 
-    <!-- EACH TICKET -->
+    <!-- EACH PURCHASE -->
     <tbody>
     {{#each purchase}}
       <tr id="Prow{{this.id}}">
+        <td style="text-align: center; background: #fff1cc;">
+          <button class="deleteButton"
+            onclick="clickDeleteP({{this.id}})"
+            style="margin-right: 8px;">X
+          </button>
         <td>{{this.date}}
         <td>{{this.amount}}
         <td>{{this.notes}}

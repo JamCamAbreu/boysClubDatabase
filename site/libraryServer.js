@@ -1208,7 +1208,9 @@ app.post("/searchStudentName", function (req, res, next) {
   var completeForm = true; // true until proven false
 
   context.fName = req.body.firstName;
+	var fNameParse = "%" + req.body.firstName + "%";
   context.lName = req.body.lastName;
+	var lNameParse = "%" + req.body.lastName + "%";
 
   if ((context.fName.length <= 0) && (context.lName.length <= 0)) {
     completeForm = false;
@@ -1235,17 +1237,20 @@ app.post("/searchStudentName", function (req, res, next) {
 
     // first name provided:
     if (context.fName.length > 0) {
-      sqlString += "firstName = ?";
-      inserts.push(context.fName);
+      sqlString += "firstName LIKE ?";
+      inserts.push(fNameParse);
     }
 
     if (context.fName.length > 0 && context.lName.length > 0)
-      sqlString += "AND ";
+      sqlString += " AND ";
 
     if (context.lName.length > 0) {
-      sqlString += "lastName = ?";
-      inserts.push(context.lName);
+      sqlString += "lastName LIKE ?";
+      inserts.push(lNameParse);
     }
+
+		// last name alphebetical:
+		sqlString += " ORDER BY lastName";
 
     // SEND the query:
     mysql.pool.query(sqlString, inserts, function(err, rows, fields){
@@ -1491,7 +1496,7 @@ app.post("/reports-studentWork", function (req, res, next) {
 		}
 
 
-		console.log("total string = " + sqlString);
+		//console.log("total string = " + sqlString);
 		//console.log("TOTAL CONDITIONS = " + conditionCount);
 		//console.log("INSERTS = " + inserts.length);
 

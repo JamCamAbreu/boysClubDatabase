@@ -42,7 +42,7 @@ th { padding: 2px; }
 
 #titleBar {
   padding: 4px;
-  background-color: #88f;
+  background-color: black;
   margin-bottom: 8px;
   display: flex;
   flex-direction: row;
@@ -63,8 +63,31 @@ th { padding: 2px; }
   cursor: pointer;
 }
 
+
+#l_home { background-color: #c99400 !important; }
+#l_home:hover { background-color: black !important; }
+
+#l_search { background-color: #997100 !important; }
+#l_search:hover { background-color: black !important; }
+
+#l_allStudents { background-color: #997100 !important; }
+#l_allStudents:hover { background-color: black !important; }
+
+#l_newStudent { background-color: #997100 !important; }
+#l_newStudent:hover { background-color: black !important; }
+
+#l_ticket { background-color: #b5a2fe !important; }
+#l_ticket:hover { background-color: black !important; }
+
+#l_purchase { background-color: #9377fd !important; }
+#l_purchase:hover { background-color: black !important; }
+
+#l_reports { background-color: #1e018a !important; }
+#l_reports:hover { background-color: black !important; }
+
 #l_minecraft { background-color: #454 !important; }
-#l_minecraft:hover { background-color: #030 !important; }
+#l_minecraft:hover { background-color: black !important; }
+
 
 .barWhole {
   margin: 0px;
