@@ -88,6 +88,14 @@ th { padding: 2px; }
 #l_minecraft { background-color: #454 !important; }
 #l_minecraft:hover { background-color: black !important; }
 
+#l_pt { background-color: #9622a5 !important; }
+#l_pt:hover { background-color: black !important; }
+
+#l_pp { background-color: #761982 !important; }
+#l_pp:hover { background-color: black !important; }
+
+#l_pr { background-color: #501158 !important; }
+#l_pr:hover { background-color: black !important; }
 
 .barWhole {
   margin: 0px;

@@ -1,17 +1,4 @@
 
-<script>
-  // onclick event for the X delete buttons
-  function clickDelete(rowNum) {
-    if (confirm("Remove purchase from database? Warning, " + 
-                "this can NOT be undone!")) {
-			deletePurchase(rowNum, "recentPurchaseTable");
-    }
-  }
-</script>
-
-
-
-
 
 <!-- ERRORS -->
 {{#if errorList}}
@@ -34,10 +21,11 @@
 
 
 
-<!-- NEW Purchase FIELD -->
-<h2>New Library Purchase</h2>
-<form method="post" action="/newPurchase">
-<fieldset class="newPurchaseTable">
+<h2>New Panther Ticket</h2>
+
+<!-- NEW TICKET FIELD -->
+<form method="post" action="/pantherTicket">
+<fieldset class="newTicketTable" style="background: #ffccf9;">
   <p><b>Note: <u>All fields required!</u></b></p>
 
   <table style="text-align: left;">
@@ -51,8 +39,19 @@ value="{{studentNum}}"></td></tr>
     <tr><th><label for="date">Date</label></th>
       <td><input name="date" id="date" type="date" value="{{todayDate}}"></td></tr>
 
-    <!-- Amount -->
-    <tr><th><label for="amount">Total Purchase Amount</label></th>
+    <!-- WORK TYPE -->
+    <tr><th>Work Type
+      <td><select name="workType" id="workType">
+
+        <option value="1">Tournament</option>
+        <option value="2">Contest</option>
+        <option value="3">Cleaning</option>
+        <option value="4">Recycling</option>
+        <option value="5">Other</option>
+      </select></td></tr>
+
+    <!-- Point Amount -->
+    <tr><th><label for="amount">Point Amount</label></th>
       <td><input name="amount" id="amount" type="number"
 value="{{amount}}"></td></tr>
 
@@ -70,27 +69,29 @@ value="{{amount}}"></td></tr>
 </fieldset></form>
 
 
-<!-- =========== RECENT PURCHASES =========== -->
+
+<!-- =========== RECENT TICKETS =========== -->
 <br>
-<h2>Most Recent Purchases</h2>
+<h2>Most Recent Panther Tickets</h2>
 <i>(Most recent at top)</i>
-<!-- IF PURCHASES EXIST -->
-{{#if numPT}}
-  <table class="recentPurchaseTable" id="recentPurchaseTable">
+<!-- IF TICKETS EXIST -->
+{{#if numTT}}
+  <table class="recentTicketTable" id="recentTicketTable" style="background: #ffccf9;">
     <thead>
       <tr>
         <th style="background: #fff1cc;">
-        <th id="PT_DATE">DATE
-        <th id="PT_ID">Student ID
-        <th id="PT_LN">Last Name
-        <th id="PT_FN">First Name
-        <th id="PT_A">Amount
-        <th id="PT_NOTE">Notes
+        <th id="TT_DATE">DATE
+        <th id="TT_ID">Student ID
+        <th id="TT_LN">Last Name
+        <th id="TT_FN">First Name
+        <th id="TT_T">Type
+        <th id="TT_A">Amount
+        <th id="TT_NOTE">Notes
 
-    <!-- EACH PURCHASE -->
+    <!-- EACH TICKET -->
     <tbody>
-    {{#each PT}}
-      <tr id="Prow{{this.id}}">
+    {{#each TT}}
+      <tr id="Trow{{this.id}}">
         <td style="text-align: center; background: #fff1cc;">
           <button class="deleteButton"
             onclick="clickDelete({{this.id}})"
@@ -98,19 +99,29 @@ value="{{amount}}"></td></tr>
           </button>
         <td>{{this.date}}
         <td>{{this.num}}
-        <td>{{this.lName}}
         <td>{{this.fName}}
+        <td>{{this.lName}}
+        <td>{{this.type}}
         <td>{{this.amount}}
 				<td><small>{{this.notes}}</small>
     {{/each}} <!-- END ROW -->
     </tbody>
   </table>
 
-<!-- NO Purchases YET -->
+<!-- NO Tickets YET -->
 {{else}}
-    <p><i>No entries for library purchases yet...</i></p>
+    <p><i>No entries for library tickets yet...</i></p>
     <br>
 {{/if}}
+
+
+
+
+
+
+
+
+
 
 
 

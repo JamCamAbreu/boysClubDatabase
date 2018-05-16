@@ -6,7 +6,7 @@
   function clickDelete(rowNum) {
     if (confirm("Remove ticket " + rowNum + " from database? Warning, " + 
                 "this can NOT be undone!")) {
-      deleteTicket(rowNum, "ticketTable");
+      deleteTicket(rowNum, "resultsTable");
     }
   }
 </script>
@@ -38,7 +38,7 @@
 			<!-- EACH ROW -->
 			<tbody>
 			{{#each row}}
-				<tr id="row{{this.studentNumber}}" onclick="clickRow({{this.tid}})">
+				<tr id="Trow{{this.tid}}">
 					<td style="text-align: center; background: #fff1cc;">
 						<button class="deleteButton"
 							onclick="clickDelete({{this.tid}})"

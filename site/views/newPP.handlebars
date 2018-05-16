@@ -1,0 +1,68 @@
+
+
+<!-- ERRORS -->
+{{#if errorList}}
+<div id="errors">
+  {{#each errorList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+<!-- SUCCESSES -->
+{{#if successList}}
+<div id="successes">
+  {{#each successList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+<h2>New Panther Purchase</h2>
+
+<!-- NEW Purchase FIELD -->
+<form method="post" action="/pantherPurchase">
+<fieldset class="newPurchaseTable" style="background: #ffccf9;">
+  <p><b>Note: <u>All fields required!</u></b></p>
+
+  <table style="text-align: left;">
+
+    <!-- STUDENT NUMBER -->
+    <tr><th><label for="studentNumber">Student Number</label></th>
+      <td><input name="studentNumber" id="studentNumber" type="number"
+value="{{studentNum}}"></td></tr>
+
+    <!-- DATE -->
+    <tr><th><label for="date">Date</label></th>
+      <td><input name="date" id="date" type="date" value="{{todayDate}}"></td></tr>
+
+    <!-- Amount -->
+    <tr><th><label for="amount">Total Purchase Amount</label></th>
+      <td><input name="amount" id="amount" type="number"
+value="{{amount}}"></td></tr>
+
+  </table>
+
+  <!-- NOTES -->
+  <div class="noteBox">
+    <div><b>Notes/Comments:</b></div>
+    <textarea rows="4" cols="50" name="notes">{{notes}}</textarea>
+  </div>
+  
+  <!-- SUBMIT BUTTON -->
+  <input type="submit" value="Submit" id="submitButton">
+  
+</fieldset></form>
+
+
+
+
+
+
+
+
+
+
+
