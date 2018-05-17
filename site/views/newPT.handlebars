@@ -1,4 +1,16 @@
 
+<script>
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove Panther ticket from database? Warning, " + 
+                "this can NOT be undone!")) {
+			deletePantherTicket(rowNum, "recentTicketTable");
+    }
+  }
+</script>
+
+
+
 
 <!-- ERRORS -->
 {{#if errorList}}
@@ -110,18 +122,8 @@ value="{{amount}}"></td></tr>
 
 <!-- NO Tickets YET -->
 {{else}}
-    <p><i>No entries for library tickets yet...</i></p>
+    <p><i>No entries for panther tickets yet...</i></p>
     <br>
 {{/if}}
-
-
-
-
-
-
-
-
-
-
 
 

@@ -120,6 +120,39 @@ function deletePurchase(rowNum, ID_table) {
 
 
 
+/* *******************************************
+ * DELETE PANTHER TICKET
+ * ******************************************/
+
+function deletePantherTicket(rowNum, ID_table) {
+
+  var req = new XMLHttpRequest();
+  req.open("GET", URL + portUsed + "/removePantherTicket?" + "id=" + rowNum, true);
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(null);
+  req.addEventListener("load", function() {
+
+    // successfully deleted from database??:
+    var responseRequest = parseInt(req.responseText);
+    if (req.status >= 200 & req.status < 400 & responseRequest == 1) {
+
+      // DELETE BY ACCESSING DOM:
+      var rowToDelete = document.getElementById("Trow" + rowNum).rowIndex;
+      document.getElementById(ID_table).deleteRow(rowToDelete);
+      alert("Panther Ticket successfully deleted.");
+    }
+
+    // COULD NOT DELETE FROM DATABASE:
+    else {
+      alert("Panther Ticket could NOT be deleted from database!\n" + 
+        "Please wait and try again in a few seconds");
+      console.log("responseRequest = " + responseRequest);
+    }
+
+  });
+}
+
+
 
 
 
@@ -159,6 +192,39 @@ function postStudentPage(studentNum) {
 }
 
 
+
+
+/* *******************************************
+ * DELETE PANTHER PURCHASE
+ * ******************************************/
+
+function deletePPurchase(rowNum, ID_table) {
+  
+  var req = new XMLHttpRequest();
+  req.open("GET", URL + portUsed + "/removePantherPurchase?" + "id=" + rowNum, true);
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(null);
+  req.addEventListener("load", function() {
+
+    // successfully deleted from database??:
+    var responseRequest = parseInt(req.responseText);
+    if (req.status >= 200 & req.status < 400 & responseRequest == 1) {
+
+      // DELETE BY ACCESSING DOM:
+      var rowToDelete = document.getElementById("Prow" + rowNum).rowIndex;
+      document.getElementById(ID_table).deleteRow(rowToDelete);
+      alert("Panther Purchase successfully deleted.");
+    }
+
+    // COULD NOT DELETE FROM DATABASE:
+    else {
+      alert("Panther Purchase could NOT be deleted from database!\n" + 
+        "Please wait and try again in a few seconds");
+      console.log("responseRequest = " + responseRequest);
+    }
+
+  });
+}
 
 
 

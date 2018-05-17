@@ -1,4 +1,16 @@
 
+<script>
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove panther purchase from database? Warning, " + 
+                "this can NOT be undone!")) {
+			deletePPurchase(rowNum, "recentPurchaseTable");
+    }
+  }
+</script>
+
+
+
 
 <!-- ERRORS -->
 {{#if errorList}}
@@ -59,10 +71,46 @@ value="{{amount}}"></td></tr>
 
 
 
+<!-- =========== RECENT PURCHASES =========== -->
+<br>
+<h2>Most Recent Panther Purchases</h2>
+<i>(Most recent at top)</i>
+<!-- IF PURCHASES EXIST -->
+{{#if numPT}}
+  <table class="recentPurchaseTable" id="recentPurchaseTable">
+    <thead>
+      <tr>
+        <th style="background: #fff1cc;">
+        <th id="PT_DATE">DATE
+        <th id="PT_ID">Student ID
+        <th id="PT_LN">Last Name
+        <th id="PT_FN">First Name
+        <th id="PT_A">Amount
+        <th id="PT_NOTE">Notes
 
+    <!-- EACH PURCHASE -->
+    <tbody>
+    {{#each PT}}
+      <tr id="Prow{{this.id}}">
+        <td style="text-align: center; background: #fff1cc;">
+          <button class="deleteButton"
+            onclick="clickDelete({{this.id}})"
+            style="margin-right: 8px;">X
+          </button>
+        <td>{{this.date}}
+        <td>{{this.num}}
+        <td>{{this.lName}}
+        <td>{{this.fName}}
+        <td>{{this.amount}}
+				<td><small>{{this.notes}}</small>
+    {{/each}} <!-- END ROW -->
+    </tbody>
+  </table>
 
-
-
-
+<!-- NO Purchases YET -->
+{{else}}
+    <p><i>No entries for Panther purchases yet...</i></p>
+    <br>
+{{/if}}
 
 
