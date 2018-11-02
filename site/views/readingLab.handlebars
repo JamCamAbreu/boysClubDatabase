@@ -1,0 +1,119 @@
+
+<script>
+  // clicking a row takes you to that student page
+  function clickRow(rowNum) {
+
+    var url = URL + portUsed + "/student?scanID=" + rowNum;
+    window.location = url;
+  }
+</script>
+
+
+<div style="height: 64px;">
+	<span style="float: center; margin-top: 30px;">
+		<h2 align="center" style="margin: 0px;">Reading Lab</h2>
+		<p style="margin: 0px;" align="center"><b>{{mon}}</b>(Mon) through <b>{{fri}}</b>(Fri)</p>
+	</span>
+
+	<!--
+	<span style="float: right;">
+		<img src="images/pickaxe.png" alt="minecraft pickaxe">
+	</span>
+	-->
+</div>
+
+
+
+
+
+
+
+
+<div id="dataBox">
+<table class="resultsTable" id="resultsTable" style="width:300px; border: 2px solid black; border-collapse: collapse;">
+	<caption><h3>~Pages Read This Week~</h3></caption>
+	<tbody>
+		<tr style="border: 1px solid grey;">
+			<td>Monday<b>{{this.monToday}}</b>:
+			<td align="right">{{this.pagesMonday}}
+		<tr style="border: 1px solid grey;">
+			<td>Tuesday<b>{{this.tueToday}}</b>:
+			<td align="right">{{this.pagesTuesday}}
+		<tr style="border: 1px solid grey;">
+			<td>Wednesday<b>{{this.wedToday}}</b>:
+			<td align="right">{{this.pagesWednesday}}
+		<tr style="border: 1px solid grey;">
+			<td>Thursday<b>{{this.thuToday}}</b>:
+			<td align="right">{{this.pagesThursday}}
+		<tr style="border: 1px solid grey;">
+			<td>Friday<b>{{this.friToday}}</b>:
+			<td align="right">{{this.pagesFriday}}
+		<tr style="border: 2px solid black; background-color: #8bc34a">
+			<td align="center" style="padding-top:8px; padding-bottom:8px"><b>WEEK TOTAL:</b>
+			<td align="right"><b>{{this.pagesWeekTotal}}</b>
+		<tr style="border: 2px solid black; background-color: #4caf50">
+			<td align="center" style="padding-top:8px; padding-bottom:8px"><b>MONTH TOTAL:</b>
+			<td align="right"><b>{{this.pagesMonthTotal}}</b>
+		<tr style="border: 2px solid black; background-color: #009688">
+			<td align="center" style="padding-top:8px; padding-bottom:8px"><b>SCHOOL YEAR TOTAL:</b>
+			<h5 style="margin: 4px;">
+				<i>{{this.startSchoolYear}} through {{this.today}}
+			</i></h5>
+			<td align="right"><b>{{this.pagesProgramTotal}}</b>
+	</tbody>
+</table>
+
+
+
+
+
+
+
+
+<br>
+<form method="get" action="/readingLab" style="margin-top: 48px;">
+	<h3>Minimum weekly worked days:
+		<input type="number" value="{{days}}" id="days" name="days">
+	</h3>
+	
+</form>
+
+
+
+
+<div id="studentListing">
+{{#if numStudents}}
+<table class="resultsTable" id="resultsTable">
+
+  <!-- IF STUDENTS EXIST IN DATABASE -->
+    <thead>
+      <tr>
+        <th style="background: #fff1cc;">
+        <th id="MC_SN">Student Number
+        <th id="MC_FN">First Name
+        <th id="MC_LN">Last Name
+        <th id="MC_WC">Days Read (this week)
+
+    <!-- EACH ROW -->
+    <tbody>
+    {{#each S}}
+      <tr id="row{{this.studentNumber}}" onclick="clickRow({{this.id}})">
+        <td style="text-align: center; background: #fff1cc;">
+        <td>{{this.id}}
+        <td>{{this.fName}}
+        <td>{{this.lName}}
+        <td>{{this.works}}
+    {{/each}} <!-- END ROW -->
+    </tbody>
+</table>
+
+<!-- NO STUDENTS IN DATABASE -->
+{{else}}
+  <p><i>No students eligible for minecraft yet this week! </i></p>
+  <p><i>Check date range to ensure correct results.</i></p>
+{{/if}}
+
+
+</div>
+
+

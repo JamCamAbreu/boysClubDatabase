@@ -1628,7 +1628,9 @@ app.post("/reports-studentWork", function (req, res, next) {
 
 
 
-app.get("/minecraftClub", function (req, res, next) {
+
+
+app.get("/readingLab", function (req, res, next) {
 
   var context = {
     errorList: [],
@@ -1636,11 +1638,9 @@ app.get("/minecraftClub", function (req, res, next) {
   };
 
 	// DEFAULT settings:
-	var daysRequirement = 2;
+	var daysRequirement = 1;
   var beg = "\"" + moment(moment().startOf('isoWeek')).format("YYYY-MM-DD") + "\"";
   var end = "\"" + moment(moment().endOf('isoWeek')).format("YYYY-MM-DD") + "\"";
-	context.beg = beg;
-	context.end = end;
 	console.log("Generating Minecraft Club report between " + beg + " and " + end + "...");
 
 
@@ -1711,12 +1711,127 @@ WHERE temp.w >= 3
 
 		} // end for
 
-		// RENDER PAGE:
-		res.render('minecraft', context);
 
+	// Query pages read for students each day this week:
+	context.today = moment().format("YYYY-MM-DD");
+	var isToday = " (Today)";
+	var Mon = moment().day("Monday").format("YYYY-MM-DD");
+	if (Mon == context.today) { context.monToday = isToday; }
+	context.mon = Mon;
+	var Tue = moment().day("Tuesday").format("YYYY-MM-DD");
+	if (Tue == context.today) { context.tueToday = isToday; }
+	var Wed = moment().day("Wednesday").format("YYYY-MM-DD");
+	if (Wed == context.today) { context.wedToday = isToday; }
+	var Thu = moment().day("Thursday").format("YYYY-MM-DD");
+	if (Thu == context.today) { context.thuToday = isToday; }
+	var Fri = moment().day("Friday").format("YYYY-MM-DD");
+	if (Fri == context.today) { context.friToday = isToday; }
+	context.fri = Fri;
+	var startMonth = moment().startOf("month").format("YYYY-MM-DD");
+	context.startSchoolYear = moment().month("August").startOf("month").format("YYYY-MM-DD");
+
+	var dayQ = "SELECT SUM(LT.pointEarnedAmount) AS 'sum' " + 
+						 "FROM `tbl_libraryTicket` LT " + 
+						 "WHERE LT.dateCompleted ";
+
+	var mondayQ = "='" + Mon + "'";
+	var tuesdayQ = "='" + Tue + "'";
+	var wednesdayQ = "='" + Wed + "'";
+	var thursdayQ = "='" + Thu + "'";
+	var fridayQ = "='" + Fri + "'";
+	var monthQ = "BETWEEN '" + startMonth + "' AND '" + context.today + "'";
+	var yearQ = "BETWEEN '" + context.startSchoolYear + "' AND '" + context.today + "'";
+
+
+	// -- SEND MONDAY -->
+	mysql.pool.query(dayQ + mondayQ, inserts, function(err, rows, fields){
+		if (err) { console.log("Error in selecting student from DB."); next(err); return; }
+		var row = rows[0];
+		context.pagesMonday = row.sum;
+		if (!context.pagesMonday) { context.pagesMonday = '0'; }
+
+	// -- SEND TUESDAY -->
+	mysql.pool.query(dayQ + tuesdayQ, inserts, function(err, rows, fields){
+		if (err) { console.log("Error in selecting student from DB."); next(err); return; }
+		var row = rows[0];
+		context.pagesTuesday = row.sum;
+		if (!context.pagesTuesday) { context.pagesTuesday = '0'; }
+
+
+	// -- SEND WEDNESDAY -->
+	mysql.pool.query(dayQ + wednesdayQ, inserts, function(err, rows, fields){
+		if (err) { console.log("Error in selecting student from DB."); next(err); return; }
+		var row = rows[0];
+		context.pagesWednesday = row.sum;
+		if (!context.pagesWednesday) { context.pagesWednesday = '0'; }
+
+
+	// -- SEND THURSDAY -->
+	mysql.pool.query(dayQ + thursdayQ, inserts, function(err, rows, fields){
+		if (err) { console.log("Error in selecting student from DB."); next(err); return; }
+		var row = rows[0];
+		context.pagesThursday = row.sum;
+		if (!context.pagesThursday) { context.pagesThursday = '0'; }
+
+
+	// -- SEND FRIDAY -->
+	mysql.pool.query(dayQ + fridayQ, inserts, function(err, rows, fields){
+		if (err) { console.log("Error in selecting student from DB."); next(err); return; }
+		var row = rows[0];
+		context.pagesFriday = row.sum;
+		if (!context.pagesFriday) { context.pagesFriday = '0'; }
+
+
+	// -- WEEK TOTAL -->
+	var weekTotal = 0;
+	weekTotal += parseInt(context.pagesMonday, 10);
+	weekTotal += parseInt(context.pagesTuesday, 10);
+	weekTotal += parseInt(context.pagesWednesday, 10);
+	weekTotal += parseInt(context.pagesThursday, 10);
+	weekTotal += parseInt(context.pagesFriday, 10);
+	context.pagesWeekTotal = weekTotal; // set context here
+
+	// Query pages read this month total:
+	// -- SEND MONTH -->
+	mysql.pool.query(dayQ + monthQ, inserts, function(err, rows, fields){
+		if (err) { console.log("Error in selecting student from DB."); next(err); return; }
+		var row = rows[0];
+		context.pagesMonthTotal = row.sum;
+		if (!context.pagesMonthTotal) { context.pagesMonthTotal = '0'; }
+
+
+	// Query pages read this year total:
+	// -- SEND SCHOOL YEAR -->
+	mysql.pool.query(dayQ + yearQ, inserts, function(err, rows, fields){
+		if (err) { console.log("Error in selecting student from DB."); next(err); return; }
+		var row = rows[0];
+		context.pagesProgramTotal = row.sum;
+		if (!context.pagesProgramTotal) { context.pagesProgramTotal = '0'; }
+
+
+
+
+		// RENDER PAGE:
+		res.render('readingLab', context);
+
+
+	}); // end query for Year 
+	}); // end query for Month 
+	}); // end query for Friday 
+	}); // end query for Thursday 
+	}); // end query for Wednesday
+	}); // end query for Tuesday 
+	}); // end query for Monday 
 	}); // end query for insert
 
 });
+
+
+
+
+
+
+
 
 
 
@@ -2115,6 +2230,10 @@ app.get("/pantherPurchase", function (req, res, next) {
 
 
 
+
+
+
+
 app.post("/pantherPurchase", function (req, res, next) {
 
   var context = {
@@ -2144,6 +2263,7 @@ app.post("/pantherPurchase", function (req, res, next) {
       if (rows.length <= 0) {
         completeForm = false;
         context.errorList.push("Student with ID number " + studentNum + " does not exist in database yet.");
+        context.errorList.push("Please finish filling out the information below:");
       }
 
 
