@@ -31,9 +31,7 @@
 <div id="studentInfoTopRow">
 
 	<div class="studentInfo" style="padding: 15px;">
-		<h2> Student Information </h2>
-
-		<div><h3>{{lastName}}, {{firstName}}</h3></div>
+		<div><h2>{{lastName}}, {{firstName}}</h2></div>
 
 		<div>Student Number: <b>{{studentNumber}}</b></div>
 
@@ -42,11 +40,46 @@
 		<div>School: <b>{{school}}</b></div>
 
 		<table class="pointsTable"> <tbody>
+
+
+			<tr>
+				<td><b><u>Pages Read Today: </u></b><td><b><u>{{pagesReadToday}}</u></b>
+
+			<tr> 
+				<td>Pages Read Week: <td>{{pagesReadWeek}}
+
+			<tr>
+				<td>Pages Read Month: <td>{{pagesReadMonth}}
+
+			<tr style="border-bottom-style: double;">
+				<td>Pages Read Life: <td>{{pagesReadLife}}
+
+			<tr>
+				<td>Monday's Read: <td>{{daysReadMonday}}
+
+			<tr>
+				<td>Tuesday's Read: <td>{{daysReadTuesday}}
+
+			<tr>
+				<td>Wednesday's Read: <td>{{daysReadWednesday}}
+
+			<tr>
+				<td>Thursday's Read: <td>{{daysReadThursday}}
+
+			<tr>
+				<td>Friday's Read: <td>{{daysReadFriday}}
+
+			<tr style="border-bottom-style: double;">
+				<td>Days Read Life: <td>{{daysReadTotal}}
+
+
 			<tr>
 				<td>Lifetime Earned Points: <td><b>{{lifeTimeEarned}}</b>
+
 			<tr>
 				<td>Lifetime Spent Points:  <td><b>{{lifeTimeSpent}}</b>
-			<tr id="balance">
+
+			<tr id="balance" style="border-style: solid; border-width: 2px;">
 				<td>Balance:                <td><b>{{balance}}</b>
 
 				<!-- Change color of balance based on amount -->
@@ -59,77 +92,122 @@
 				{{#if balanceGreen}}
 					<script>$('#balance').css("background", "#81ff11");</script>
 				{{/if}}
+
+
+
+
 		</tbody></table>
+	</div>
+
+
+
+
+	<div class="studentAchievements" style="padding: 15px;">
+
+		<h2 style="margin-bottom: 32px; text-align: center;">X-Lab Level: <b>{{level}}</b></h2>
+
+
+		<h2 style="text-align: center;"> Badges </h2>
+		<div class="badges">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+			<img src="images/badge_trophy.png" alt="trophy badge">
+		</div>
 
 	</div>
 
 
 
-	<div style="padding: 15px;">
-		<!-- NEW TICKET FIELD -->
-		<form method="post" action="/newTicket">
-		<fieldset class="newTicketTable">
-			<h2>New Library Ticket</h2>
-			<p><b>Note: <u>All fields required!</u></b></p>
-
-			<table style="text-align: left;">
-
-				<!-- STUDENT NUMBER -->
-				<tr><th><label for="studentNumber">Student Number</label></th>
-					<td><input name="studentNumber" id="studentNumber" type="number"
-		value="{{studentNum}}"></td></tr>
-
-				<!-- DATE -->
-				<tr><th><label for="date">Date</label></th>
-					<td><input name="date" id="date" type="date" value="{{todayDate}}"></td></tr>
-
-				<!-- WORK TYPE -->
-				<tr><th>Work Type
-					<td><select name="workType" id="workType">
-
-						<option value="1">School Work</option>
-						<option value="2" selected="selected">Reading Pages</option>
-						<option value="3">Math Worksheet</option>
-						<option value="4">Writing Worksheet</option>
-						<option value="5">Clock/Time Worksheet</option>
-						<option value="6">Miscellaneous Worksheet</option>
-						<option disabled>--------------</option>
-						<option value="7">School Work Computer</option>
-						<option value="8">Dreambox</option>
-						<option value="9">Reading Plus</option>
-						<option value="10">Mindplay</option>
-						<option value="11">abcya</option>
-						<option value="12">Typing</option>
-						<option value="13">Prodigy</option>
-						<option value="14">Miscellaneous Computer</option>
-						<option disabled>--------------</option>
-						<option value="15">Unknown</option>
-					</select></td></tr>
-
-				<!-- Point Amount -->
-				<tr><th><label for="amount">Point Amount</label></th>
-					<td><input name="amount" id="amount" type="number"
-		value="{{amount}}"></td></tr>
-
-			</table>
-
-			<!-- NOTES -->
-			<div class="noteBox">
-				<div><b>Notes/Comments:</b></div>
-				<textarea rows="4" cols="50" name="notes">{{notes}}</textarea>
-			</div>
-			
-			<!-- SUBMIT BUTTON -->
-			<input type="submit" value="Submit" id="submitButton">
-			
-		</fieldset></form>
 
 
 
-	</div>
+
+
+</div> <!-- END TOP ROW -->
+
+
+
+
+<div style="padding: 15px;">
+	<!-- NEW TICKET FIELD -->
+	<form method="post" action="/newTicket">
+	<fieldset class="newTicketTable">
+		<h2>New Library Ticket</h2>
+		<p><b>Note: <u>All fields required!</u></b></p>
+
+		<table style="text-align: left;">
+
+			<!-- STUDENT NUMBER -->
+			<tr><th><label for="studentNumber">Student Number</label></th>
+				<td><input name="studentNumber" id="studentNumber" type="number"
+	value="{{studentNum}}"></td></tr>
+
+			<!-- DATE -->
+			<tr><th><label for="date">Date</label></th>
+				<td><input name="date" id="date" type="date" value="{{todayDate}}"></td></tr>
+
+			<!-- WORK TYPE -->
+			<tr><th>Work Type
+				<td><select name="workType" id="workType">
+
+					<option value="1">School Work</option>
+					<option value="2" selected="selected">Reading Pages</option>
+					<option value="3">Math Worksheet</option>
+					<option value="4">Writing Worksheet</option>
+					<option value="5">Clock/Time Worksheet</option>
+					<option value="6">Miscellaneous Worksheet</option>
+					<option disabled>--------------</option>
+					<option value="7">School Work Computer</option>
+					<option value="8">Dreambox</option>
+					<option value="9">Reading Plus</option>
+					<option value="10">Mindplay</option>
+					<option value="11">abcya</option>
+					<option value="12">Typing</option>
+					<option value="13">Prodigy</option>
+					<option value="14">Miscellaneous Computer</option>
+					<option disabled>--------------</option>
+					<option value="15">Unknown</option>
+				</select></td></tr>
+
+			<!-- Point Amount -->
+			<tr><th><label for="amount">Point Amount</label></th>
+				<td><input name="amount" id="amount" type="number"
+	value="{{amount}}"></td></tr>
+
+		</table>
+
+		<!-- NOTES -->
+		<div class="noteBox">
+			<div><b>Notes/Comments:</b></div>
+			<textarea rows="4" cols="50" name="notes">{{notes}}</textarea>
+		</div>
+		
+		<!-- SUBMIT BUTTON -->
+		<input type="submit" value="Submit" id="submitButton">
+		
+	</fieldset></form>
+
 
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

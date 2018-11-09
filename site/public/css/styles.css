@@ -213,12 +213,52 @@ th { padding: 2px; }
 
 
 /* ========= STUDENT INFO ============= */
+
+
+ 
+#studentInfoTopRow {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: stretch;
+}
+
+#studentInfoTopRow div {
+	flex-grow: 1;
+}
+
+
+
+
 .studentInfo {
   background-color: #fff1cc;
   padding: 2px 6px 6px 6px;
   border-spacing: 0;
   border: 1px solid black;
 }
+
+
+.studentAchievements {
+  background-color: #fff1cc;
+  padding: 2px 6px 6px 6px;
+  border-spacing: 0;
+  border: 1px solid black;
+}
+
+
+.badges {
+	width: 400px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.badges img {
+	margin: 8px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+
 
 .studentInfo tr { text-align: left; }
 
@@ -236,22 +276,11 @@ th { padding: 2px; }
   border-collapse: collapse;
   background: #eee1bb;
 }
- 
-#studentInfoTopRow {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	align-items: stretch;
+
+
+.pointsTable td {
+	padding: 4px;
 }
-
-#studentInfoTopRow div {
-	flex-grow: 1;
-}
-
-
-
-
 
 
 

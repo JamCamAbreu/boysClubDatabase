@@ -222,6 +222,8 @@ app.post("/newStudent", function (req, res, next) {
 
 
 
+
+
 // +==========================================+
 // |        REMOVE STUDENT FROM DB            |
 // +==========================================+
@@ -1056,6 +1058,11 @@ app.get("/search", function (req, res, next) {
 
 
 
+
+
+
+
+
 app.get("/student", function (req, res, next) {
 
   var context = {
@@ -1134,98 +1141,208 @@ app.get("/student", function (req, res, next) {
           context.lifeTimeSpent = 0; // starts at zero, incremented further down
 
 
+		// RUN ANOTHER QUERY FOR TICKETS:
+		var ticketSql = "SELECT T.id, " + 
+										"T.dateCompleted AS 'dateCompleted', " + 
+										"WT.name AS 'workType', " + 
+										"T.pointEarnedAmount, " + 
+										"T.notes " + 
+										"FROM tbl_libraryTicket T " +
+										"INNER JOIN tbl_student S ON S.studentNumber = T.student_id " +
+										"INNER JOIN tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
+										"WHERE S.studentNumber = ? " +
+										"ORDER BY T.dateCompleted DESC";
 
+		var ticketInsert = [context.studentNumber];
 
-          // RUN ANOTHER QUERY FOR TICKETS:
-          var ticketSql = "SELECT T.id, " + 
-                          "T.dateCompleted AS 'dateCompleted', " + 
-                          "WT.name AS 'workType', " + 
-                          "T.pointEarnedAmount, " + 
-                          "T.notes " + 
-                          "FROM tbl_libraryTicket T " +
-                          "INNER JOIN tbl_student S ON S.studentNumber = T.student_id " +
-                          "INNER JOIN tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
-                          "WHERE S.studentNumber = ? " +
-                          "ORDER BY T.dateCompleted DESC LIMIT 15";
+		// SEND the query:
+		mysql.pool.query(ticketSql, ticketInsert, function(err, Trows, fields){
+				if (err) {
+					console.log("Error in selecting student tickets from DB.");
+					next(err);
+					return;
+				}
 
-          var ticketInsert = [context.studentNumber];
+				// Gather ticket info and shoot it to handlebars:
+				context.numTickets = Trows.length;
+				context.ticket = [];
 
-          // SEND the query:
-          mysql.pool.query(ticketSql, ticketInsert, function(err, Trows, fields){
-              if (err) {
-                console.log("Error in selecting student tickets from DB.");
-                next(err);
-                return;
-              }
+				var index;
+				var Trow;
+				for (index = 0; index < context.numTickets; index++) {
+					Trow = Trows[index];
+					context.ticket.push({
+						id : Trow.id,
+						date : moment(Trow.dateCompleted).format("MM.DD.YYYY"),
+						workType : Trow.workType,
+						pointsEarned : Trow.pointEarnedAmount,
+						notes : Trow.notes
+					});
 
-              // Gather ticket info and shoot it to handlebars:
-              context.numTickets = Trows.length;
-              context.ticket = [];
+					context.lifeTimeEarned += parseInt(Trow.pointEarnedAmount); // started at zero above
 
-              var index;
-              var Trow;
-              for (index = 0; index < context.numTickets; index++) {
-                Trow = Trows[index];
-                context.ticket.push({
-                  id : Trow.id,
-                  date : moment(Trow.dateCompleted).format("MM.DD.YYYY"),
-                  workType : Trow.workType,
-                  pointsEarned : Trow.pointEarnedAmount,
-                  notes : Trow.notes
-                });
-
-                context.lifeTimeEarned += parseInt(Trow.pointEarnedAmount); // started at zero above
-
-              } // end for
-
+				} // end for
 
           
+		// RUN ANOTHER QUERY FOR PURCHASES:
+		var purchaseSql = "SELECT P.id, " + 
+										"P.dateOfPurchase AS 'date', " + 
+										"P.pointAmount, " + 
+										"P.notes " + 
+										"FROM tbl_libraryPurchase P " +
+										"INNER JOIN tbl_student S ON S.studentNumber = P.student_id " +
+										"WHERE S.studentNumber = ? " +
+										"ORDER BY P.dateOfPurchase DESC LIMIT 15";
+
+		var purchaseInsert = [context.studentNumber];
+
+		// SEND the query:
+		mysql.pool.query(purchaseSql, purchaseInsert, function(err, Prows, fields){
+				if (err) {
+					console.log("Error in selecting student purchases from DB.");
+					next(err);
+					return;
+				}
+
+				// Gather purchase info and shoot it to handlebars:
+				context.numPurchases = Prows.length;
+				context.purchase = [];
+
+				var index;
+				var Prow;
+				for (index = 0; index < context.numPurchases; index++) {
+					Prow = Prows[index];
+					context.purchase.push({
+						id : Prow.id,
+						date : moment(Prow.date).format("MM.DD.YYYY"),
+						amount : Prow.pointAmount,
+						notes : Prow.notes
+					});
+
+					context.lifeTimeSpent += parseInt(Prow.pointAmount); // started at zero above
+				} // end for
 
 
-              // RUN ANOTHER QUERY FOR PURCHASES:
-              var purchaseSql = "SELECT P.id, " + 
-                              "P.dateOfPurchase AS 'date', " + 
-                              "P.pointAmount, " + 
-                              "P.notes " + 
-                              "FROM tbl_libraryPurchase P " +
-                              "INNER JOIN tbl_student S ON S.studentNumber = P.student_id " +
-                              "WHERE S.studentNumber = ? " +
-                              "ORDER BY P.dateOfPurchase DESC LIMIT 15";
 
-              var purchaseInsert = [context.studentNumber];
 
-              // SEND the query:
-              mysql.pool.query(purchaseSql, purchaseInsert, function(err, Prows, fields){
-                  if (err) {
-                    console.log("Error in selecting student purchases from DB.");
-                    next(err);
-                    return;
-                  }
 
-                  // Gather purchase info and shoot it to handlebars:
-                  context.numPurchases = Prows.length;
-                  context.purchase = [];
 
-                  var index;
-                  var Prow;
-                  for (index = 0; index < context.numPurchases; index++) {
-                    Prow = Prows[index];
-                    context.purchase.push({
-                      id : Prow.id,
-                      date : moment(Prow.date).format("MM.DD.YYYY"),
-                      amount : Prow.pointAmount,
-                      notes : Prow.notes
-                    });
+		// RUN ANOTHER QUERY FOR READING INFORMATION:
+		//var purchaseSql = "SELECT P.id, " + 
 
-                    context.lifeTimeSpent += parseInt(Prow.pointAmount); // started at zero above
-                  } // end for
+
+var studentNum = context.studentNumber;
+var today = moment().format("YYYY-MM-DD");
+var begWeek = moment().day("Monday").format("YYYY-MM-DD");
+var endWeek = moment().day("Friday").format("YYYY-MM-DD");
+var begMonth = moment().startOf("month").format("YYYY-MM-DD");
+var endMonth = moment().endOf("month").format("YYYY-MM-DD");
+
+var allQueries = "SELECT * FROM " + 
+	// -- PAGES READ TODAY:
+	"(SELECT SUM(LT.pointEarnedAmount) as pagesReadToday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND LT.dateCompleted = \"" + today + "\") AS PRT, " +
+
+	"(SELECT SUM(LT.pointEarnedAmount) as pagesReadWeek FROM " + //-- PAGES READ WEEK:
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND LT.dateCompleted BETWEEN \"" + begWeek + "\" AND \"" + endWeek + "\") AS PRW, " +
+
+	//-- PAGES READ MONTH:
+	"(SELECT SUM(LT.pointEarnedAmount) AS pagesReadMonth FROM " + 
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND LT.dateCompleted BETWEEN \"" + begMonth + "\" AND \"" + endMonth + "\") AS PRM, " +
+
+	//-- PAGES READ LIFE:
+	"(SELECT SUM(LT.pointEarnedAmount) AS pagesReadLife FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + ") AS PRL, " +
+
+	//-- DAYS READ MONDAY:
+	"(SELECT COUNT(*) AS daysReadMonday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 2) AS DR_MON, " +
+
+	//-- DAYS READ TUESDAY:
+	"(SELECT COUNT(*) AS daysReadTuesday FROM " + 
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 3) AS DR_TUE, " +
+
+	//-- DAYS READ WEDNESDAY:
+	"(SELECT COUNT(*) AS daysReadWednesday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 4) AS DR_WED, " +
+
+	//-- DAYS READ THURSDAY:
+	"(SELECT COUNT(*) AS daysReadThursday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 5) AS DR_THU, " +
+
+	//-- DAYS READ FRIDAY:
+	"(SELECT COUNT(*) AS daysReadFriday FROM " + 
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 6) AS DR_FRI, " +
+
+	//-- DAYS READ TOTAL:
+	"(SELECT COUNT(*) AS daysReadTotal FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	") AS DR_TOTAL ";
+
+//console.log("FUll STRING = " + allQueries);
+
+		var readingInsert = [context.studentNumber];
+
+		// SEND the query:
+		mysql.pool.query(allQueries, readingInsert, function(err, Rrows, fields){
+				if (err) {
+					console.log("Error in selecting student purchases from DB.");
+					next(err);
+					return;
+				}
+
+				// Gather student reading info and shoot it to handlebars:
+				context.pagesReadToday = Rrows[0].pagesReadToday;
+				context.pagesReadWeek = Rrows[0].pagesReadWeek;
+				context.pagesReadMonth = Rrows[0].pagesReadMonth;
+				context.pagesReadLife = Rrows[0].pagesReadLife;
+
+				context.daysReadMonday = Rrows[0].daysReadMonday;
+				context.daysReadTuesday = Rrows[0].daysReadTuesday;
+				context.daysReadWednesday = Rrows[0].daysReadWednesday;
+				context.daysReadThursday = Rrows[0].daysReadThursday;
+				context.daysReadFriday = Rrows[0].daysReadFriday;
+				context.daysReadTotal = Rrows[0].daysReadTotal;
+				
+				// LEVEL:
+				var totalDays = context.daysReadTotal;
+				if (totalDays < 1) { totalDays = 1; }
+				context.level = Math.floor(Math.log(totalDays)/Math.log(2));
+				//console.log("Level: " + context.level);
+
 
                   // FINALLYYYY DISPLAY THE PAGE:
-
                   // Here is the current balance
                   var balance = parseInt(context.lifeTimeEarned) - 
                     parseInt(context.lifeTimeSpent);
-
                   // set balance color depending on balance:
                   if (balance < 0) 
                     context.balanceRed = "true";
@@ -1233,27 +1350,28 @@ app.get("/student", function (req, res, next) {
                     context.balanceYellow = "true";
                   else 
                     context.balanceGreen = "true";
-
                   context.balance = balance;
+
                   res.render('studentDisplay', context);
 
-            }); // end PURCHASES query
-          }); // end TICKET query
+			}); // end READING query
+			}); // end PURCHASES query
+			}); // end TICKET query
 
-        } // END MAKE SURE THERE IS ONLY 1 ENTRY FOR STUDENT
-        else if (numEntries <= 0){
-          context.errorList.push("Student with ID (" + context.studentNum + ") not found in database.");
-          res.render('newStudent', context);
+			} // END MAKE SURE THERE IS ONLY 1 ENTRY FOR STUDENT
+			else if (numEntries <= 0){
+				context.errorList.push("Student with ID (" + context.studentNum + ") not found in database.");
+				res.render('newStudent', context);
 
-          //value="{{studentNum}}"></td></tr>
+				//value="{{studentNum}}"></td></tr>
 
-        }
-        else {
-          context.errorList.push("Multiple students found with same id! Please update database.");
-          res.render('searchStudent', context);
-        }
+			}
+			else {
+				context.errorList.push("Multiple students found with same id! Please update database.");
+				res.render('searchStudent', context);
+			}
 
-       }); // end student query
+		 }); // end student query
   } // end no errors in input
 });
 
