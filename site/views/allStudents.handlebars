@@ -38,7 +38,7 @@
   <!-- IF STUDENTS EXIST IN DATABASE -->
     <thead>
       <tr>
-        <th style="background: #fff1cc;">
+        <th style="background: #0000;">
         <th id="c_LN">Last Name
         <th id="c_FN">First Name
         <th id="c_SN">Student Number
@@ -52,7 +52,7 @@
     <tbody>
     {{#each row}}
       <tr id="row{{this.studentNumber}}" onclick="clickRow({{this.studentNumber}})">
-        <td style="text-align: center; background: #fff1cc;">
+        <td style="text-align: center; background: #0000;">
           <button class="deleteButton"
             onclick="clickDelete({{this.studentNumber}})"
             style="margin-right: 8px;">X

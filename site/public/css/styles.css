@@ -7,7 +7,8 @@
 
 body {
   padding: 20px;
-  background-color: #ffffcc;
+  background-color: #fbd080;
+	background-image: linear-gradient(100deg, #dc9d2c61, #fbffb7d6, #0083f394, #9d2ed669)
 }
 
 p { margin: 2px; }
@@ -123,7 +124,7 @@ th { padding: 2px; }
 
 /* ========= GENERAL RESULTS TABLE ========== */
 .resultsTable {
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   padding: 8px;
   border-spacing: 0;
 }
@@ -131,8 +132,8 @@ th { padding: 2px; }
 .resultsTable tr { text-align: left; }
 
 /* Every other row color change: */
-.resultsTable tr:nth-child(odd) {background: #fff1cc;}
-.resultsTable tr:nth-child(even) {background: #eee1bb;}
+.resultsTable tr:nth-child(odd) {background: #96b5dc70;}
+.resultsTable tr:nth-child(even) {background: #678190;}
 
 .resultsTable tr:hover { 
   background-color: #b6befa; 
@@ -152,7 +153,7 @@ th { padding: 2px; }
 
 /* RECENT TICKET TABLE */
 .ticketTable {
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   padding: 8px;
   border-spacing: 0;
 }
@@ -160,8 +161,8 @@ th { padding: 2px; }
 .ticketTable tr { text-align: left; }
 
 /* Every other row color change: */
-.ticketTable tr:nth-child(odd) {background: #fff1cc;}
-.ticketTable tr:nth-child(even) {background: #eee1bb;}
+.ticketTable tr:nth-child(odd) {background: #96b5dc70;}
+.ticketTable tr:nth-child(even) {background: #678190;}
 
 .ticketTable tr:hover { 
   background-color: #b6befa; 
@@ -172,7 +173,7 @@ th { padding: 2px; }
 
 /* RECENT PURCHASE TABLE */
 .purchasesTable {
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   padding: 8px;
   border-spacing: 0;
 }
@@ -180,8 +181,8 @@ th { padding: 2px; }
 .purchasesTable tr { text-align: left; }
 
 /* Every other row color change: */
-.purchasesTable tr:nth-child(odd) {background: #fff1cc;}
-.purchasesTable tr:nth-child(even) {background: #eee1bb;}
+.purchasesTable tr:nth-child(odd) {background: #96b5dc70;}
+.purchasesTable tr:nth-child(even) {background: #678190;}
 
 .purchasesTable tr:hover { 
   background-color: #b6befa; 
@@ -199,7 +200,7 @@ th { padding: 2px; }
 
 /* ========= NEW STUDENT TABLE ============== */
 .newStudentTable {
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   padding: 8px;
   border-spacing: 0;
   width: 500px;
@@ -217,10 +218,16 @@ th { padding: 2px; }
 
  
 #studentInfoTopRow {
+	background-image: linear-gradient(#00a1ff94, #010029);
+	border-style: groove;
+	border-width: 8px;
+	border-color: #1e2d5f;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: stretch;
+
+	margin-bottom: 64px;
 }
 
 #studentInfoTopRow div {
@@ -231,7 +238,6 @@ th { padding: 2px; }
 
 
 .studentInfo {
-  background-color: #fff1cc;
   padding: 2px 6px 6px 6px;
   border-spacing: 0;
   border: 1px solid black;
@@ -239,7 +245,6 @@ th { padding: 2px; }
 
 
 .studentAchievements {
-  background-color: #fff1cc;
   padding: 2px 6px 6px 6px;
   border-spacing: 0;
   border: 1px solid black;
@@ -259,6 +264,67 @@ th { padding: 2px; }
 }
 
 
+.xLabLevel {
+	padding: 4px;
+	background-image: linear-gradient(#45728a, #74bde2, #0b1317);
+  font-size: 36px;
+  text-align: center;
+  text-transform: uppercase;
+  text-rendering: optimizeLegibility;
+	letter-spacing: .15em;
+	text-shadow: 
+		-1px -1px 0 white, 
+		-2px 2px 2px #123567, 
+		-1px 1px 1px #123567, 
+		1px 1px 2px #123567, 
+		2px 2px 2px #123567, 
+		3px 3px 2px #123567;
+	border-style: ridge;
+	border-width: 6px;
+	border-color: #123567;
+}
+
+.xLabLevelActual {
+	padding: 4px;
+  font-size: 36px;
+  text-align: center;
+  text-transform: uppercase;
+  text-rendering: optimizeLegibility;
+	letter-spacing: .15em;
+	text-shadow: 
+		-1px -1px 0 white, 
+		-2px 2px 2px white, 
+		-1px 1px 1px white, 
+		1px 1px 2px white, 
+		2px 2px 2px orange, 
+		3px 3px 2px orange;
+}
+
+
+#recentReading {
+	text-align: center;
+	margin-bottom: 16px;
+	margin-top: 6px;
+}
+
+#badgesTitle {
+	text-align: center;
+	font-size: 36px;
+	text-shadow: 
+		-1px -1px 0 white, 
+		-2px 2px 2px #123567, 
+		-1px 1px 1px #123567, 
+		1px 1px 2px #123567, 
+		2px 2px 2px #123567, 
+		3px 3px 2px #123567;
+}
+
+#bScroller {
+	font-size: 24px;
+	width: 256px;
+	border-style: solid;
+	border-width: 1px;
+}
 
 .studentInfo tr { text-align: left; }
 
@@ -274,7 +340,7 @@ th { padding: 2px; }
   border-spacing: 0;
   border: 1px solid black;
   border-collapse: collapse;
-  background: #eee1bb;
+  background: #a8c9da;
 }
 
 
@@ -294,14 +360,14 @@ th { padding: 2px; }
 /* ========= TICKETS ======================== */
 
 .newTicketTable {
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   width: 400px;
 }
 
 
 .recentTicketTable {
   text-align: left;
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   padding: 8px;
   border-spacing: 0;
   width: 800px;
@@ -315,8 +381,8 @@ th { padding: 2px; }
 .recentTicketTable tr { text-align: left; }
 
 /* Every other row color change: */
-.recentTicketTable tr:nth-child(odd) {background: #fff1cc;}
-.recentTicketTable tr:nth-child(even) {background: #eee1bb;}
+.recentTicketTable tr:nth-child(odd) {background: #96b5dc70;}
+.recentTicketTable tr:nth-child(even) {background: #678190;}
 
 
 /* In Student Profile Page */
@@ -351,7 +417,7 @@ th { padding: 2px; }
 /* ========= PURCHASES ====================== */
 
 .newPurchaseTable {
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   width: 400px;
 }
 
@@ -359,7 +425,7 @@ th { padding: 2px; }
 
 .recentPurchaseTable {
   text-align: left;
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   padding: 8px;
   border-spacing: 0;
   width: 800px;
@@ -373,8 +439,11 @@ th { padding: 2px; }
 .recentPurchasesTable tr { text-align: left; }
 
 /* Every other row color change: */
-.recentPurchasesTable tr:nth-child(odd) {background: #fff1cc;}
-.recentPurchasesTable tr:nth-child(even) {background: #eee1bb;}
+.recentPurchasesTable tr:nth-child(odd) {background: #96b5dc70;}
+.recentPurchasesTable tr:nth-child(even) {background: #678190;}
+
+/* #678190 */
+
 
 #P_DATE  {width: 15%}
 #P_A     {width: 15%}
@@ -435,7 +504,7 @@ th { padding: 2px; }
 /* ======== Reports ================ */
 
 .reportBox {
-  background-color: #fff1cc;
+  background-color: #96b5dc70;
   padding: 6px;
   border: 1px black solid;
   margin-top: 8px;

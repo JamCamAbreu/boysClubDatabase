@@ -1109,7 +1109,7 @@ app.get("/student", function (req, res, next) {
 
 
     var sqlString = "SELECT S.studentNumber, SCH.name AS 'school', " +
-                    "AG.name AS 'ageGroup', " +
+                    "AG.name AS 'ageGroup', S.ageGroup_id AS 'ageGroupid', " +
                      "S.firstName, S.lastName FROM tbl_student S " +
                      "INNER JOIN tbl_school SCH ON SCH.id = S.school_id " + 
                      "INNER JOIN tbl_ageGroup AG ON AG.id = S.ageGroup_id " + 
@@ -1135,6 +1135,7 @@ app.get("/student", function (req, res, next) {
           context.studentNumber = row.studentNumber;
           context.school = row.school;
           context.ageGroup = row.ageGroup;
+					context.ageGroupid = row.ageGroupid;
           context.firstName = row.firstName;
           context.lastName = row.lastName;
           context.lifeTimeEarned = 0; // starts at zero, incremented further down
@@ -1169,6 +1170,9 @@ app.get("/student", function (req, res, next) {
 
 				var index;
 				var Trow;
+
+				var recentReading = "";
+
 				for (index = 0; index < context.numTickets; index++) {
 					Trow = Trows[index];
 					context.ticket.push({
@@ -1179,10 +1183,17 @@ app.get("/student", function (req, res, next) {
 						notes : Trow.notes
 					});
 
+					recentReading += "~" + Trow.notes + "~";
+					recentReading += "&emsp;&emsp;";
 					context.lifeTimeEarned += parseInt(Trow.pointEarnedAmount); // started at zero above
-
 				} // end for
 
+
+				// RECENT READING: Trim to max string size
+				var maxLength = Math.min(150, recentReading.length);
+				recentReading = recentReading.substring(0, maxLength);
+				recentReading += "...";
+				context.recentReading = recentReading;
           
 		// RUN ANOTHER QUERY FOR PURCHASES:
 		var purchaseSql = "SELECT P.id, " + 
@@ -1321,9 +1332,13 @@ var allQueries = "SELECT * FROM " +
 
 				// Gather student reading info and shoot it to handlebars:
 				context.pagesReadToday = Rrows[0].pagesReadToday;
+				if (context.pagesReadToday == null) { context.pagesReadToday = "0"; }
 				context.pagesReadWeek = Rrows[0].pagesReadWeek;
+				if (context.pagesReadWeek == null) { context.pagesReadWeek = "0"; }
 				context.pagesReadMonth = Rrows[0].pagesReadMonth;
+				if (context.pagesReadMonth == null) { context.pagesReadMonth = "0"; }
 				context.pagesReadLife = Rrows[0].pagesReadLife;
+				if (context.pagesReadLife == null) { context.pagesReadLife = "0"; }
 
 				context.daysReadMonday = Rrows[0].daysReadMonday;
 				context.daysReadTuesday = Rrows[0].daysReadTuesday;
@@ -1333,11 +1348,27 @@ var allQueries = "SELECT * FROM " +
 				context.daysReadTotal = Rrows[0].daysReadTotal;
 				
 				// LEVEL:
-				var totalDays = context.daysReadTotal;
-				if (totalDays < 1) { totalDays = 1; }
-				context.level = Math.floor(Math.log(totalDays)/Math.log(2));
-				//console.log("Level: " + context.level);
+				var xp = context.daysReadTotal;
+				var divider = Math.max(30*(parseInt(context.ageGroupid)), 1);
+				var pagesBonus = Math.max(Math.floor(context.pagesReadLife/(divider)), 0);
+				xp += pagesBonus;
+				context.level = Math.max( Math.floor(15*Math.log(xp + 20) - 43), 1); // THE GOLDEN LEVEL FORMULA
 
+				/*
+				// TEST FORMULA:
+				var Level;
+				var testDiv;
+				for (var daysR = 1; daysR <= 22; daysR += 3) {
+					for (var ageG = 1; ageG <= 5; ageG++) {
+						for (var i = 0; i < 300; i += 50) {
+							testDiv = 30*ageG;
+							testXP = daysR + Math.floor(i/testDiv);
+							Level = Math.max( Math.floor(15*Math.log(testXP + 20) - 43), 1); // THE GOLDEN LEVEL FORMULA
+							console.log("Age=" + ageG + ", daysRead=" + daysR + ", pages=" + i + ", LEVEL=" + Level);
+						}
+					}
+				}
+				*/
 
                   // FINALLYYYY DISPLAY THE PAGE:
                   // Here is the current balance

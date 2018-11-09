@@ -52,7 +52,7 @@
 				<td>Pages Read Month: <td>{{pagesReadMonth}}
 
 			<tr style="border-bottom-style: double;">
-				<td>Pages Read Life: <td>{{pagesReadLife}}
+				<td><b>Pages Read Life: </b><td><b>{{pagesReadLife}}</b>
 
 			<tr>
 				<td>Monday's Read: <td>{{daysReadMonday}}
@@ -70,14 +70,14 @@
 				<td>Friday's Read: <td>{{daysReadFriday}}
 
 			<tr style="border-bottom-style: double;">
-				<td>Days Read Life: <td>{{daysReadTotal}}
+				<td><b>Days Read Life: </b><td><b>{{daysReadTotal}}</b>
 
 
 			<tr>
-				<td>Lifetime Earned Points: <td><b>{{lifeTimeEarned}}</b>
+				<td>Lifetime Earned Points: <td>{{lifeTimeEarned}}
 
 			<tr>
-				<td>Lifetime Spent Points:  <td><b>{{lifeTimeSpent}}</b>
+				<td>Lifetime Spent Points:  <td>{{lifeTimeSpent}}
 
 			<tr id="balance" style="border-style: solid; border-width: 2px;">
 				<td>Balance:                <td><b>{{balance}}</b>
@@ -104,11 +104,17 @@
 
 	<div class="studentAchievements" style="padding: 15px;">
 
-		<h2 style="margin-bottom: 32px; text-align: center;">X-Lab Level: <b>{{level}}</b></h2>
+		<h2 class ="xLabLevel">X-Lab Level: <b class="xLabLevelActual">{{level}}</b></h2>
 
 
-		<h2 style="text-align: center;"> Badges </h2>
+
+			<!--<marquee id="bScroller">latestRead</marquee>-->
+
+		<div id="recentReading"><i><marquee id="bScroller">{{{recentReading}}}</marquee></i></h></div>
+
+		<h2 id="badgesTitle">Badges</h2>
 		<div class="badges">
+			<!--
 			<img src="images/badge_trophy.png" alt="trophy badge">
 			<img src="images/badge_trophy.png" alt="trophy badge">
 			<img src="images/badge_trophy.png" alt="trophy badge">
@@ -117,6 +123,7 @@
 			<img src="images/badge_trophy.png" alt="trophy badge">
 			<img src="images/badge_trophy.png" alt="trophy badge">
 			<img src="images/badge_trophy.png" alt="trophy badge">
+			-->
 		</div>
 
 	</div>
@@ -221,7 +228,7 @@
   <table class="ticketTable" id="ticketTable">
     <thead>
       <tr>
-        <th style="background: #fff1cc;">
+        <th style="background: #0000;">
         <th id="T_DATE">DATE
         <th id="T_WT">Work Type
         <th id="T_P">Points Earned
@@ -231,7 +238,7 @@
     <tbody>
     {{#each ticket}}
       <tr id="Trow{{this.id}}">
-        <td style="text-align: center; background: #fff1cc;">
+        <td style="text-align: center; background: #0000;">
           <button class="deleteButton"
             onclick="clickDelete({{this.id}})"
             style="margin-right: 8px;">X
@@ -263,7 +270,7 @@
   <table class="purchasesTable" id="purchasesTable">
     <thead>
       <tr>
-        <th style="background: #fff1cc;">
+        <th style="background: #0000;">
         <th id="P_DATE">DATE
         <th id="P_A">Points Spent
         <th id="P_NOTE">Notes
@@ -272,7 +279,7 @@
     <tbody>
     {{#each purchase}}
       <tr id="Prow{{this.id}}">
-        <td style="text-align: center; background: #fff1cc;">
+        <td style="text-align: center; background: #0000;">
           <button class="deleteButton"
             onclick="clickDeleteP({{this.id}})"
             style="margin-right: 8px;">X
