@@ -55,22 +55,38 @@
 				<td><b>Pages Read Life: </b><td><b>{{pagesReadLife}}</b>
 
 			<tr>
-				<td>Monday's Read: <td>{{daysReadMonday}}
+				<td>Monday's Read: <td>{{daysReadMonday}}&ensp;<i>{{rubyText}}</i>
 
 			<tr>
-				<td>Tuesday's Read: <td>{{daysReadTuesday}}
+				<td>Tuesday's Read: <td>{{daysReadTuesday}}&ensp;<i>{{emeraldText}}</i>
 
 			<tr>
-				<td>Wednesday's Read: <td>{{daysReadWednesday}}
+				<td>Wednesday's Read: <td>{{daysReadWednesday}}&ensp;<i>{{amethystText}}</i>
 
 			<tr>
-				<td>Thursday's Read: <td>{{daysReadThursday}}
-
+				<td>Thursday's Read: <td>{{daysReadThursday}}&ensp;<i>{{sapphireText}}</i>
+ 
 			<tr>
-				<td>Friday's Read: <td>{{daysReadFriday}}
+				<td>Friday's Read: <td>{{daysReadFriday}}&ensp;<i>{{diamondText}}</i>
+ 
 
 			<tr style="border-bottom-style: double;">
 				<td><b>Days Read Life: </b><td><b>{{daysReadTotal}}</b>
+
+			<tr>
+				<td>First day: <td>{{firstDate}}
+
+			<tr>
+				<td>Most Recent: <td>{{mostRecentDate}}
+
+			<tr>
+				<td>Weeks in Program: <td>{{weeksSinceStarted}}
+
+			<tr>
+				<td>Average Reads/Week: <td>{{readsPerWeek}}
+
+			<tr style="border-bottom-style: double;">
+				<td>Average Reads/Month: <td>{{readsPerMonth}}
 
 
 			<tr>
@@ -97,33 +113,51 @@
 
 
 		</tbody></table>
+
+		<!-- RECENT READING -->
+		<div id="recentReading">
+			<div id="recentReadingLabel"><i><div>Recent</div><div>Reading:</div></i></div>
+			<marquee id="bScroller"><i>{{{recentReading}}}</i></marquee>
+		</div>
+
+
 	</div>
 
 
 
 
 	<div class="studentAchievements" style="padding: 15px;">
-
+		<!-- LEVEL -->
 		<h2 class ="xLabLevel">X-Lab Level: <b class="xLabLevelActual">{{level}}</b></h2>
 
 
 
-			<!--<marquee id="bScroller">latestRead</marquee>-->
-
-		<div id="recentReading"><i><marquee id="bScroller">{{{recentReading}}}</marquee></i></h></div>
-
-		<h2 id="badgesTitle">Badges</h2>
+		<!-- BADGES -->
+		<h2 id="badgesTitle">Equipment</h2>
 		<div class="badges">
-			<!--
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			<img src="images/badge_trophy.png" alt="trophy badge">
-			-->
+
+
+			<img src="images/badgesBackground.png" alt="Badges Background" style="margin: auto;">
+
+			<div class="badgeItems">
+
+			<!-- helm -->
+
+			<!-- armor -->
+
+			<!-- weapon -->
+
+			<!-- shield -->
+
+			<!-- GEMS for the week days: -->
+			<img id="gemMon" src={{{monPic}}}>
+			<img id="gemTue" src={{{tuePic}}}>
+			<img id="gemWed" src={{{wedPic}}}>
+			<img id="gemThu" src={{{thuPic}}}>
+			<img id="gemFri" src={{{friPic}}}>
+
+			</div>
+
 		</div>
 
 	</div>

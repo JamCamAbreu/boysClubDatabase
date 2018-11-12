@@ -20,7 +20,7 @@ th { padding: 2px; }
 
 
 #container {
-  max-width: 800px; 
+  max-width: 1100px; 
   margin: 0 auto;
 }
 
@@ -227,11 +227,11 @@ th { padding: 2px; }
 	justify-content: space-between;
 	align-items: stretch;
 
-	margin-bottom: 64px;
+	margin-bottom: 256px;
 }
 
 #studentInfoTopRow div {
-	flex-grow: 1;
+
 }
 
 
@@ -246,22 +246,44 @@ th { padding: 2px; }
 
 .studentAchievements {
   padding: 2px 6px 6px 6px;
-  border-spacing: 0;
-  border: 1px solid black;
+	margin: auto;
 }
 
 
 .badges {
-	width: 400px;
-	display: flex;
-	flex-wrap: wrap;
+	background-color: black;
+	position: relative;
 }
 
-.badges img {
-	margin: 8px;
-	display: flex;
-	flex-wrap: wrap;
+.badgeItems img{
+	position: absolute;
 }
+
+
+#gemMon {
+	top: 445px;
+	left: 145px;
+}
+#gemTue {
+	top: 445px;
+	left: 195px;
+}
+#gemWed {
+	top: 445px;
+	left: 247px;
+}
+#gemThu {
+	top: 445px;
+	left: 300px;
+}
+#gemFri {
+	top: 445px;
+	left: 352px;
+}
+
+
+
+
 
 
 .xLabLevel {
@@ -302,9 +324,21 @@ th { padding: 2px; }
 
 
 #recentReading {
+	background-color: #a8c9da;
 	text-align: center;
 	margin-bottom: 16px;
 	margin-top: 6px;
+	margin-left: auto;
+	margin-right: auto;
+	border-style: solid;
+	border-width: 1px;
+	display:table;
+}
+
+#recentReadingLabel {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 4px;
 }
 
 #badgesTitle {
@@ -321,9 +355,8 @@ th { padding: 2px; }
 
 #bScroller {
 	font-size: 24px;
-	width: 256px;
-	border-style: solid;
-	border-width: 1px;
+	width: 220px;
+	margin-top: 8px;
 }
 
 .studentInfo tr { text-align: left; }

@@ -1183,8 +1183,10 @@ app.get("/student", function (req, res, next) {
 						notes : Trow.notes
 					});
 
+					// RECENT READING STRING
 					recentReading += "~" + Trow.notes + "~";
-					recentReading += "&emsp;&emsp;";
+					if (recentReading.length < (150 - 12)) { recentReading += "&emsp;&emsp;"; }
+
 					context.lifeTimeEarned += parseInt(Trow.pointEarnedAmount); // started at zero above
 				} // end for
 
@@ -1278,47 +1280,84 @@ var allQueries = "SELECT * FROM " +
 
 	//-- DAYS READ MONDAY:
 	"(SELECT COUNT(*) AS daysReadMonday FROM " +
+	"(SELECT COUNT(*) FROM " +
 	"tbl_student S INNER JOIN " +
 	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
-	"WHERE S.studentNumber = " + studentNum + 
-	" AND DAYOFWEEK(LT.dateCompleted) = 2) AS DR_MON, " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"AND DAYOFWEEK(LT.dateCompleted) = 2 " +
+	"GROUP BY LT.dateCompleted) AS temp1) AS DR_MOND, " + 
 
 	//-- DAYS READ TUESDAY:
 	"(SELECT COUNT(*) AS daysReadTuesday FROM " + 
+	"(SELECT COUNT(*) FROM " +
 	"tbl_student S INNER JOIN " +
 	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
-	"WHERE S.studentNumber = " + studentNum + 
-	" AND DAYOFWEEK(LT.dateCompleted) = 3) AS DR_TUE, " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"AND DAYOFWEEK(LT.dateCompleted) = 3 " +
+	"GROUP BY LT.dateCompleted) AS temp2) AS DR_TUE, " + 
 
 	//-- DAYS READ WEDNESDAY:
-	"(SELECT COUNT(*) AS daysReadWednesday FROM " +
+	"(SELECT COUNT(*) AS daysReadWednesday FROM " + 
+	"(SELECT COUNT(*) FROM " +
 	"tbl_student S INNER JOIN " +
 	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
-	"WHERE S.studentNumber = " + studentNum + 
-	" AND DAYOFWEEK(LT.dateCompleted) = 4) AS DR_WED, " +
+	"WHERE S.studentNumber = " + studentNum + " " + 
+	"AND DAYOFWEEK(LT.dateCompleted) = 4 " +
+	"GROUP BY LT.dateCompleted) AS temp2) AS DR_WED, " + 
 
 	//-- DAYS READ THURSDAY:
 	"(SELECT COUNT(*) AS daysReadThursday FROM " +
+	"(SELECT COUNT(*) FROM " +
 	"tbl_student S INNER JOIN " +
 	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
-	"WHERE S.studentNumber = " + studentNum + 
-	" AND DAYOFWEEK(LT.dateCompleted) = 5) AS DR_THU, " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"AND DAYOFWEEK(LT.dateCompleted) = 5 " +
+	"GROUP BY LT.dateCompleted) AS temp2) AS DR_THU, " + 
 
 	//-- DAYS READ FRIDAY:
 	"(SELECT COUNT(*) AS daysReadFriday FROM " + 
+	"(SELECT COUNT(*) FROM " +
 	"tbl_student S INNER JOIN " +
 	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
-	"WHERE S.studentNumber = " + studentNum + 
-	" AND DAYOFWEEK(LT.dateCompleted) = 6) AS DR_FRI, " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"AND DAYOFWEEK(LT.dateCompleted) = 6 " +
+	"GROUP BY LT.dateCompleted) AS temp2) AS DR_FRI, " + 
 
 	//-- DAYS READ TOTAL:
 	"(SELECT COUNT(*) AS daysReadTotal FROM " +
+	"(SELECT COUNT(*) FROM " +
 	"tbl_student S INNER JOIN " +
 	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
-	"WHERE S.studentNumber = " + studentNum + 
-	") AS DR_TOTAL ";
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"GROUP BY LT.dateCompleted) AS temp2) AS DR_TOTAL, " + 
 
-//console.log("FUll STRING = " + allQueries);
+	// FIRST DAY COMPLETED READING
+	"(SELECT LT.dateCompleted AS firstDate FROM tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"ORDER BY LT.dateCompleted ASC LIMIT 1) AS First_day, " +
+
+	// MOST RECENT DAY
+	"(SELECT LT.dateCompleted AS mostRecentDate FROM tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"ORDER BY LT.dateCompleted DESC LIMIT 1) AS recent_day, " +
+
+	// HOW MANY DAYS BETWEEN FIRST DAY READ AND MOST RECENT DAY READ?
+	"(SELECT DATEDIFF( " +
+		"(SELECT LT.dateCompleted AS mostRecentDate FROM tbl_student S INNER JOIN " +
+		"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+		"WHERE S.studentNumber = " + studentNum + " " +
+		"ORDER BY LT.dateCompleted DESC LIMIT 1), " +
+
+		"(SELECT LT.dateCompleted AS firstDate FROM tbl_student S INNER JOIN " +
+		"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+		"WHERE S.studentNumber = " + studentNum + " " + 
+		"ORDER BY LT.dateCompleted ASC LIMIT 1) " +
+	") AS daysSinceStarted) as days_since ";
+
+
+//console.log(allQueries);
 
 		var readingInsert = [context.studentNumber];
 
@@ -1331,44 +1370,153 @@ var allQueries = "SELECT * FROM " +
 				}
 
 				// Gather student reading info and shoot it to handlebars:
-				context.pagesReadToday = Rrows[0].pagesReadToday;
-				if (context.pagesReadToday == null) { context.pagesReadToday = "0"; }
-				context.pagesReadWeek = Rrows[0].pagesReadWeek;
-				if (context.pagesReadWeek == null) { context.pagesReadWeek = "0"; }
-				context.pagesReadMonth = Rrows[0].pagesReadMonth;
-				if (context.pagesReadMonth == null) { context.pagesReadMonth = "0"; }
-				context.pagesReadLife = Rrows[0].pagesReadLife;
-				if (context.pagesReadLife == null) { context.pagesReadLife = "0"; }
+				if (Rrows.length > 0) {
+					context.pagesReadToday = Rrows[0].pagesReadToday;
+					if (context.pagesReadToday == null) { context.pagesReadToday = "0"; }
+					context.pagesReadWeek = Rrows[0].pagesReadWeek;
+					if (context.pagesReadWeek == null) { context.pagesReadWeek = "0"; }
+					context.pagesReadMonth = Rrows[0].pagesReadMonth;
+					if (context.pagesReadMonth == null) { context.pagesReadMonth = "0"; }
+					context.pagesReadLife = Rrows[0].pagesReadLife;
+					if (context.pagesReadLife == null) { context.pagesReadLife = "0"; }
 
-				context.daysReadMonday = Rrows[0].daysReadMonday;
-				context.daysReadTuesday = Rrows[0].daysReadTuesday;
-				context.daysReadWednesday = Rrows[0].daysReadWednesday;
-				context.daysReadThursday = Rrows[0].daysReadThursday;
-				context.daysReadFriday = Rrows[0].daysReadFriday;
-				context.daysReadTotal = Rrows[0].daysReadTotal;
-				
-				// LEVEL:
-				var xp = context.daysReadTotal;
-				var divider = Math.max(30*(parseInt(context.ageGroupid)), 1);
-				var pagesBonus = Math.max(Math.floor(context.pagesReadLife/(divider)), 0);
-				xp += pagesBonus;
-				context.level = Math.max( Math.floor(15*Math.log(xp + 20) - 43), 1); // THE GOLDEN LEVEL FORMULA
+					context.daysReadMonday = Rrows[0].daysReadMonday;
+					context.daysReadTuesday = Rrows[0].daysReadTuesday;
+					context.daysReadWednesday = Rrows[0].daysReadWednesday;
+					context.daysReadThursday = Rrows[0].daysReadThursday;
+					context.daysReadFriday = Rrows[0].daysReadFriday;
+					context.daysReadTotal = Rrows[0].daysReadTotal;
 
-				/*
-				// TEST FORMULA:
-				var Level;
-				var testDiv;
-				for (var daysR = 1; daysR <= 22; daysR += 3) {
-					for (var ageG = 1; ageG <= 5; ageG++) {
-						for (var i = 0; i < 300; i += 50) {
-							testDiv = 30*ageG;
-							testXP = daysR + Math.floor(i/testDiv);
-							Level = Math.max( Math.floor(15*Math.log(testXP + 20) - 43), 1); // THE GOLDEN LEVEL FORMULA
-							console.log("Age=" + ageG + ", daysRead=" + daysR + ", pages=" + i + ", LEVEL=" + Level);
+					context.firstDate = moment(Rrows[0].firstDate).format('MMMM Do YYYY');
+					context.mostRecentDate = moment(Rrows[0].mostRecentDate).format('MMMM Do YYYY');
+					context.daysSinceStarted = Rrows[0].daysSinceStarted;
+					context.weeksSinceStarted = Math.ceil(context.daysSinceStarted/7);
+
+					var monthsSinceStarted = context.daysSinceStarted/30;
+					context.readsPerMonth = context.daysReadTotal/monthsSinceStarted;
+					context.readsPerMonth = context.readsPerMonth.toFixed(2);
+
+					context.readsPerWeek = context.daysReadTotal/context.weeksSinceStarted;
+					context.readsPerWeek = context.readsPerWeek.toFixed(2);
+					
+					// -------------- LEVEL: ----------------------
+					var xp = context.daysReadTotal;
+					var divider = Math.max(30*(parseInt(context.ageGroupid)), 1);
+					var pagesBonus = Math.max(Math.floor(context.pagesReadLife/(divider)), 0);
+					xp += pagesBonus;
+					context.level = Math.max( Math.floor(15*Math.log(xp + 20) - 43), 1); // THE GOLDEN LEVEL FORMULA
+
+					/*
+					// TEST FORMULA:
+					var Level;
+					var testDiv;
+					for (var daysR = 1; daysR <= 22; daysR += 3) {
+						for (var ageG = 1; ageG <= 5; ageG++) {
+							for (var i = 0; i < 300; i += 50) {
+								testDiv = 30*ageG;
+								testXP = daysR + Math.floor(i/testDiv);
+								Level = Math.max( Math.floor(15*Math.log(testXP + 20) - 43), 1); // THE GOLDEN LEVEL FORMULA
+								console.log("Age=" + ageG + ", daysRead=" + daysR + ", pages=" + i + ", LEVEL=" + Level);
+							}
 						}
 					}
-				}
-				*/
+					*/
+
+
+
+					// ------------- BADGES: ----------------------
+
+					var gemLevel1 = 2;
+					var gemLevel2 = 4;
+					var gemLevel3 = 7;
+					var gemLevel4 = 11;
+					var gemLevel5 = 16;
+					var gemLev;
+					var gemText;
+					var picName;
+					var daysReadCopy;
+
+					// monday's read
+					gemLev = 0;
+					gemText = "";
+					picName = "ruby";
+					daysReadCopy = context.daysReadMonday;
+					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					picName += gemLev.toString();
+					context.monPic = "\"images/" + picName + ".png\"";
+					context.rubyText = gemText;
+
+
+					// tuesday's read
+					gemLev = 0;
+					gemText = "";
+					picName = "emerald";
+					daysReadCopy = context.daysReadTuesday;
+					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					picName += gemLev.toString();
+					context.tuePic = "\"images/" + picName + ".png\"";
+					context.emeraldText = gemText;
+
+					// wednesday's read
+					gemLev = 0;
+					gemText = "";
+					picName = "amethyst";
+					daysReadCopy = context.daysReadWednesday;
+					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					picName += gemLev.toString();
+					context.wedPic = "\"images/" + picName + ".png\"";
+					context.amethystText = gemText;
+
+
+					// thursday's read
+					gemLev = 0;
+					gemText = "";
+					picName = "sapphire";
+					daysReadCopy = context.daysReadThursday;
+					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					picName += gemLev.toString();
+					context.thuPic = "\"images/" + picName + ".png\"";
+					context.sapphireText = gemText;
+
+
+					// Friday's read
+					gemLev = 0;
+					gemText = "";
+					picName = "diamond";
+					daysReadCopy = context.daysReadFriday;
+					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					picName += gemLev.toString();
+					context.friPic = "\"images/" + picName + ".png\"";
+					context.diamondText = gemText;
+
+
+	
+
+				// Lifetime days read
+
+				// lifetime pages read badge
+
+			} // end if student was returned from query
 
                   // FINALLYYYY DISPLAY THE PAGE:
                   // Here is the current balance
