@@ -1398,6 +1398,16 @@ var allQueries = "SELECT * FROM " +
 
 					context.readsPerWeek = context.daysReadTotal/context.weeksSinceStarted;
 					context.readsPerWeek = context.readsPerWeek.toFixed(2);
+
+					context.cLife = 0;
+					context.cSpeed = "Average";
+					context.cDefence = 0;
+					context.cStrength = 0;
+					context.cFire = 0;
+					context.cCold = 0;
+					context.cPoison = 0;
+					context.cElemental = 0;
+					context.cDamage = 0;
 					
 					// -------------- LEVEL: ----------------------
 					var xp = context.daysReadTotal;
@@ -1423,6 +1433,12 @@ var allQueries = "SELECT * FROM " +
 					*/
 
 
+					// BASE LIFE: based on level:
+					context.cLife += (context.level*67);
+
+					// BASE STRENGTH: based on level:
+					context.cStrength += Math.ceil(context.level*2.3);
+
 
 					// ------------- BADGES: ----------------------
 
@@ -1434,47 +1450,54 @@ var allQueries = "SELECT * FROM " +
 					var gemLev;
 					var gemText;
 					var picName;
-					var daysReadCopy;
+					var requirementStat;
 
 					// monday's read
 					gemLev = 0;
 					gemText = "";
 					picName = "ruby";
-					daysReadCopy = context.daysReadMonday;
-					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
-					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
-					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
-					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
-					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					requirementStat = context.daysReadMonday;
+					if (requirementStat >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (requirementStat >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (requirementStat >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (requirementStat >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (requirementStat >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
 					picName += gemLev.toString();
 					context.monPic = "\"images/" + picName + ".png\"";
 					context.rubyText = gemText;
+
+				// FIRE DAMAGE: based on ruby
+				context.cFire += Math.ceil((gemLev * gemLev) * 4.4 * (Math.max(context.level/6, 1)));
 
 
 					// tuesday's read
 					gemLev = 0;
 					gemText = "";
 					picName = "emerald";
-					daysReadCopy = context.daysReadTuesday;
-					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
-					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
-					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
-					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
-					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					requirementStat = context.daysReadTuesday;
+					if (requirementStat >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (requirementStat >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (requirementStat >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (requirementStat >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (requirementStat >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
 					picName += gemLev.toString();
 					context.tuePic = "\"images/" + picName + ".png\"";
 					context.emeraldText = gemText;
+
+				// POISON DAMAGE: based on emerald
+				context.cPoison += Math.ceil((gemLev * gemLev) * 7.4 * (Math.max(context.level/4, 1)));
+
 
 					// wednesday's read
 					gemLev = 0;
 					gemText = "";
 					picName = "amethyst";
-					daysReadCopy = context.daysReadWednesday;
-					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
-					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
-					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
-					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
-					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					requirementStat = context.daysReadWednesday;
+					if (requirementStat >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (requirementStat >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (requirementStat >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (requirementStat >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (requirementStat >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
 					picName += gemLev.toString();
 					context.wedPic = "\"images/" + picName + ".png\"";
 					context.amethystText = gemText;
@@ -1484,27 +1507,29 @@ var allQueries = "SELECT * FROM " +
 					gemLev = 0;
 					gemText = "";
 					picName = "sapphire";
-					daysReadCopy = context.daysReadThursday;
-					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
-					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
-					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
-					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
-					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					requirementStat = context.daysReadThursday;
+					if (requirementStat >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (requirementStat >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (requirementStat >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (requirementStat >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (requirementStat >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
 					picName += gemLev.toString();
 					context.thuPic = "\"images/" + picName + ".png\"";
 					context.sapphireText = gemText;
 
+				// COLD DAMAGE: based on sapphire
+				context.cCold += Math.ceil((gemLev * gemLev) * 2.6 * (Math.max(context.level/8, 1)));
 
 					// Friday's read
 					gemLev = 0;
 					gemText = "";
 					picName = "diamond";
-					daysReadCopy = context.daysReadFriday;
-					if (daysReadCopy >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
-					if (daysReadCopy >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
-					if (daysReadCopy >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
-					if (daysReadCopy >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
-					if (daysReadCopy >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					requirementStat = context.daysReadFriday;
+					if (requirementStat >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
+					if (requirementStat >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
+					if (requirementStat >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
+					if (requirementStat >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
+					if (requirementStat >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
 					picName += gemLev.toString();
 					context.friPic = "\"images/" + picName + ".png\"";
 					context.diamondText = gemText;
@@ -1513,6 +1538,137 @@ var allQueries = "SELECT * FROM " +
 	
 
 				// Lifetime days read
+				var itemLev = 0;
+				var itemText = 0;
+				picName = "armor"
+				requirementStat = context.daysReadTotal;
+				if (requirementStat >= 3) { itemLev++; itemText = "Padded Cloth"; context.cDefence += 5; }
+				if (requirementStat >= 5) { itemLev++; itemText = "Studded Leather"; context.cDefence += 6;  }
+				if (requirementStat >= 8) { itemLev++; itemText = "Iron Chest Plate"; context.cDefence += 7;  }
+				if (requirementStat >= 12) { itemLev++; itemText = "Full Chainmail"; context.cDefence += 9;  }
+				if (requirementStat >= 17) { itemLev++; itemText = "Platemail"; context.cDefence += 11;  }
+				if (requirementStat >= 23) { itemLev++; itemText = "Kings Platemail"; context.cDefence += 15;  }
+				if (requirementStat >= 30) { itemLev++; itemText = "Holy Cloth"; context.cDefence += 20;  }
+				if (requirementStat >= 38) { itemLev++; itemText = "Robin's Luck"; context.cDefence += 27;  }
+				if (requirementStat >= 47) { itemLev++; itemText = "Blacksmith's Blessing"; context.cDefence += 40;  }
+				if (requirementStat >= 57) { itemLev++; itemText = "Templar Coat"; context.cDefence += 53;  }
+				if (requirementStat >= 68) { itemLev++; itemText = "Unspoken Glory"; context.cDefence += 68;  }
+				picName += itemLev.toString();
+				context.armor = "\"images/" + picName + ".png\"";
+				context.armorText = itemText;
+
+
+
+
+				// Main Hand: Based on level
+				var itemLev = 0;
+				var itemText = 0;
+				picName = "main"
+				requirementStat = context.level;
+				if (requirementStat >= 1) { itemLev++; itemText = "Wooden Club"; }
+				if (requirementStat >= 3) { itemLev++; itemText = "Iron Dagger"; }
+				if (requirementStat >= 6) { itemLev++; itemText = "Iron Short Sword"; }
+				if (requirementStat >= 10) { itemLev++; itemText = "Iron Mace"; }
+				if (requirementStat >= 14) { itemLev++; itemText = "Steel Kris"; }
+				if (requirementStat >= 18) { itemLev++; itemText = "Steel Flail"; }
+				if (requirementStat >= 23) { itemLev++; itemText = "Falchion"; }
+				if (requirementStat >= 28) { itemLev++; itemText = "Steel Scimitar"; }
+				if (requirementStat >= 33) { itemLev++; itemText = "Double Edge Axe"; }
+				if (requirementStat >= 39) { itemLev++; itemText = "Great Halberd"; }
+				if (requirementStat >= 45) { itemLev++; itemText = "Crystal Sword"; }
+				if (requirementStat >= 51) { itemLev++; itemText = "Wallace Sword"; }
+				if (requirementStat >= 57) { itemLev++; itemText = "Bec-De-Corbin"; }
+				if (requirementStat >= 64) { itemLev++; itemText = "Conan Great Sword"; }
+				if (requirementStat >= 71) { itemLev++; itemText = "Royal Dwarf Double Axe"; }
+				picName += itemLev.toString();
+				context.mainHand = "\"images/" + picName + ".png\"";
+				context.mainHandText = itemText;
+
+
+
+
+
+				// Shield: Based on average reads/month
+				var itemLev = 0;
+				var itemText = 0;
+				picName = "off"
+				requirementStat = context.readsPerMonth;
+				if (requirementStat >= 2) { itemLev++; itemText = "Iron Buckler"; }
+				if (requirementStat >= 3) { itemLev++; itemText = "Reinforced Round Shield"; }
+				if (requirementStat >= 4) { itemLev++; itemText = "Secret Dagger"; }
+				if (requirementStat >= 5) { itemLev++; itemText = "Gold Plated Shield"; }
+				if (requirementStat >= 6) { itemLev++; itemText = "Warrior's Kite Shield"; }
+				if (requirementStat >= 7) { itemLev++; itemText = "Spiked Shield"; }
+				if (requirementStat >= 8) { itemLev++; itemText = "Offhand Falchion"; }
+				if (requirementStat >= 9) { itemLev++; itemText = "Defender Shield"; }
+				if (requirementStat >= 10) { itemLev++; itemText = "Necromancer Shield"; }
+				if (requirementStat >= 12) { itemLev++; itemText = "Offhand Flail"; }
+				if (requirementStat >= 14) { itemLev++; itemText = "Offhand Scimitar"; }
+				if (requirementStat >= 16) { itemLev++; itemText = "Offhand Great Sword"; }
+				if (requirementStat >= 18) { itemLev++; itemText = "Paladin Holy Shield"; }
+				picName += itemLev.toString();
+				context.offHand = "\"images/" + picName + ".png\"";
+				context.offHandText = itemText;
+
+
+
+				// Helm: Based on average total Pages Read
+				var itemLev = 0;
+				var itemText = 0;
+				picName = "helm"
+				requirementStat = context.pagesReadLife;
+				if (requirementStat >= 100) { itemLev++; itemText = "Leather Hood"; }
+				if (requirementStat >= 200) { itemLev++; itemText = "Iron Cap"; }
+				if (requirementStat >= 400) { itemLev++; itemText = "Iron Helm"; }
+				if (requirementStat >= 800) { itemLev++; itemText = "Steel Full Helm"; }
+				if (requirementStat >= 1600) { itemLev++; itemText = "Bone Visor"; }
+				if (requirementStat >= 3200) { itemLev++; itemText = "Warrior's Giant Helm"; }
+				if (requirementStat >= 6400) { itemLev++; itemText = "Royal Crown"; }
+				picName += itemLev.toString();
+				context.helm = "\"images/" + picName + ".png\"";
+				context.helmText = itemText;
+
+
+
+
+
+
+				// Boots: Based on weeks since started 
+				var itemLev = 0;
+				var itemText = 0;
+				picName = "boots"
+				requirementStat = context.weeksSinceStarted;
+				if (requirementStat >= 1) { itemLev++; itemText = "Cloth Boots"; }
+				if (requirementStat >= 2) { itemLev++; itemText = "Leather Boots"; }
+				if (requirementStat >= 4) { itemLev++; itemText = "Iron Boots"; }
+				if (requirementStat >= 6) { itemLev++; itemText = "Steel Plated Boots"; }
+				if (requirementStat >= 8) { itemLev++; itemText = "War Boots"; }
+				if (requirementStat >= 10) { itemLev++; itemText = "Wizard Boots"; }
+				if (requirementStat >= 12) { itemLev++; itemText = "Rage Boots"; }
+				if (requirementStat >= 14) { itemLev++; itemText = "Ice Boots"; }
+				if (requirementStat >= 16) { itemLev++; itemText = "Corrupted Boots"; }
+				if (requirementStat >= 19) { itemLev++; itemText = "Holy Boots"; }
+				picName += itemLev.toString();
+				context.boots = "\"images/" + picName + ".png\"";
+				context.bootsText = itemText;
+
+
+
+			
+
+
+				// LIFE BONUS: based on amethyst
+
+
+				// BASE DAMAGE: based on strength:
+				context.cDamage += Math.ceil(context.cStrength * 1.8);
+
+				// ELEMENTAL DAMAGE
+				context.cElemental += (context.cFire + context.cCold + context.cPoison);
+				context.cDamage += context.cElemental;
+
+
+
 
 				// lifetime pages read badge
 

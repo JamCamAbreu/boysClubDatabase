@@ -41,7 +41,6 @@
 
 		<table class="pointsTable"> <tbody>
 
-
 			<tr>
 				<td><b><u>Pages Read Today: </u></b><td><b><u>{{pagesReadToday}}</u></b>
 
@@ -52,7 +51,7 @@
 				<td>Pages Read Month: <td>{{pagesReadMonth}}
 
 			<tr style="border-bottom-style: double;">
-				<td><b>Pages Read Life: </b><td><b>{{pagesReadLife}}</b>
+				<td><b>Pages Read Life: </b><td><b>{{pagesReadLife}}</b>&ensp;<i>({{helmText}})</i>
 
 			<tr>
 				<td>Monday's Read: <td>{{daysReadMonday}}&ensp;<i>{{rubyText}}</i>
@@ -71,7 +70,7 @@
  
 
 			<tr style="border-bottom-style: double;">
-				<td><b>Days Read Life: </b><td><b>{{daysReadTotal}}</b>
+				<td><b>Days Read Life: </b><td><b>{{daysReadTotal}}</b>&ensp;<i>({{armorText}})</i>
 
 			<tr>
 				<td>First day: <td>{{firstDate}}
@@ -80,13 +79,17 @@
 				<td>Most Recent: <td>{{mostRecentDate}}
 
 			<tr>
-				<td>Weeks in Program: <td>{{weeksSinceStarted}}
+				<td>Weeks in Program: <td>{{weeksSinceStarted}}&ensp;<i>({{bootsText}})</i>
 
 			<tr>
-				<td>Average Reads/Week: <td>{{readsPerWeek}}
+				<td>Average Reads/Week: <td>{{readsPerWeek}}&ensp;<i>({{offHandText}})</i>
 
 			<tr style="border-bottom-style: double;">
 				<td>Average Reads/Month: <td>{{readsPerMonth}}
+
+
+			<tr style="border-bottom-style: double;">
+				<td><b>Overal Level:</b><td><b>{{level}}</b>&ensp;<i>({{mainHandText}})</i>
 
 
 			<tr>
@@ -130,37 +133,60 @@
 		<!-- LEVEL -->
 		<h2 class ="xLabLevel">X-Lab Level: <b class="xLabLevelActual">{{level}}</b></h2>
 
-
-
-		<!-- BADGES -->
 		<h2 id="badgesTitle">Equipment</h2>
+		<!-- BADGES -->
 		<div class="badges">
 
-
 			<img src="images/badgesBackground.png" alt="Badges Background" style="margin: auto;">
-
 			<div class="badgeItems">
+				<!-- helm -->
+				<img id="boots" src={{{boots}}}>
 
-			<!-- helm -->
+				<!-- helm -->
+				<img id="helm" src={{{helm}}}>
 
-			<!-- armor -->
+				<!-- armor -->
+				<img id="armor" src={{{armor}}}>
 
-			<!-- weapon -->
+				<!-- weapon -->
+				<img id="mainHand" src={{{mainHand}}}>
 
-			<!-- shield -->
+				<!-- shield -->
+				<img id="offHand" src={{{offHand}}}>
 
-			<!-- GEMS for the week days: -->
-			<img id="gemMon" src={{{monPic}}}>
-			<img id="gemTue" src={{{tuePic}}}>
-			<img id="gemWed" src={{{wedPic}}}>
-			<img id="gemThu" src={{{thuPic}}}>
-			<img id="gemFri" src={{{friPic}}}>
+				<!-- GEMS for the week days: -->
+				<img id="gemMon" src={{{monPic}}}>
+				<img id="gemTue" src={{{tuePic}}}>
+				<img id="gemWed" src={{{wedPic}}}>
+				<img id="gemThu" src={{{thuPic}}}>
+				<img id="gemFri" src={{{friPic}}}>
+			</div> <!-- END BADGES PICTURE -->
 
-			</div>
+			<div id="characterStats">
+				<div id="characterStatsTitle">Stats</div>
+				<table class="characterStatsTable"> <tbody>
+					<tr>
+						<td class="leftCol">Life: <td class="rightCol">{{cLife}}
+					<tr>
+						<td class="leftCol">Speed: <td class="rightCol">{{cSpeed}}
+					<tr>
+						<td class="leftCol">Defence: <td class="rightCol">{{cDefence}}
+					<tr>
+						<td class="leftCol">Strength: <td class="rightCol">{{cStrength}}
+					<tr>
+						<td class="leftCol">Elemental Damage: <td class="rightCol">{{cElemental}}&ensp;
+														<i>&ensp;<span id="fire">(fire: {{cFire}}</span>
+																&ensp;<span id="cold">cold: {{cCold}}</span>
+																&ensp;<span id="poison">poison: {{cPoison}})</span></i>
+					<tr>
+						<td class="leftCol"><b>Total Damage:</b><td class="rightCol"><b>{{cDamage}}</b>
+				</tbody></table>
 
-		</div>
 
-	</div>
+			</div> <!-- END CHARACTER STATS DIV -->
+
+		</div> <!-- END BADGES DIV -->
+	</div> <!-- END STUDENT ACHIEVEMENTS DIV -->
 
 
 

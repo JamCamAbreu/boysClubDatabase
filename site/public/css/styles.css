@@ -253,10 +253,38 @@ th { padding: 2px; }
 .badges {
 	background-color: black;
 	position: relative;
+	padding-bottom: 8px;
 }
 
 .badgeItems img{
 	position: absolute;
+}
+
+
+#armor {
+	top: 142px;
+	left: 209px;
+}
+
+
+#mainHand {
+	top: 127px;
+	left: 75px;
+}
+
+#offHand {
+	top: 127px;
+	left: 340px;
+}
+
+#helm {
+	top: 19px;
+	left: 213px;
+}
+
+#boots {
+	top: 318px;
+	left: 208px;
 }
 
 
@@ -382,12 +410,49 @@ th { padding: 2px; }
 }
 
 
+.pointsTable i {
+	color: #0000ff85;
+}
 
 
+#characterStats {
+	color: white;
+}
+
+#characterStatsTitle {
+	text-align: center;
+	font-size: 36px;
+	text-shadow: 
+		1px 1px 2px darkgrey;
+}
+
+.characterStatsTable {
+	margin-bottom: 8px;
+}
+
+.leftCol {
+	padding: 4px;
+	padding-left: 32px;
+	text-align: right;
+}
+
+.rightCol {
+	padding: 4px;
+	padding-left: 16px;
+}
 
 
+#fire {
+	color: red;
+}
 
+#cold {
+	color: lightblue;
+}
 
+#poison {
+	color: limegreen;
+}
 
 
 /* ========= TICKETS ======================== */
