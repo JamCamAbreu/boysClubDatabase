@@ -1392,7 +1392,7 @@ var allQueries = "SELECT * FROM " +
 					context.daysSinceStarted = Rrows[0].daysSinceStarted;
 					context.weeksSinceStarted = Math.ceil(context.daysSinceStarted/7);
 
-					var monthsSinceStarted = context.daysSinceStarted/30;
+					var monthsSinceStarted = Math.max(context.daysSinceStarted/30, 1);
 					context.readsPerMonth = context.daysReadTotal/monthsSinceStarted;
 					context.readsPerMonth = context.readsPerMonth.toFixed(2);
 
@@ -1400,7 +1400,7 @@ var allQueries = "SELECT * FROM " +
 					context.readsPerWeek = context.readsPerWeek.toFixed(2);
 
 					context.cLife = 0;
-					context.cSpeed = "Average";
+					context.cSpeed = 0;
 					context.cDefence = 0;
 					context.cStrength = 0;
 					context.cFire = 0;
@@ -1408,6 +1408,9 @@ var allQueries = "SELECT * FROM " +
 					context.cPoison = 0;
 					context.cElemental = 0;
 					context.cDamage = 0;
+					var amethystArmorBonus = 1; // stands for 100%
+					var diamondHealthBonus = 1; // etc.
+					var diamondSpeedBonus = 1; // etc.
 					
 					// -------------- LEVEL: ----------------------
 					var xp = context.daysReadTotal;
@@ -1493,11 +1496,11 @@ var allQueries = "SELECT * FROM " +
 					gemText = "";
 					picName = "amethyst";
 					requirementStat = context.daysReadWednesday;
-					if (requirementStat >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
-					if (requirementStat >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
-					if (requirementStat >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
-					if (requirementStat >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
-					if (requirementStat >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					if (requirementStat >= gemLevel1) { gemLev++; amethystArmorBonus += 0.07; gemText = "(chipped " + picName + ")"; }
+					if (requirementStat >= gemLevel2) { gemLev++; amethystArmorBonus += 0.12; gemText = "(flawed " + picName + ")"; }
+					if (requirementStat >= gemLevel3) { gemLev++; amethystArmorBonus += 0.18; gemText = "(" + picName + ")"; } 
+					if (requirementStat >= gemLevel4) { gemLev++; amethystArmorBonus += 0.25; gemText = "(flawless " + picName + ")"; } 
+					if (requirementStat >= gemLevel5) { gemLev++; amethystArmorBonus += 0.33; gemText = "(perfect " + picName + ")"; }
 					picName += gemLev.toString();
 					context.wedPic = "\"images/" + picName + ".png\"";
 					context.amethystText = gemText;
@@ -1525,11 +1528,31 @@ var allQueries = "SELECT * FROM " +
 					gemText = "";
 					picName = "diamond";
 					requirementStat = context.daysReadFriday;
-					if (requirementStat >= gemLevel1) { gemLev++; gemText = "(chipped " + picName + ")"; }
-					if (requirementStat >= gemLevel2) { gemLev++; gemText = "(flawed " + picName + ")"; }
-					if (requirementStat >= gemLevel3) { gemLev++; gemText = "(" + picName + ")"; } 
-					if (requirementStat >= gemLevel4) { gemLev++; gemText = "(flawless " + picName + ")"; } 
-					if (requirementStat >= gemLevel5) { gemLev++; gemText = "(perfect " + picName + ")"; }
+					if (requirementStat >= gemLevel1) { 
+						gemLev++; gemText = "(chipped " + picName + ")"; 
+						diamondHealthBonus += 0.12;
+						diamondSpeedBonus += 0.13;
+					}
+					if (requirementStat >= gemLevel2) { 
+						gemLev++; gemText = "(flawed " + picName + ")"; 
+						diamondHealthBonus += 0.10;
+						diamondSpeedBonus += 0.11;
+					}
+					if (requirementStat >= gemLevel3) { 
+						gemLev++; gemText = "(" + picName + ")"; 
+						diamondHealthBonus += 0.08;
+						diamondSpeedBonus += 0.9;
+					} 
+					if (requirementStat >= gemLevel4) { 
+						gemLev++; gemText = "(flawless " + picName + ")"; 
+						diamondHealthBonus += 0.06;
+						diamondSpeedBonus += 0.7;
+					} 
+					if (requirementStat >= gemLevel5) { 
+						gemLev++; gemText = "(perfect " + picName + ")"; 
+						diamondHealthBonus += 0.04;
+						diamondSpeedBonus += 0.5;
+					}
 					picName += gemLev.toString();
 					context.friPic = "\"images/" + picName + ".png\"";
 					context.diamondText = gemText;
@@ -1638,27 +1661,28 @@ var allQueries = "SELECT * FROM " +
 				var itemText = 0;
 				picName = "boots"
 				requirementStat = context.weeksSinceStarted;
-				if (requirementStat >= 1) { itemLev++; itemText = "Cloth Boots"; }
-				if (requirementStat >= 2) { itemLev++; itemText = "Leather Boots"; }
-				if (requirementStat >= 4) { itemLev++; itemText = "Iron Boots"; }
-				if (requirementStat >= 6) { itemLev++; itemText = "Steel Plated Boots"; }
-				if (requirementStat >= 8) { itemLev++; itemText = "War Boots"; }
-				if (requirementStat >= 10) { itemLev++; itemText = "Wizard Boots"; }
-				if (requirementStat >= 12) { itemLev++; itemText = "Rage Boots"; }
-				if (requirementStat >= 14) { itemLev++; itemText = "Ice Boots"; }
-				if (requirementStat >= 16) { itemLev++; itemText = "Corrupted Boots"; }
-				if (requirementStat >= 19) { itemLev++; itemText = "Holy Boots"; }
+				if (requirementStat >= 1) { itemLev++; itemText = "Cloth Boots"; context.cSpeed += 7; }
+				if (requirementStat >= 2) { itemLev++; itemText = "Leather Boots"; context.cSpeed += 8; }
+				if (requirementStat >= 4) { itemLev++; itemText = "Iron Boots"; context.cSpeed += 9; }
+				if (requirementStat >= 6) { itemLev++; itemText = "Steel Plated Boots"; context.cSpeed += 10; }
+				if (requirementStat >= 8) { itemLev++; itemText = "War Boots"; context.cSpeed += 11; }
+				if (requirementStat >= 10) { itemLev++; itemText = "Wizard Boots"; context.cSpeed += 12; }
+				if (requirementStat >= 12) { itemLev++; itemText = "Rage Boots"; context.cSpeed += 13; }
+				if (requirementStat >= 14) { itemLev++; itemText = "Ice Boots"; context.cSpeed += 14; }
+				if (requirementStat >= 16) { itemLev++; itemText = "Corrupted Boots"; context.cSpeed += 15; }
+				if (requirementStat >= 19) { itemLev++; itemText = "Holy Boots"; context.cSpeed += 16; }
 				picName += itemLev.toString();
 				context.boots = "\"images/" + picName + ".png\"";
 				context.bootsText = itemText;
 
 
-
-			
-
-
 				// LIFE BONUS: based on amethyst
+				context.cDefence = Math.ceil(context.cDefence*amethystArmorBonus);
 
+				// Diamond Health and Speed Bonus:
+				context.cLife = Math.ceil(context.cLife*diamondHealthBonus);
+				context.cSpeed = Math.ceil(context.cSpeed*diamondSpeedBonus);
+					//context.cSpeed = "Average";
 
 				// BASE DAMAGE: based on strength:
 				context.cDamage += Math.ceil(context.cStrength * 1.8);
@@ -1668,6 +1692,20 @@ var allQueries = "SELECT * FROM " +
 				context.cDamage += context.cElemental;
 
 
+				// immobile, sluggish, slow, average, quick, nimble, like a shadow, teleportation, interstellar
+
+				// SPEED TEXT:
+				var speedText = "immobile";
+				if (context.cSpeed >= 10) speedText = "sluggish";
+				if (context.cSpeed >= 21) speedText = "slow";
+				if (context.cSpeed >= 33) speedText = "average";
+				if (context.cSpeed >= 45) speedText = "quick";
+				if (context.cSpeed >= 57) speedText = "nimble";
+				if (context.cSpeed >= 71) speedText = "like a shadow";
+				if (context.cSpeed >= 94) speedText = "teleportation";
+				if (context.cSpeed >= 121) speedText = "interstellar";
+				
+				context.cSpeed += " &ensp; (" + speedText + ")";
 
 
 				// lifetime pages read badge
