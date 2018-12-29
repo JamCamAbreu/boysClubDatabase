@@ -157,6 +157,40 @@ function deletePantherTicket(rowNum, ID_table) {
 
 
 
+/* *******************************************
+ * DELETE WINNER
+ * ******************************************/
+
+function deleteWinner(rowNum, ID_table) {
+  
+  var req = new XMLHttpRequest();
+  req.open("GET", URL + portUsed + "/removeWinner?" + "id=" + rowNum, true);
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(null);
+  req.addEventListener("load", function() {
+
+    // successfully deleted from database??:
+    var responseRequest = parseInt(req.responseText);
+    if (req.status >= 200 & req.status < 400 & responseRequest == 1) {
+      alert("Winner successfully deleted.");
+			location.reload();
+    }
+
+    // COULD NOT DELETE FROM DATABASE:
+    else {
+      alert("Purchase could NOT be deleted from database!\n" + 
+        "Please wait and try again in a few seconds");
+      console.log("responseRequest = " + responseRequest);
+    }
+
+  });
+}
+
+
+
+
+
+
 
 
 
@@ -225,6 +259,74 @@ function deletePPurchase(rowNum, ID_table) {
 
   });
 }
+
+
+
+
+
+
+
+/* *******************************************
+ * MONTHLY READING LAB WINNER
+ * ******************************************/
+
+function pickWinner(begin, end) {
+
+	var notes = document.getElementById("noteBox").value;
+  
+  var req = new XMLHttpRequest();
+  req.open("GET", URL + portUsed + "/getWinner?" + "begin=" + 
+					 begin + "&end=" + end + "&notes=" + notes, true);
+
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(null);
+  req.addEventListener("load", function() {
+
+    // success:
+    if (req.status >= 200 & req.status < 400) {
+    	var winner = req.responseText;
+
+		// ANIMATE WINNER BOX:
+		$("#winnerBox").css('display', 'block');
+		$("#winnerBox").css('left', '0');
+		$("#winnerBox").css("opacity", "0.0");
+		$("#winnerBox").text("Congratulations " + winner + "!");
+
+		var wid = parseInt($(document).width());
+		wid /= 2;
+		wid -= $("#winnerBox").outerWidth()/2;
+		width = "+=" + wid.toString();
+
+		$("#winnerBox").animate({
+			left: width,
+			opacity: 1
+		}, 700, function() {
+				setTimeout(function(){
+				$("#winnerBox").css('display', 'none');
+				location.reload();
+			}, 4500)
+		});
+
+    }
+
+    // COULD NOT DETERMINE WINNER
+    else {
+      alert("Could not determine winner\n");
+      console.log("responseRequest = " + responseRequest);
+    }
+
+  });
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

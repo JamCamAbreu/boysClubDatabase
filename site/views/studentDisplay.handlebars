@@ -51,26 +51,26 @@
 				<td>Pages Read Month: <td>{{pagesReadMonth}}
 
 			<tr style="border-bottom-style: double;">
-				<td><b>Pages Read Life: </b><td><b>{{pagesReadLife}}</b>&ensp;<i>({{helmText}})</i>
+				<td><b>Pages Read Life:</b><i>[helm]:</i><td><b>{{pagesReadLife}}</b>&ensp;<i>({{helmText}})</i>
 
 			<tr>
-				<td>Monday's Read: <td>{{daysReadMonday}}&ensp;<i>{{rubyText}}</i>
+				<td>Monday's Read <i>[ruby]:</i> <td>{{daysReadMonday}}&ensp;<i>{{rubyText}}</i>
 
 			<tr>
-				<td>Tuesday's Read: <td>{{daysReadTuesday}}&ensp;<i>{{emeraldText}}</i>
+				<td>Tuesday's Read <i>[emerald]:</i> <td>{{daysReadTuesday}}&ensp;<i>{{emeraldText}}</i>
 
 			<tr>
-				<td>Wednesday's Read: <td>{{daysReadWednesday}}&ensp;<i>{{amethystText}}</i>
+				<td>Wednesday's Read <i>[amethyst]:</i> <td>{{daysReadWednesday}}&ensp;<i>{{amethystText}}</i>
 
 			<tr>
-				<td>Thursday's Read: <td>{{daysReadThursday}}&ensp;<i>{{sapphireText}}</i>
+				<td>Thursday's Read <i>[sapphire]:</i> <td>{{daysReadThursday}}&ensp;<i>{{sapphireText}}</i>
  
 			<tr>
-				<td>Friday's Read: <td>{{daysReadFriday}}&ensp;<i>{{diamondText}}</i>
+				<td>Friday's Read <i>[diamond]:</i> <td>{{daysReadFriday}}&ensp;<i>{{diamondText}}</i>
  
 
 			<tr style="border-bottom-style: double;">
-				<td><b>Days Read Life: </b><td><b>{{daysReadTotal}}</b>&ensp;<i>({{armorText}})</i>
+				<td><b>Days Read Life</b> <i>[armor]:</i><td><b>{{daysReadTotal}}</b>&ensp;<i>({{armorText}})</i>
 
 			<tr>
 				<td>First day: <td>{{firstDate}}
@@ -79,17 +79,22 @@
 				<td>Most Recent: <td>{{mostRecentDate}}
 
 			<tr>
-				<td>Weeks in Program: <td>{{weeksSinceStarted}}&ensp;<i>({{bootsText}})</i>
+				<td>Weeks in Program <i>[boots]:</i> <td>{{weeksSinceStarted}}&ensp;<i>({{bootsText}})</i>
 
 			<tr>
-				<td>Average Reads/Week: <td>{{readsPerWeek}}&ensp;<i>({{offHandText}})</i>
+				<td>Average Reads/Week: <td>{{readsPerWeek}}
+			<tr style="border-bottom-style: double;">
+				<td>Average Reads/Month <i>[off hand]:</i> <td>{{readsPerMonth}}&ensp;<i>({{offHandText}})</i>
+ 
+
+
+			<tr>
+				<td>Base XP (days in program): <td>{{xpBase}}
+			<tr style="border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: black">
+				<td>Bonus XP (Pages Read / age group): <td> {{xpPagesBonus}}&emsp;<i> = {{xpOverall}} (total)</i>
 
 			<tr style="border-bottom-style: double;">
-				<td>Average Reads/Month: <td>{{readsPerMonth}}
-
-
-			<tr style="border-bottom-style: double;">
-				<td><b>Overal Level:</b><td><b>{{level}}</b>&ensp;<i>({{mainHandText}})</i>
+				<td><b>Overall Level</b> <i>[main hand]:</i><td><b>{{level}}</b>&ensp;<i>({{mainHandText}})</i>
 
 
 			<tr>
@@ -139,20 +144,28 @@
 
 			<img src="images/badgesBackground.png" alt="Badges Background" style="margin: auto;">
 			<div class="badgeItems">
-				<!-- helm -->
+
+				<div id="coolName"><b>{{firstName}}<div>{{lastName}}</b></div></div>
+
+				<!-- boots -->
 				<img id="boots" src={{{boots}}}>
+				<span id="boots"> &ensp;{{bootsLevel}}</span>
 
 				<!-- helm -->
 				<img id="helm" src={{{helm}}}>
+				<span id="helm"> &ensp;{{helmLevel}}</span>
 
 				<!-- armor -->
 				<img id="armor" src={{{armor}}}>
+				<span id="armor"> &ensp;{{armorLevel}}</span>
 
 				<!-- weapon -->
 				<img id="mainHand" src={{{mainHand}}}>
+				<span id="mainHand"> &ensp;{{mainHandLevel}}</span>
 
 				<!-- shield -->
 				<img id="offHand" src={{{offHand}}}>
+				<span id="offHand"> &ensp;{{offHandLevel}}</span>
 
 				<!-- GEMS for the week days: -->
 				<img id="gemMon" src={{{monPic}}}>

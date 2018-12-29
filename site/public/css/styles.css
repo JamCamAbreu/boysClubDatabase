@@ -256,8 +256,15 @@ th { padding: 2px; }
 	padding-bottom: 8px;
 }
 
-.badgeItems img{
+.badgeItems img {
 	position: absolute;
+}
+
+.badgeItems span {
+	font-size: 14px;
+	color: darkgrey;
+	position: absolute;
+	font-style: italic;
 }
 
 
@@ -285,6 +292,21 @@ th { padding: 2px; }
 #boots {
 	top: 318px;
 	left: 208px;
+}
+
+#coolName {
+	font-size: 22px;
+	text-align: justify;
+	color: white;
+	position: absolute;
+	top: 30px;
+	left: 36px;
+	text-shadow: 
+		-1px -1px 0 #9C27B0, 
+		-2px 2px 2px #009688, 
+		-1px 1px 1px #8bc34a, 
+		1px 1px 2px #E91E63, 
+		2px 2px 2px #009688;
 }
 
 
@@ -624,6 +646,85 @@ th { padding: 2px; }
 
 
 
+/* ======== READING LAB ============ */
+#dataBox {
+  display: flex;
+  flex-flow: row;
+	flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: stretch;
+
+	padding-top: 8px;
+	padding-bottom: 8px;
+
+	text-align: center;
+}
+
+.dataBox > .fBox {
+  flex-grow: 1;
+}
+
+
+#pickWinnerButton {
+	background-color: #3f9788;
+	border-color: #2d1600e8;
+	border-width: 3px;
+	border-style: dashed;
+	color: #2d1600e8;
+	padding: 2px 20px;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 1px 1px black;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	-webkit-transition-duration: 0.4s;
+	transition-duration: 0.4s;
+}
+
+#pickWinnerButton:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+	color: gold;
+	border-color: gold;
+}
+
+
+
+
+
+#winnerBox {
+
+	display: none;
+
+	bottom: 50%;
+	position: fixed;
+	text-align: center;
+	padding: 8px;
+	background: red;
+
+	font-size: 30px;
+	font-family: 'Acme';
+
+	border-width: 4px;
+  border-style: dashed;
+
+	animation-name: rainbow;
+	animation-duration: 6s;
+}
+
+@keyframes rainbow {
+  0%   {background-color: red;}
+  10%   {background-color: orange;}
+  20%   {background-color: yellow;}
+  30%   {background-color: green;}
+  40%   {background-color: blue;}
+  50%   {background-color: purple;}
+  60%   {background-color: pink;}
+  70%   {background-color: red;}
+  80%   {background-color: orange;}
+  90%   {background-color: green;}
+  100% {background-color: blue;}
+}
 
 
 

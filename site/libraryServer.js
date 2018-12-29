@@ -50,6 +50,27 @@ var MAX_STUDENT_NUM = 999999;
 
 
 
+
+
+// ====== UTILITY ======
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
+}
+
+
+
+
+
+
+
+
+
+
 // ------------- HOME PAGE -------------==
 
 app.get("/", function (req, res, next) {
@@ -478,7 +499,7 @@ app.get("/newTicket", function (req, res, next) {
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
                    "tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
-                   "ORDER BY T.submitTimestamp DESC LIMIT 25";
+                   "ORDER BY T.submitTimestamp DESC LIMIT 75";
 
     var inserts = [];
 
@@ -647,7 +668,7 @@ app.post("/newTicket", function (req, res, next) {
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
                    "tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
-                   "ORDER BY T.submitTimestamp DESC LIMIT 25";
+                   "ORDER BY T.submitTimestamp DESC LIMIT 75";
 
 
     var inserts = [];
@@ -702,7 +723,7 @@ app.post("/newTicket", function (req, res, next) {
                    "FROM tbl_libraryTicket T INNER JOIN " +
                    "tbl_student S ON S.studentNumber = T.student_id INNER JOIN " + 
                    "tbl_libraryWorkType WT ON WT.id = T.libraryWorkType " + 
-                   "ORDER BY T.submitTimestamp DESC LIMIT 25";
+                   "ORDER BY T.submitTimestamp DESC LIMIT 75";
 
     var inserts = [];
 
@@ -1411,12 +1432,17 @@ var allQueries = "SELECT * FROM " +
 					var amethystArmorBonus = 1; // stands for 100%
 					var diamondHealthBonus = 1; // etc.
 					var diamondSpeedBonus = 1; // etc.
+					var itemArmorBonus = 1; // etc.
+					var itemDamageBonus = 1; // etc.
 					
 					// -------------- LEVEL: ----------------------
 					var xp = context.daysReadTotal;
+					context.xpBase = xp;
 					var divider = Math.max(30*(parseInt(context.ageGroupid)), 1);
 					var pagesBonus = Math.max(Math.floor(context.pagesReadLife/(divider)), 0);
+					context.xpPagesBonus = pagesBonus;
 					xp += pagesBonus;
+					context.xpOverall = xp;
 					context.level = Math.max( Math.floor(15*Math.log(xp + 20) - 43), 1); // THE GOLDEN LEVEL FORMULA
 
 					/*
@@ -1577,6 +1603,7 @@ var allQueries = "SELECT * FROM " +
 				if (requirementStat >= 57) { itemLev++; itemText = "Templar Coat"; context.cDefence += 53;  }
 				if (requirementStat >= 68) { itemLev++; itemText = "Unspoken Glory"; context.cDefence += 68;  }
 				picName += itemLev.toString();
+				context.armorLevel = itemLev;
 				context.armor = "\"images/" + picName + ".png\"";
 				context.armorText = itemText;
 
@@ -1604,6 +1631,7 @@ var allQueries = "SELECT * FROM " +
 				if (requirementStat >= 64) { itemLev++; itemText = "Conan Great Sword"; }
 				if (requirementStat >= 71) { itemLev++; itemText = "Royal Dwarf Double Axe"; }
 				picName += itemLev.toString();
+				context.mainHandLevel = itemLev;
 				context.mainHand = "\"images/" + picName + ".png\"";
 				context.mainHandText = itemText;
 
@@ -1616,23 +1644,23 @@ var allQueries = "SELECT * FROM " +
 				var itemText = 0;
 				picName = "off"
 				requirementStat = context.readsPerMonth;
-				if (requirementStat >= 2) { itemLev++; itemText = "Iron Buckler"; }
-				if (requirementStat >= 3) { itemLev++; itemText = "Reinforced Round Shield"; }
-				if (requirementStat >= 4) { itemLev++; itemText = "Secret Dagger"; }
-				if (requirementStat >= 5) { itemLev++; itemText = "Gold Plated Shield"; }
-				if (requirementStat >= 6) { itemLev++; itemText = "Warrior's Kite Shield"; }
-				if (requirementStat >= 7) { itemLev++; itemText = "Spiked Shield"; }
-				if (requirementStat >= 8) { itemLev++; itemText = "Offhand Falchion"; }
-				if (requirementStat >= 9) { itemLev++; itemText = "Defender Shield"; }
-				if (requirementStat >= 10) { itemLev++; itemText = "Necromancer Shield"; }
-				if (requirementStat >= 12) { itemLev++; itemText = "Offhand Flail"; }
-				if (requirementStat >= 14) { itemLev++; itemText = "Offhand Scimitar"; }
-				if (requirementStat >= 16) { itemLev++; itemText = "Offhand Great Sword"; }
-				if (requirementStat >= 18) { itemLev++; itemText = "Paladin Holy Shield"; }
+				if (requirementStat >= 2) { itemLev++; itemText = "Iron Buckler"; itemArmorBonus += 0.1; }
+				if (requirementStat >= 3) { itemLev++; itemText = "Reinforced Round Shield"; itemArmorBonus += 0.09; }
+				if (requirementStat >= 4) { itemLev++; itemText = "Secret Dagger"; itemDamageBonus += 0.3; }
+				if (requirementStat >= 5) { itemLev++; itemText = "Gold Plated Shield"; itemArmorBonus += 0.08; }
+				if (requirementStat >= 6) { itemLev++; itemText = "Warrior's Kite Shield"; itemArmorBonus += 0.07; }
+				if (requirementStat >= 7) { itemLev++; itemText = "Spiked Shield"; itemArmorBonus += 0.06; }
+				if (requirementStat >= 8) { itemLev++; itemText = "Offhand Falchion"; itemDamageBonus += 0.2; }
+				if (requirementStat >= 9) { itemLev++; itemText = "Defender Shield"; itemArmorBonus += 0.05; }
+				if (requirementStat >= 10) { itemLev++; itemText = "Necromancer Shield"; itemArmorBonus += 0.04; }
+				if (requirementStat >= 12) { itemLev++; itemText = "Offhand Flail"; itemDamageBonus += 0.1; }
+				if (requirementStat >= 14) { itemLev++; itemText = "Offhand Scimitar"; itemDamageBonus += 0.1; }
+				if (requirementStat >= 16) { itemLev++; itemText = "Offhand Great Sword"; itemDamageBonus += 0.1; }
+				if (requirementStat >= 18) { itemLev++; itemText = "Paladin Holy Shield"; itemArmorBonus += 0.03; }
 				picName += itemLev.toString();
+				context.offHandLevel = itemLev;
 				context.offHand = "\"images/" + picName + ".png\"";
 				context.offHandText = itemText;
-
 
 
 				// Helm: Based on average total Pages Read
@@ -1640,14 +1668,15 @@ var allQueries = "SELECT * FROM " +
 				var itemText = 0;
 				picName = "helm"
 				requirementStat = context.pagesReadLife;
-				if (requirementStat >= 100) { itemLev++; itemText = "Leather Hood"; }
-				if (requirementStat >= 200) { itemLev++; itemText = "Iron Cap"; }
-				if (requirementStat >= 400) { itemLev++; itemText = "Iron Helm"; }
-				if (requirementStat >= 800) { itemLev++; itemText = "Steel Full Helm"; }
-				if (requirementStat >= 1600) { itemLev++; itemText = "Bone Visor"; }
-				if (requirementStat >= 3200) { itemLev++; itemText = "Warrior's Giant Helm"; }
-				if (requirementStat >= 6400) { itemLev++; itemText = "Royal Crown"; }
+				if (requirementStat >= 100) { itemLev++; itemText = "Leather Hood"; context.cDefence += 2; }
+				if (requirementStat >= 200) { itemLev++; itemText = "Iron Cap"; context.cDefence += 4; }
+				if (requirementStat >= 400) { itemLev++; itemText = "Iron Helm"; context.cDefence += 6; }
+				if (requirementStat >= 800) { itemLev++; itemText = "Steel Full Helm"; context.cDefence += 9; }
+				if (requirementStat >= 1600) { itemLev++; itemText = "Bone Visor"; context.cDefence += 13; }
+				if (requirementStat >= 3200) { itemLev++; itemText = "Warrior's Giant Helm"; context.cDefence += 18; }
+				if (requirementStat >= 6400) { itemLev++; itemText = "Royal Crown"; context.cDefence += 23; }
 				picName += itemLev.toString();
+				context.helmLevel = itemLev;
 				context.helm = "\"images/" + picName + ".png\"";
 				context.helmText = itemText;
 
@@ -1661,17 +1690,18 @@ var allQueries = "SELECT * FROM " +
 				var itemText = 0;
 				picName = "boots"
 				requirementStat = context.weeksSinceStarted;
-				if (requirementStat >= 1) { itemLev++; itemText = "Cloth Boots"; context.cSpeed += 7; }
-				if (requirementStat >= 2) { itemLev++; itemText = "Leather Boots"; context.cSpeed += 8; }
-				if (requirementStat >= 4) { itemLev++; itemText = "Iron Boots"; context.cSpeed += 9; }
-				if (requirementStat >= 6) { itemLev++; itemText = "Steel Plated Boots"; context.cSpeed += 10; }
-				if (requirementStat >= 8) { itemLev++; itemText = "War Boots"; context.cSpeed += 11; }
-				if (requirementStat >= 10) { itemLev++; itemText = "Wizard Boots"; context.cSpeed += 12; }
-				if (requirementStat >= 12) { itemLev++; itemText = "Rage Boots"; context.cSpeed += 13; }
-				if (requirementStat >= 14) { itemLev++; itemText = "Ice Boots"; context.cSpeed += 14; }
-				if (requirementStat >= 16) { itemLev++; itemText = "Corrupted Boots"; context.cSpeed += 15; }
-				if (requirementStat >= 19) { itemLev++; itemText = "Holy Boots"; context.cSpeed += 16; }
+				if (requirementStat >= 1) { itemLev++; itemText = "Cloth Boots"; context.cSpeed += 7; context.cDefence += 5; }
+				if (requirementStat >= 2) { itemLev++; itemText = "Leather Boots"; context.cSpeed += 8; context.cDefence += 5; }
+				if (requirementStat >= 4) { itemLev++; itemText = "Iron Boots"; context.cSpeed += 9; context.cDefence += 5; }
+				if (requirementStat >= 6) { itemLev++; itemText = "Steel Plated Boots"; context.cSpeed += 10; context.cDefence += 5; }
+				if (requirementStat >= 8) { itemLev++; itemText = "War Boots"; context.cSpeed += 11; context.cDefence += 5; }
+				if (requirementStat >= 10) { itemLev++; itemText = "Wizard Boots"; context.cSpeed += 12; context.cDefence += 5; }
+				if (requirementStat >= 12) { itemLev++; itemText = "Rage Boots"; context.cSpeed += 13; context.cDefence += 5; }
+				if (requirementStat >= 14) { itemLev++; itemText = "Ice Boots"; context.cSpeed += 14; context.cDefence += 5; }
+				if (requirementStat >= 16) { itemLev++; itemText = "Corrupted Boots"; context.cSpeed += 15; context.cDefence += 5; }
+				if (requirementStat >= 19) { itemLev++; itemText = "Holy Boots"; context.cSpeed += 16; context.cDefence += 5; }
 				picName += itemLev.toString();
+				context.bootsLevel = itemLev;
 				context.boots = "\"images/" + picName + ".png\"";
 				context.bootsText = itemText;
 
@@ -1690,6 +1720,10 @@ var allQueries = "SELECT * FROM " +
 				// ELEMENTAL DAMAGE
 				context.cElemental += (context.cFire + context.cCold + context.cPoison);
 				context.cDamage += context.cElemental;
+
+				// Off hand bonuses!
+				context.cDefence = Math.ceil(context.cDefence*itemArmorBonus);
+				context.cDamage = Math.ceil(context.cDamage*itemDamageBonus);
 
 
 				// immobile, sluggish, slow, average, quick, nimble, like a shadow, teleportation, interstellar
@@ -2135,6 +2169,10 @@ app.get("/readingLab", function (req, res, next) {
 	console.log("Generating Minecraft Club report between " + beg + " and " + end + "...");
 
 
+  context.begMonth = moment(moment().startOf('month')).format("YYYY-MM-DD");
+  context.endMonth = moment(moment().endOf('month')).format("YYYY-MM-DD");
+
+
 	
   var reqDays = req.query.days;
 	if (reqDays > 0)
@@ -2302,10 +2340,58 @@ WHERE temp.w >= 3
 
 
 
+
+	var sqlString = "SELECT RW.id, RW.student_id, RW.notes, RW.submitTimestamp, S.firstName, S.lastName " +
+									"FROM tbl_readingWinner RW " + 
+									"INNER JOIN tbl_student S on RW.student_id = S.studentNumber " + 
+									"ORDER BY submitTimestamp DESC LIMIT 10";
+
+	// array of parameters:
+	var inserts = [];
+
+	// SEND the query:
+	mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+
+		// SQL ERROR
+		if (err) {
+			console.log("Error in reading winner query");
+			next(err);
+			return;
+		}
+
+		// Gather student info and shoot it to handlebars:
+		context.numWinners = rows.length;
+		context.winner = []; // Each student in returned table
+
+		var index;
+		var row;
+
+		for (index = 0; index < context.numWinners; index++) {
+			row = rows[index];
+
+			var t = row.submitTimestamp;
+			var timeS = moment(t).format("DD-MM-YYYY");
+
+			context.winner.push({
+				row_id : row.id,
+				date : timeS,
+				fName : row.firstName,
+				lName : row.lastName,
+				id : row.student_id,
+				notes : row.notes
+			});
+		} // end for
+
+
+
+
+
+
 		// RENDER PAGE:
 		res.render('readingLab', context);
 
 
+	}); // end query for Recent Winners Reading
 	}); // end query for Year 
 	}); // end query for Month 
 	}); // end query for Friday 
@@ -2358,7 +2444,7 @@ app.get("/pantherTicket", function (req, res, next) {
 									"FROM tbl_pantherTicket T INNER JOIN " + 
 									"tbl_student S ON S.studentNumber = T.student_id INNER JOIN " +
 									"tbl_pantherWorkType WT ON WT.id = T.workType " +
-									"ORDER BY T.submitTimestamp DESC LIMIT 50";
+									"ORDER BY T.submitTimestamp DESC LIMIT 75";
 
 
     var inserts = [];
@@ -2549,7 +2635,7 @@ app.post("/pantherTicket", function (req, res, next) {
 									"FROM tbl_pantherTicket T INNER JOIN " + 
 									"tbl_student S ON S.studentNumber = T.student_id INNER JOIN " +
 									"tbl_pantherWorkType WT ON WT.id = T.workType " +
-									"ORDER BY T.submitTimestamp DESC LIMIT 50";
+									"ORDER BY T.submitTimestamp DESC LIMIT 75";
 
 
     var inserts = [];
@@ -2602,7 +2688,7 @@ app.post("/pantherTicket", function (req, res, next) {
 									"FROM tbl_pantherTicket T INNER JOIN " + 
 									"tbl_student S ON S.studentNumber = T.student_id INNER JOIN " +
 									"tbl_pantherWorkType WT ON WT.id = T.workType " +
-									"ORDER BY T.submitTimestamp DESC LIMIT 50";
+									"ORDER BY T.submitTimestamp DESC LIMIT 75";
 
 
     var inserts = [];
@@ -2681,7 +2767,7 @@ app.get("/pantherPurchase", function (req, res, next) {
                    "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_pantherPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
-                   "ORDER BY P.submitTimestamp DESC LIMIT 50";
+                   "ORDER BY P.submitTimestamp DESC LIMIT 75";
 
     var inserts = [];
 
@@ -2836,7 +2922,7 @@ app.post("/pantherPurchase", function (req, res, next) {
                    "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_pantherPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
-                   "ORDER BY P.submitTimestamp DESC LIMIT 50";
+                   "ORDER BY P.submitTimestamp DESC LIMIT 75";
 
     var inserts = [];
 
@@ -2891,7 +2977,7 @@ app.post("/pantherPurchase", function (req, res, next) {
                    "P.pointAmount AS 'amount', P.notes, P.submitTimestamp " + 
                    "FROM tbl_pantherPurchase P INNER JOIN " +
                    "tbl_student S ON S.studentNumber = P.student_id " + 
-                   "ORDER BY P.submitTimestamp DESC LIMIT 50";
+                   "ORDER BY P.submitTimestamp DESC LIMIT 75";
 
 
     var inserts = [];
@@ -3014,9 +3100,127 @@ app.get("/pantherReports", function (req, res, next) {
 
 
 
+app.get("/getWinner", function (req, res, next) {
 
 
 
+	/*
+
+	*/
+
+
+
+	var beginDate = req.query.begin;
+	var endDate = req.query.end;
+	var notes = req.query.notes;
+
+	var qString = " SELECT temp.id, temp.fn, temp.ln, temp.w FROM " +
+	"(SELECT temp2.ID AS 'id', temp2.fName AS 'fn', temp2.lName AS 'ln', COUNT(*) AS 'w' FROM " +
+		"(SELECT S.studentNumber AS 'ID', S.firstName AS 'fName', S.lastName AS 'lName', " +
+		"LT.dateCompleted, COUNT(*) AS 'num' FROM tbl_student S " +
+		"INNER JOIN tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+		"WHERE LT.dateCompleted BETWEEN '" + beginDate + "' AND '" + endDate + "' " + 
+		"GROUP BY S.studentNumber, LT.dateCompleted) AS temp2 " +
+		"GROUP BY temp2.ID) AS temp " +
+"WHERE temp.w >= 1 " +
+"ORDER BY temp.w DESC, temp.ln ";
+
+  var inserts = [];
+
+  mysql.pool.query(qString, inserts, function(err, rows, results) {
+      if(err){
+        next(err);
+        return;
+      }
+
+      // Gather s
+      numS = rows.length;
+      S = []; // Tickets Today
+			t = [];
+
+      var index;
+      var row;
+      for (index = 0; index < numS; index++) {
+        row = rows[index];
+        S.push({
+          id : row.id,
+          fName : row.fn,
+          lName : row.ln,
+					tickets : row.w
+        });
+				var i;
+				for (i = 0; i < S[index].tickets; i++) {
+					t.push({
+						id : row.id,
+						fName : row.fn,
+						lName : row.ln
+					});
+				}
+
+      } // end for
+
+			var min = 0;
+			var max = t.length - 1;
+			var winIndex = Math.floor(Math.random() * (max - min) + min);
+			var winner = t[winIndex];
+			var winText = t[winIndex].fName + " " + winner.lName + " " + winner.id;
+			console.log("Picking winner...");
+			console.log("Congratulations " + winText + "!");
+
+
+			// Push Winner to database:
+	var qString = "INSERT INTO `tbl_readingWinner` (`id`, `student_id`, `notes`, `submitTimestamp`) " + 
+								"VALUES (NULL, " + winner.id + ", '" + notes + "', CURRENT_TIMESTAMP); ";
+
+  var inserts = [];
+
+  mysql.pool.query(qString, inserts, function(err, rows, results) {
+      if(err){
+        next(err);
+        return;
+      }
+
+
+
+      // HTTP RESPONSE:
+      res.setHeader("Content-Type", "application/json");
+      res.write(winText);
+      res.end();
+
+    }); // end winner INSERT
+    }); // end all student query
+});
+
+
+
+
+// +==========================================+
+// |      DELETE READING WINNER FROM DB       |
+// +==========================================+
+
+app.get("/removeWinner", function(req,res,next) {
+
+  var idString = "" + req.query["id"];
+
+  mysql.pool.query("DELETE FROM tbl_readingWinner WHERE id = ?", 
+
+    // array of parameters:
+    [idString],
+
+    function(err, results) {
+      if(err){
+        next(err);
+        return;
+      }
+
+      // HTTP RESPONSE:
+      var deleteSuccess = "" + results.affectedRows;
+
+      res.setHeader("Content-Type", "application/json");
+      res.write(deleteSuccess);
+      res.end();
+    });
+});
 
 
 

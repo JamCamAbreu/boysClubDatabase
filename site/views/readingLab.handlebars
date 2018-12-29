@@ -1,4 +1,6 @@
 
+ 
+
 <script>
   // clicking a row takes you to that student page
   function clickRow(rowNum) {
@@ -6,6 +8,18 @@
     var url = URL + portUsed + "/student?scanID=" + rowNum;
     window.location = url;
   }
+
+
+
+  // onclick event for the X delete buttons
+  function clickDelete(rowNum) {
+    if (confirm("Remove winner from database? Warning, " + 
+                "this can NOT be undone!")) {
+			deleteWinner(rowNum, "recentTicketTable");
+    }
+  }
+
+
 </script>
 
 
@@ -30,6 +44,8 @@
 
 
 <div id="dataBox">
+
+<div class="fBox">
 <table class="resultsTable" id="resultsTable" style="width:300px; border: 2px solid black; border-collapse: collapse;">
 	<caption><h3>~Pages Read This Week~</h3></caption>
 	<tbody>
@@ -62,6 +78,86 @@
 			<td align="right"><b>{{this.pagesProgramTotal}}</b>
 	</tbody>
 </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="fBox">
+<h3 style="text-align: center;">~Recent Reading Lab Monthly Winners~</h3>
+<table class="resultsTable" id="resultsTable" style="width:550px; border: 2px solid black; border-collapse: collapse;">
+{{#if numWinners}}
+  <!-- IF STUDENTS EXIST IN DATABASE -->
+    <thead>
+		<tr style="border: 1px solid grey;">
+			<td>
+			<td><b>Winner</b>:
+			<td><b>ID</b>:
+			<td><b>Prize</b>:
+			<td><b>Date</b>:
+			<td>
+
+    <!-- EACH ROW -->
+    <tbody>
+    {{#each winner}}
+      <tr>
+				<td> <button class="deleteButton"
+            onclick="clickDelete({{this.row_id}})"
+            style="margin-right: 8px;">X
+          </button>
+        <td>{{this.fName}} {{this.lName}}
+        <td>{{this.id}}
+        <td>{{this.notes}}
+        <td>{{this.date}}
+    {{/each}} <!-- END ROW -->
+    </tbody>
+
+<!-- NO STUDENTS IN DATABASE -->
+{{else}}
+  <p><i>No winners yet!</i></p>
+{{/if}}
+
+</table>
+
+
+<div style="margin: 6px;">
+	<div>
+		Start Date <input type="date" id="beginDate" value="{{begMonth}}">
+		End Date <input type="date" id="endDate" value="{{endMonth}}">
+	</div>
+
+  <!-- NOTES -->
+  <div class="noteBox">
+    <div><b>Enter Reading Prize:</b></div>
+    <textarea rows="1" cols="30" name="notes" id="noteBox"></textarea>
+  </div>
+
+	<div>
+		<button id="pickWinnerButton" 
+						onclick="pickWinner(document.getElementById('beginDate').value, document.getElementById('endDate').value)">
+		<b>Pick Winner</b></button>
+	</div>
+</div>
+
+</div> <!-- fBox -->
+
+
+
+</div> <!-- dataBox -->
+
+
+
+<!-- ANIMATE BOX -->
+<div id="winnerBox">
+</div>
+
+
+
 
 
 
@@ -77,9 +173,6 @@
 	</h3>
 	
 </form>
-
-
-
 
 <div id="studentListing">
 {{#if numStudents}}
@@ -114,6 +207,24 @@
 {{/if}}
 
 
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
