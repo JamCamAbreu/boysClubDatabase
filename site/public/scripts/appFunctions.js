@@ -163,6 +163,7 @@ function deletePantherTicket(rowNum, ID_table) {
 
 function deleteWinner(rowNum, ID_table) {
   
+
   var req = new XMLHttpRequest();
   req.open("GET", URL + portUsed + "/removeWinner?" + "id=" + rowNum, true);
   req.setRequestHeader("Content-Type", "application/json");
@@ -273,6 +274,8 @@ function deletePPurchase(rowNum, ID_table) {
 function pickWinner(begin, end) {
 
 	var notes = document.getElementById("noteBox").value;
+	var pStart = document.getElementById("beginDate").value;
+	var pEnd = document.getElementById("endDate").value;
   
   var req = new XMLHttpRequest();
   req.open("GET", URL + portUsed + "/getWinner?" + "begin=" + 
@@ -285,38 +288,75 @@ function pickWinner(begin, end) {
     // success:
     if (req.status >= 200 & req.status < 400) {
     	var winner = req.responseText;
+			if (winner == "0") {
+				alert("There were no readers in the date requested. Please review the date range.");
+			}
 
-		// ANIMATE WINNER BOX:
-		$("#winnerBox").css('display', 'block');
-		$("#winnerBox").css('left', '0');
-		$("#winnerBox").css("opacity", "0.0");
-		$("#winnerBox").text("Congratulations " + winner + "!");
+			else {
 
-		var wid = parseInt($(document).width());
-		wid /= 2;
-		wid -= $("#winnerBox").outerWidth()/2;
-		width = "+=" + wid.toString();
+				var sound = document.getElementById("victorySound"); 
+				sound.play();
 
-		$("#winnerBox").animate({
-			left: width,
-			opacity: 1
-		}, 700, function() {
-				setTimeout(function(){
-				$("#winnerBox").css('display', 'none');
-				location.reload();
-			}, 4500)
-		});
+				// ANIMATE WINNER BOX:
+				$("#winnerBox").css('display', 'block');
+				$("#winnerBox").css('left', '0');
+				$("#winnerBox").css("opacity", "0.0");
+				$("#winnerBox").text("Congratulations " + winner + "!");
 
-    }
+				var wid = parseInt($(document).width());
+				wid /= 2;
+				wid -= $("#winnerBox").outerWidth()/2;
+				width = "+=" + wid.toString();
 
-    // COULD NOT DETERMINE WINNER
-    else {
-      alert("Could not determine winner\n");
-      console.log("responseRequest = " + responseRequest);
-    }
+				$("#winnerBox").animate({
+					left: width,
+					opacity: 1
+				}, 700, function() {
+						setTimeout(function(){
+						$("#winnerBox").css('display', 'none');
+						window.location = "/readingLab?prizeStart=" + pStart + "&prizeEnd=" + pEnd;
+					}, 4500)
+				});
 
-  });
+			}
+
+		}
+		// COULD NOT DETERMINE WINNER
+		else {
+			alert("Could not determine winner\n");
+			console.log("responseRequest = " + responseRequest);
+		}
+	});
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* *******************************************
+ * Refresh the week for reading lab
+ * ******************************************/
+
+function getWeek(weekNum) {
+	var num = parseInt(weekNum); 
+	window.location = "/readingLab?week=" + num;
+}
+
+
+
+
 
 
 
