@@ -1,0 +1,139 @@
+<!-- ERRORS -->
+{{#if errorList}}
+<div id="errors">
+  {{#each errorList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+<!-- SUCCESSES -->
+{{#if successList}}
+<div id="successes">
+  {{#each successList}}
+    <div>{{this}}</div>
+  {{/each}}
+</div>
+{{/if}}
+
+
+<h1>Edit Student</h2>
+
+<form method="post" action="/editStudent">
+<fieldset class="newStudentTable">
+  <p><b>Note: <u>All fields required!</u></b></p>
+
+  <table style="text-align: left;">
+
+    <!-- STUDENT NUMBER -->
+    <tr><th><label for="studentNumber">Student Number</label></th>
+		<td>{{studentNum}}</td>
+
+		<input name="studentNumber" id="studentNumber" type="number"
+		value="{{studentNum}}" style="display: none;">
+		</tr>
+
+    <!-- FIRST NAME -->
+    <tr><th><label for="firstName">First Name</label></th>
+      <td><input name="firstName" id="studentFirstName" value="{{fName}}"></td></tr>
+
+    <!-- LAST NAME -->
+    <tr><th><label for="lastName">Last Name</label></th>
+      <td><input name="lastName" id="studentLastName" value="{{lName}}"></td></tr>
+    
+
+    <!-- I should really use sql to build this list up, but whatever... -->
+    <!-- SCHOOL -->
+    <tr><th>School
+      <td><select name="school_id" id="school_id">
+
+        <option value="1">Home School</option>
+        <option value="2">Not Listed</option>
+        <option disabled>--------------</option>
+        <option value="24">Black Hawk Elementary</option>
+        <option value="23">Canyon Lake Elementary</option>
+        <option value="3">General Beadle Elementary</option>
+        <option value="4">Grandview Elementary</option>
+        <option value="5">Horace Mann Elementary</option>
+        <option value="6">Knollwood Elementary</option>
+        <option value="7">Meadowbrook Elementary</option>
+        <option value="21">Pinedale Elementary</option>
+        <option value="8">Rapid Valley Elementary</option>
+        <option value="9">Robbinsdale Elementary</option>
+        <option value="20">South Canyon Elementary</option>
+        <option value="10">South Park Elementary</option>
+        <option value="11">Valley View Elementary</option>
+        <option value="22">Wilson Elementary</option>
+        <option disabled>--------------</option> 
+
+        <option value="12">East Middle</option>
+        <option value="13">North Middle</option>
+        <option value="14">South Middle</option>
+        <option value="15">Southwest Middle</option>
+        <option value="16">West Middle</option>
+        <option disabled>--------------</option>
+
+        <option value="17">Central High</option>
+        <option value="25">Jefferson Academy</option>
+        <option value="18">Rapid City Christian High</option>
+        <option value="19">Stevens High</option>
+      </select></td></tr>
+
+    <!-- AGE GROUP -->
+    <tr><th>Age Group
+      <td><select name="ageGroup_id" id="ageGroup_id">
+        <option value="1">Cadet</option>
+        <option value="2">Minor</option>
+        <option value="3">Junior</option>
+        <option value="4">Intermediate</option>
+        <option value="5">Senior</option>
+      </select></td></tr>
+  </table>
+
+  <!-- HIT LIST -->
+  <div style="padding-top: 5px; padding-bottom: 10px; display: none;">
+    <span><b>Hit Lists</b> (check all that apply): </span>
+    <input name="hitlist_school" type="checkbox" value="1" 
+        {{checkedIf h_schoolWork}}>School Work
+
+    <input name="hitlist_reading" type="checkbox" value="2"
+        {{checkedIf h_reading}}>Reading
+
+    <input name="hitlist_math" type="checkbox" value="3"
+        {{checkedIf h_math}}>Math
+
+  </div>
+  
+  <!-- SUBMIT BUTTON -->
+  <input type="submit" value="Submit" id="newStudentSubmitButton">
+  
+</fieldset></form>
+<br>
+
+
+
+
+
+
+
+
+<!-- REMEMBERING DATA IN CASE OF ERRORS -->
+<script>
+    // REMEMBER which school id in case of error:
+    {{#if school_id}}
+			var id = {{school_id}};
+			document.getElementById('school_id').value = id;
+    {{/if}}
+
+    // REMEMBER age group id in case of error:
+    {{#if ageG_id}}
+      var AG = {{ageG_id}};
+			document.getElementById('ageGroup_id').value = AG;
+    {{/if}}
+</script>
+
+
+
+
+

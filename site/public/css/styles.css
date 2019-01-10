@@ -728,4 +728,17 @@ th { padding: 2px; }
 
 
 
+#editButton {
+	color: grey;
+	font-size: 15px;
+}
+
+
+#editButton:hover {
+	color: yellow;
+  cursor: pointer;
+}
+
+
+
 

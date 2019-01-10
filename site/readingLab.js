@@ -39,6 +39,7 @@ app.get("/readingLab", function (req, res, next) {
 			thisWeek = false;
 			beg = "\"" + moment().subtract(WEEK, 'weeks').startOf('isoWeek').format("YYYY-MM-DD") + "\"";
 			end = "\"" + moment().subtract(WEEK, 'weeks').endOf('isoWeek').format("YYYY-MM-DD") + "\"";
+			context.beg = beg.substring(1,beg.length - 1); context.end = end.substring(1, end.length - 1);
 		}
 	}
 

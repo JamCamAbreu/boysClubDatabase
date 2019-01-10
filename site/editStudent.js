@@ -8,16 +8,63 @@ var MAX_STUDENT_NUM = 999999;
 module.exports = function(app){
 
 
+
 // +==========================================+
 // |        ADD NEW STUDENT TO DB             |
 // +==========================================+
-app.get("/newStudent", function (req, res, next) {
-  res.render('newStudent');
+app.get("/editStudent", function (req, res, next) {
+
+  var context = {
+    errorList: [],
+    successList: []
+  };
+
+  // Get variables to be used for database Query:
+  var studentNum = req.query.studentNumber;
+
+	var qStr = "SELECT S.studentNumber, S.firstName, S.lastName, " + 
+									 "S.ageGroup_id, S.school_id " + 
+                   "FROM tbl_student S " + 
+                   "WHERE S.studentNumber = " + studentNum;
+
+
+  mysql.pool.query( qStr, [], 
+     function(err, rows, fields){
+      if (err) {
+        console.log("Error in selecting students from DB.");
+        next(err);
+        return;
+      }
+
+      if (rows.length < 1) {
+        completeForm = false;
+        context.errorList.push("Student with ID number " + studentNum + 
+          "does not yet exist!");
+      }
+
+			else {
+				// Save the data in case there were errors:
+				row = rows[0];
+				context.studentNum = parseInt(row.studentNumber);
+				context.fName = row.firstName;
+				context.lName = row.lastName
+				context.school_id = parseInt(row.school_id); 
+				context.ageG_id = parseInt(row.ageGroup_id);
+
+			}
+
+  	res.render('editStudent', context);
+	}); // end query
 });
 
 
 
-app.post("/newStudent", function (req, res, next) {
+
+
+
+
+
+app.post("/editStudent", function (req, res, next) {
 
   var context = {
     errorList: [],
@@ -30,7 +77,6 @@ app.post("/newStudent", function (req, res, next) {
   // Get variables to be used for database Query:
   var studentNum = req.body.studentNumber;
 
-
   mysql.pool.query("SELECT S.studentNumber, S.firstName, S.lastName " + 
                    " FROM tbl_student S " + 
                    "WHERE S.studentNumber = ?", [studentNum], 
@@ -41,20 +87,16 @@ app.post("/newStudent", function (req, res, next) {
         return;
       }
 
-      if (rows.length > 0) {
+      if (rows.length < 1) {
         completeForm = false;
-        var student_fName = rows[0].firstName;
-        var student_lName = rows[0].lastName;
         context.errorList.push("Student with ID number " + studentNum + 
-          " already exists in database with name: " + 
-          student_lName + ", " + student_fName);
+          "does not yet exist!");
       }
 
   var fName = req.body.firstName;
   var lName = req.body.lastName;
   var school_id = req.body.school_id;
   var ageG_id = req.body.ageGroup_id;
-
 
   // Check boxes:
   var hitlists = [];
@@ -127,41 +169,55 @@ app.post("/newStudent", function (req, res, next) {
     else
       console.log("\t\tNone");
 
-    // Query the database (insert):
-    var sqlString = "INSERT INTO tbl_student " + 
-                    "(`studentNumber`, `school_id`, " +  
-                    "`ageGroup_id`, `firstName`, `lastName`) " + 
-                    "VALUES (?, ?, ?, ?, ?)";
+	var id = studentNum;
+  var fName = req.body.firstName;
+  var lName = req.body.lastName;
+  var school_id = req.body.school_id;
+  var ageG_id = req.body.ageGroup_id;
+
+    // Query the database (update):
+	var qString = "UPDATE tbl_student " + 
+								"SET firstName = '" + fName + "', " +
+								"lastName = '" + lName + "', " +
+								"school_id = " + school_id + ", " + 
+								"ageGroup_id = " + ageG_id + " " +
+								"WHERE studentNumber = " + id;
+
+	console.log(qString);
 
     // array of parameters:
-    var inserts = [studentNum, school_id, ageG_id, fName, lName];
+    var inserts = [];
 
     // SEND the query:
-    mysql.pool.query(sqlString, inserts, function(err, results){
+    mysql.pool.query(qString, inserts, function(err, results){
       if(err){
         next(err);
         return
       }
 
-      console.log("Query sent successfully.");
+      console.log("Student updated successfully.");
     }); // end query
 
     var name = context.lName + ", " + context.fName;
-    context.successList.push(name + " added successfully.");
+		context.successList.push(name + ": " + studentNum + " successfully updated.");
 
   } // end if test correct response
 
-  res.render('newStudent', context);
+  res.render('editStudent', context);
 
   }); // end query for student already exists
 });
 
 
 
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+

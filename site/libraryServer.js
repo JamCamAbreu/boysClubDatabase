@@ -69,6 +69,7 @@ require('./student')(app);
 require('./reports')(app);
 require('./panther')(app);
 require('./readingLab')(app);
+require('./editStudent')(app);
 
 // ============== ERRORS ================
 

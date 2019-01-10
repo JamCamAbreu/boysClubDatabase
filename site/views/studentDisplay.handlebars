@@ -31,7 +31,8 @@
 <div id="studentInfoTopRow">
 
 	<div class="studentInfo" style="padding: 15px;">
-		<div><h2>{{lastName}}, {{firstName}}</h2></div>
+		<div><h2>{{lastName}}, {{firstName}} <i id="editButton">[edit]</i></h2></div>
+
 
 		<div>Student Number: <b>{{studentNumber}}</b></div>
 
@@ -371,4 +372,10 @@
 {{/if}}
 
 
+<script>
+	var b = document.getElementById("editButton");
+	b.onclick = function() {
+		window.location = "/editStudent?studentNumber=" + {{studentNumber}};
+	}
+</script>
 
