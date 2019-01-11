@@ -175,6 +175,11 @@ app.post("/editStudent", function (req, res, next) {
   var school_id = req.body.school_id;
   var ageG_id = req.body.ageGroup_id;
 
+
+	// replace any of the single quote marks with a backslash and quote mark:
+	fName = fName.replace(/\'/g, "\\\'");
+	lName = lName.replace(/\'/g, "\\\'");
+
     // Query the database (update):
 	var qString = "UPDATE tbl_student " + 
 								"SET firstName = '" + fName + "', " +
