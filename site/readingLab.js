@@ -209,7 +209,7 @@ app.get("/readingLab", function (req, res, next) {
 		if (!context.pagesProgramTotal) { context.pagesProgramTotal = '0'; }
 
 
-
+	// Reading Winners:
 	var sqlString = "SELECT RW.id, RW.student_id, RW.notes, RW.submitTimestamp, S.firstName, S.lastName " +
 									"FROM tbl_readingWinner RW " + 
 									"INNER JOIN tbl_student S on RW.student_id = S.studentNumber " + 
@@ -243,7 +243,7 @@ app.get("/readingLab", function (req, res, next) {
 			row = rows[index];
 
 			var t = row.submitTimestamp;
-			var timeS = moment(t).format("DD-MM-YYYY");
+			var timeS = moment(t).format("MM-DD-YYYY");
 
 			context.winner.push({
 				row_id : row.id,

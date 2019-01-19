@@ -15,7 +15,6 @@ var URL = "http://192.168.16.89:"; // BOYS CLUB IP
 //var URL = "http://192.168.0.22:"; // Cam's House IP
 
 
-
 /* *******************************************
  * DELETE BUTTON ACTION (STUDENT ONLY...)
  * ******************************************/
@@ -353,6 +352,21 @@ function getWeek(weekNum) {
 	var num = parseInt(weekNum); 
 	window.location = "/readingLab?week=" + num;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

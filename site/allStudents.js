@@ -15,6 +15,8 @@ module.exports = function(app){
 
 app.get("/allStudents", function(req, res, next) {
 
+
+
   var context = {};
 
   mysql.pool.query("SELECT S.studentNumber, SCH.name AS 'school', " + 
@@ -47,8 +49,14 @@ app.get("/allStudents", function(req, res, next) {
         });
       } // end for
 
-      res.render("allStudents", context);
+      //res.render("allStudents", context);
+
+
+
      }); // end query select all students
+
+
+
 });
 
 

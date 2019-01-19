@@ -1,0 +1,15 @@
+<script src="scripts/Chart.js"></script>
+	
+<div>
+	<canvas id="myChart" width="100" height="100"></canvas>
+</div>
+
+
+<script> 
+		var ctx = document.getElementById("myChart");
+		var myLineChart = new Chart(ctx, {
+			type: 'line',
+			data: [{{{data}}}]
+		});
+</script>
+
