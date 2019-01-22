@@ -1,15 +1,45 @@
 <script src="scripts/Chart.js"></script>
 	
-<div>
-	<canvas id="myChart" width="100" height="100"></canvas>
+<div style="width: 800px; height: 300px;">
+	<canvas id="myChart"></canvas>
 </div>
 
 
 <script> 
-		var ctx = document.getElementById("myChart");
-		var myLineChart = new Chart(ctx, {
-			type: 'line',
-			data: [{{{data}}}]
-		});
+
+	var a = [{{{data1}}}];
+	var b = [{{{data2}}}];
+
+	new Chart(document.getElementById("myChart"), {
+  type: 'line',
+  data: {
+    labels: b,
+    datasets: [{ 
+        data: a,
+        label: "Total pages read most recent 30 days",
+        borderColor: "#3e95cd",
+        fill: false
+      }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Readers sorted by age group'
+    }
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+	console.log(myLineChart);
 </script>
 
