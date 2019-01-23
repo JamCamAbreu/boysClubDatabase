@@ -1,4 +1,4 @@
-
+<script src="scripts/Chart.js"> </script>
  
 
 <script>
@@ -113,7 +113,6 @@
 
 
 
-
 <div class="fBox">
 <h3 style="text-align: center;">~Recent Reading Lab Monthly Winners~</h3>
 <table class="resultsTable" id="resultsTable" style="width:550px; border: 2px solid black; border-collapse: collapse;">
@@ -190,40 +189,35 @@
 
 
 
+<div id="topTenReaders">
+<h1 style="margin-bottom: 0px;">Top Ten Readers</h1><h3>(this week)</h3>
 
-
-<br>
-<form method="get" action="/readingLab" style="margin-top: 48px;">
-	<h3>Minimum weekly worked days:
-		<input type="number" value="{{days}}" id="days" name="days">
-	</h3>
-	
-	<div><b>{{beg}}</b> (Mon) through <b>{{end}}</b> (Fri)</div>
-	
-</form>
-
-<div id="studentListing">
+<div id="studentListing" style="width: auto;">
 {{#if numStudents}}
-<table class="resultsTable" id="resultsTable">
+<table class="topTenTable" id="resultsTable">
 
   <!-- IF STUDENTS EXIST IN DATABASE -->
     <thead>
-      <tr>
+      <tr style="background: #96b5dc70;">
         <th style="background: #0000;">
+				<th id="MC_RA">RANK
+        <th id="MC_WC">Days Read (this week)
+        <th id="MC_PR">Pages Read (this week)
         <th id="MC_SN">Student Number
         <th id="MC_FN">First Name
         <th id="MC_LN">Last Name
-        <th id="MC_WC">Days Read (this week)
 
     <!-- EACH ROW -->
     <tbody>
     {{#each S}}
       <tr id="row{{this.studentNumber}}" onclick="clickRow({{this.id}})">
         <td style="text-align: center; background: #0000;">
+        <td>{{this.place}}
+        <td>{{this.works}}
+        <td>{{this.pagesRead}}
         <td>{{this.id}}
         <td>{{this.fName}}
         <td>{{this.lName}}
-        <td>{{this.works}}
     {{/each}} <!-- END ROW -->
     </tbody>
 </table>
@@ -234,6 +228,39 @@
   <p><i>Check date range to ensure correct results.</i></p>
 {{/if}}
 
+</div>
+<br>
+<form method="get" action="/readingLab">
+	<h3>Minimum weekly worked days:
+		<input type="number" value="{{days}}" id="days" name="days">
+	</h3>
+	<div><b>{{beg}}</b> (Mon) through <b>{{end}}</b> (Fri)</div>
+</form>
+
+
+<!-- GRAPHS GRAPHS GRAPHS -->
+
+<h1 style="margin-bottom: 20px;">Reading Data</h1>
+
+<div class="charts" style="margin-top:20px;">
+	<h2 style="margin-bottom: 0px; margin-top: 20px;">Total Pages Read Each Day</h2>
+	<h3 style="margin-bottom: 0px; margin-top: 0px;">(all students combined)</h3>
+	<canvas id="myChart"></canvas>
+</div>
+
+
+<div class="charts">
+	<h2 style="margin-bottom: 0px; margin-top: 20px;">Pages Read Each Week</h2>
+	<h3 style="margin-bottom: 0px; margin-top: 0px;">(all students combined)</h3>
+	<canvas id="myChartWeekPages"></canvas>
+</div>
+
+
+<div class="charts">
+	<h2 style="margin-bottom: 0px; margin-top: 20px;">How many students Have Read</h2>
+	<h3 style="margin-bottom: 0px; margin-top: 0px;">(<i>{{totalUniqueStudents}} total since program start</i>)</h3>
+	<canvas id="myChartUniqueStudents"></canvas>
+</div>
 
 
 
@@ -241,16 +268,122 @@
 
 
 
+<script>
+	Chart.defaults.global.defaultFontColor = 'black';
+</script>
+
+
+
+<script> 
+
+	var a = [{{{data1}}}];
+	var b = [{{{data2}}}];
+
+	var pic = new Image(18, 18);
+	pic.src = "images/bookIconBlue.png";
+
+	new Chart(document.getElementById("myChart"), {
+  type: 'line',
+  data: {
+    labels: b,
+    datasets: [{ 
+        data: a,
+        label: "(Most recent 30 days)",
+        borderColor: "#3e95cd",
+        fill: false,
+				pointStyle: pic
+      }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Pages Read',
+			fontSize: 22
+    }
+  }
+});
+
+</script>
+
+
+
+
+<script> 
+
+	var a = [{{{weekTotalData}}}];
+	var b = [{{{weekTotalWeeks}}}];
+
+	var pic = new Image(26, 26);
+	pic.src = "images/bookIconBlue.png";
+
+	var c = new Chart(document.getElementById("myChartWeekPages"), {
+  type: 'line',
+  data: {
+    labels: b,
+    datasets: [{ 
+        data: a,
+        label: "(all students)",
+        borderColor: "#3e95cd",
+        fill: false,
+				pointStyle: pic
+      }]
+  },
+
+  options: {
+    title: {
+      display: true,
+      text: 'Pages per Week',
+			fontSize: 22,
+    }
+  },
+
+	defaults: {
+		global: {
+			defaultFontColor: 'black'
+		}
+	}
+
+});
+
+
+</script>
 
 
 
 
 
 
+<!-- UNIQUE STUDENTS PER WEEK -->
+<script> 
 
+	var a = [{{{weekUniqueStudents}}}];
+	var b = [{{{weekUniqueStudentsWeeks}}}];
 
+	var pic = new Image(24, 24);
+	pic.src = "images/boyIconBlue.png";
 
+	new Chart(document.getElementById("myChartUniqueStudents"), {
+  type: 'line',
+  data: {
+    labels: b,
+    datasets: [{ 
+        data: a,
+        label: "(all students)",
+        borderColor: "#3e95cd",
+        fill: false,
+				pointStyle: pic
+      }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Unique Students per Week',
+			fontSize: 22
+    }
+  }
+});
 
+</script>
 
 
 

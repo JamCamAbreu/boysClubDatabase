@@ -583,10 +583,12 @@ th { padding: 2px; }
 /* ========= MINECRAFT TABLE ================ */
 
 
-#MC_SC  {width: 20%}
-#MC_LN  {width: 27%}
-#MC_FN  {width: 27%}
-#MC_WC  {width: 26%}
+#MC_RA  {width: 8%}
+#MC_WC  {width: 17%}
+#MC_PR  {width: 17%}
+#MC_SN  {width: 12%}
+#MC_FN  {width: 22%}
+#MC_LN  {width: 22%}
 
 
 
@@ -647,6 +649,36 @@ th { padding: 2px; }
 
 
 /* ======== READING LAB ============ */
+
+
+.topTenTable {
+  background-color: #96b5dc70;
+  padding: 8px;
+  border-spacing: 0;
+}
+
+.topTenTable tr { text-align: left; }
+
+/* Every other row color change: */
+.topTenTable tr:nth-child(-n+10) {background: #c600ff6b; padding: 8px;}
+.topTenTable tr:first-child {background: gold;}
+.topTenTable tr:nth-child(2) {background: #989898;}
+.topTenTable tr:nth-child(3) {background: orange;}
+.topTenTable tr:nth-child(n+11) {background: #96b5dc70;}
+
+.topTenTable tr:hover { 
+  background-color: white; 
+  cursor: pointer;
+}
+
+
+
+
+#topTenReaders {
+	text-align: center;
+}
+
+
 #dataBox {
   display: flex;
   flex-flow: row;
@@ -738,6 +770,37 @@ th { padding: 2px; }
 	color: yellow;
   cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* ======== CHARTS ============ */
+
+.charts {
+	width: auto;
+	height: 300px;
+	margin-bottom: 300px;
+	margin-top: 300px;
+}
+
+.charts canvas {
+	background: #f3e8aaf5;
+	border-width: 5px;
+	border-color: #2196F3;
+	border-style: groove;
+}
+
+
+
+
+
 
 
 

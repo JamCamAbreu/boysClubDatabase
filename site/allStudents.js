@@ -49,7 +49,7 @@ app.get("/allStudents", function(req, res, next) {
         });
       } // end for
 
-      //res.render("allStudents", context);
+      res.render("allStudents", context);
 
 
 

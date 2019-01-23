@@ -44,27 +44,29 @@ app.get("/readingLab", function (req, res, next) {
 	}
 
 	console.log("beg=" + beg + ", end=" + end);
-	console.log("Generating Minecraft Club report between " + beg + " and " + end + "...");
+	console.log("Generating Top 10 list from:" + beg + " and " + end + "...");
 	context.whichWeek = 0;
 
 	if (req.query.prizeStart) { context.prizeStart = req.query.prizeStart; }
 	if (req.query.prizeEnd) { context.prizeEnd = req.query.prizeEnd; }
   //context.prizeEnd = moment(moment().endOf('month')).format("YYYY-MM-DD");
 
-
-	var sqlString = "SELECT temp.id, temp.fn, temp.ln, temp.w " + 
+	var sqlString = "SELECT temp.id, temp.fn, temp.ln, temp.w, temp.tp " + 
 									"FROM " + 
-    								"(SELECT temp2.ID AS 'id', temp2.fName AS 'fn', temp2.lName AS 'ln', COUNT(*) AS 'w' " + 
+    								"(SELECT temp2.ID AS 'id', temp2.fName AS 'fn', temp2.lName AS 'ln', COUNT(*) AS 'w', " + 
+										"SUM(temp2.totalPages) AS 'tp' " + 
     								"FROM " + 
         							"(SELECT S.studentNumber AS 'ID', S.firstName AS 'fName', S.lastName AS 'lName', " + 
-         							"LT.dateCompleted, COUNT(*) AS 'num' FROM tbl_student S " + 
+         							"LT.dateCompleted, COUNT(*) AS 'num', SUM(LT.pointEarnedAmount) as 'totalPages' " + 
+											"FROM tbl_student S " + 
          							"INNER JOIN tbl_libraryTicket LT ON LT.student_id = S.studentNumber " + 
 											"WHERE LT.dateCompleted BETWEEN " + beg + " AND " + end + " " + 
          							"GROUP BY S.studentNumber, LT.dateCompleted) AS temp2 " + 
     							"GROUP BY temp2.ID) AS temp " + 
 									"WHERE temp.w >= " + daysRequirement +
-									" ORDER BY temp.w DESC, temp.ln";
+									" ORDER BY temp.w DESC, temp.tp DESC";
 
+	console.log("\nSQLSTRING: " + sqlString + "\n\n");
 
 	// array of parameters:
 	var inserts = [];
@@ -89,6 +91,8 @@ app.get("/readingLab", function (req, res, next) {
 		for (index = 0; index < context.numStudents; index++) {
 			row = rows[index];
 			context.S.push({
+				place: (index + 1),
+				pagesRead: row.tp,
 				id : row.id,
 				fName : row.fn,
 				lName : row.ln,
@@ -256,11 +260,176 @@ app.get("/readingLab", function (req, res, next) {
 		} // end for
 
 
+
+
+
+		var sqlString = "SELECT SUM(pointEarnedAmount) as pts, dateCompleted as dte " +
+										"FROM `tbl_libraryTicket` " + 
+										"GROUP BY dateCompleted " +
+										"ORDER BY dateCompleted DESC " +
+										"LIMIT 30 ";
+
+
+
+		// SEND the query:
+		mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+
+			// SQL ERROR
+			if (err) {
+				console.log("Error in selecting student from DB.");
+				next(err);
+				return;
+			}
+
+			context.data1 = [];
+			context.data2 = [];
+
+			var index;
+			var row;
+			for (index = 0; index < rows.length; index++) {
+				row = rows[index];
+				context.data1.push(row.pts);
+
+				var d = "'" + moment(row.dte).format("M-DD") + "'";
+				if (index != 0) {
+					context.data2.push(d);
+				} else { context.data2.push("'Latest'"); }
+			} // end for
+
+			context.data1.reverse();
+			context.data2.reverse();
+
+
+
+
+
+
+		// PAGES READ PER WEEK
+		var sqlString = "SELECT SUM(dayPoints) as weekPoints, " +
+											"weekNumber FROM " +
+													"(SELECT SUM(pointEarnedAmount) as dayPoints,  " +
+													"dateCompleted as dte, " +
+													"ROUND(DATEDIFF('" + context.today + "', dateCompleted)/7, 0) AS weekNumber " +
+													"FROM `tbl_libraryTicket`  " +
+													"GROUP BY dateCompleted " +
+													"ORDER BY dateCompleted DESC " +
+													"LIMIT 30) AS part " +
+											"GROUP BY WeekNumber";
+
+		// SEND the query:
+		mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+
+			// SQL ERROR
+			if (err) {
+				console.log("Error in selecting student from DB.");
+				next(err);
+				return;
+			}
+
+			context.weekTotalData = [];
+			context.weekTotalWeeks = [];
+
+			var index;
+			var row;
+			for (index = 0; index < rows.length; index++) {
+				row = rows[index];
+				context.weekTotalData.push(row.weekPoints);
+
+				var d = "'" + row.weekNumber + " weeks ago'";
+				if (index != 0) {
+					context.weekTotalWeeks.push(d);
+				} else { context.weekTotalWeeks.push("'This Week'"); }
+			} // end for
+
+			context.weekTotalData.reverse();
+			context.weekTotalWeeks.reverse();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// UNIQUE STUDENTS PER WEEK
+		var sqlString = "SELECT COUNT(*) as numberUniqueStudents, " +
+										"weekNumber FROM " +
+												"(SELECT student_id as si, " +
+												"ROUND(DATEDIFF('" + context.today + "', dateCompleted)/7, 0) AS weekNumber " +
+												"FROM `tbl_libraryTicket`  " +
+												"GROUP BY si, weekNumber) AS part " +
+										"GROUP BY WeekNumber ";
+
+		// SEND the query:
+		mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+
+			// SQL ERROR
+			if (err) {
+				console.log("Error in selecting student from DB.");
+				next(err);
+				return;
+			}
+
+			context.weekUniqueStudents = [];
+			context.weekUniqueStudentsWeeks = [];
+
+			var index;
+			var row;
+			for (index = 0; index < rows.length; index++) {
+				row = rows[index];
+				context.weekUniqueStudents.push(row.numberUniqueStudents);
+
+				var d = "'" + row.weekNumber + " weeks ago'";
+				if (index != 0) {
+					context.weekUniqueStudentsWeeks.push(d);
+				} else { context.weekUniqueStudentsWeeks.push("'This Week'"); }
+			} // end for
+
+			context.weekUniqueStudents.reverse();
+			context.weekUniqueStudentsWeeks.reverse();
+
+
+
+
+
+
+
+		// UNIQUE STUDENTS in whole program:
+		var sqlString = "SELECT COUNT(*) as numberUniqueStudents FROM " +
+											"(SELECT student_id as si " +
+											"FROM `tbl_libraryTicket`  " +
+											"GROUP BY si) AS part ";
+
+
+		// SEND the query:
+		mysql.pool.query(sqlString, inserts, function(err, rows, fields){
+
+			// SQL ERROR
+			if (err) {
+				console.log("Error in selecting student from DB.");
+				next(err);
+				return;
+			}
+
+			context.totalUniqueStudents = rows[0].numberUniqueStudents;
+
 		// RENDER PAGE:
 		res.render('readingLab', context);
 
+	}); // end query for unique students TOTAL
+
+	}); // end query for unique students graph
+	}); // end query for Weekly pages GRAPH
+	}); // end query for Daily Pages 30 days GRAPH
 
 	}); // end query for Recent Winners Reading
+
 	}); // end query for Year 
 	}); // end query for Month 
 	}); // end query for Friday 
@@ -268,8 +437,8 @@ app.get("/readingLab", function (req, res, next) {
 	}); // end query for Wednesday
 	}); // end query for Tuesday 
 	}); // end query for Monday 
-	}); // end query for insert
 
+	}); // end query for days read this week
 });
 
 
