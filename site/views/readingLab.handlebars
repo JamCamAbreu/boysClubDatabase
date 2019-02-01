@@ -41,6 +41,9 @@
 	<source src="audio/levelUp.wav" type="audio/wav">
 </audio>
 
+<audio id="buildUp">
+	<source src="audio/buildUp.wav" type="audio/wav">
+</audio>
 
 
 
@@ -171,13 +174,15 @@
 
 </div> <!-- fBox -->
 
-
-
 </div> <!-- dataBox -->
 
 
 
+
 <!-- ANIMATE BOX -->
+<div id="suspenseBox">
+</div>
+
 <div id="winnerBox">
 </div>
 
@@ -190,7 +195,14 @@
 
 
 <div id="topTenReaders">
-<h1 style="margin-bottom: 0px;">Top Ten Readers</h1><h3>(this week)</h3>
+<span>
+	<h1 id="topTenTitle">Top Five Readers</h1>
+	<h3 id="topTenSubTitle">(this week)</h3>
+</span>
+	
+<div style="color: #4e3a07; font-style: italic; font-size: small;">
+	<b>{{beg}}</b> (Mon) through <b>{{end}}</b> (Fri)
+</div>
 
 <div id="studentListing" style="width: auto;">
 {{#if numStudents}}
@@ -198,7 +210,7 @@
 
   <!-- IF STUDENTS EXIST IN DATABASE -->
     <thead>
-      <tr style="background: #96b5dc70;">
+      <tr style="background: #96b5dc70; text-shadow: none;">
         <th style="background: #0000;">
 				<th id="MC_RA">RANK
         <th id="MC_WC">Days Read (this week)
@@ -227,15 +239,28 @@
   <p><i>No students eligible for minecraft yet this week! </i></p>
   <p><i>Check date range to ensure correct results.</i></p>
 {{/if}}
-
 </div>
-<br>
+
 <form method="get" action="/readingLab">
 	<h3>Minimum weekly worked days:
 		<input type="number" value="{{days}}" id="days" name="days">
 	</h3>
-	<div><b>{{beg}}</b> (Mon) through <b>{{end}}</b> (Fri)</div>
 </form>
+
+
+</div> <!-- topTenReaders div -->
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <!-- GRAPHS GRAPHS GRAPHS -->
@@ -268,12 +293,18 @@
 
 
 
+
+
+
+<!-- CHARTS PROPERTIES -->
 <script>
 	Chart.defaults.global.defaultFontColor = 'black';
 </script>
 
 
 
+
+<!-- TOTAL PAGES PER DAY -->
 <script> 
 
 	var a = [{{{data1}}}];
@@ -308,6 +339,12 @@
 
 
 
+
+
+
+
+
+<!-- TOTAL PAGES PER WEEK -->
 <script> 
 
 	var a = [{{{weekTotalData}}}];

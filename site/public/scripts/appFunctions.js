@@ -292,31 +292,57 @@ function pickWinner(begin, end) {
 			}
 
 			else {
+				var rightScreen = screen.width;
 
-				var sound = document.getElementById("victorySound"); 
-				sound.play();
-
-				// ANIMATE WINNER BOX:
+				// DEFAULTS (reset):
 				$("#winnerBox").css('display', 'block');
 				$("#winnerBox").css('left', '0');
 				$("#winnerBox").css("opacity", "0.0");
 				$("#winnerBox").text("Congratulations " + winner + "!");
 
-				var wid = parseInt($(document).width());
-				wid /= 2;
-				wid -= $("#winnerBox").outerWidth()/2;
-				width = "+=" + wid.toString();
+				//var midSuspenseBox = (rightScreen/2) - ($("#suspenseBox").outerWidth()/2);
+				$("#suspenseBox").css('display', 'block');
+				$("#suspenseBox").css("opacity", "0.0");
+				$("#suspenseBox").css("top", "0px");
+				$("#suspenseBox").css('left', '0px');
+				$("#suspenseBox").text("and the winner is...");
 
-				$("#winnerBox").animate({
-					left: width,
-					opacity: 1
-				}, 700, function() {
+				// find middle screen placement:
+				var mid = rightScreen;
+				mid /= 2;
+				mid -= $("#winnerBox").outerWidth()/2;
+				width = "+=" + mid.toString();
+
+
+
+				// And the winner is...
+				var sound = document.getElementById("buildUp"); 
+				sound.play();
+				$("#suspenseBox").animate({
+					opacity: 0.9
+				}, 2300, function() {
+
+					// Hide previous box
+					//$("#suspenseBox").css('display', 'none');
+					$("#suspenseBox").text("");
+
+					var sound2 = document.getElementById("victorySound"); 
+					sound2.play();
+
+					// ANIMATE WINNER BOX:
+					$("#winnerBox").animate({
+						left: width,
+						opacity: 1
+					}, 900, function() {
+
+
 						setTimeout(function(){
-						$("#winnerBox").css('display', 'none');
-						window.location = "/readingLab?prizeStart=" + pStart + "&prizeEnd=" + pEnd;
-					}, 4500)
-				});
+							$("#winnerBox").css('display', 'none');
+							window.location = "/readingLab?prizeStart=" + pStart + "&prizeEnd=" + pEnd;
 
+						}, 4500)
+					}); // end "congratulations [kid]!" animation
+				}); // end "and winner is..." animation
 			}
 
 		}

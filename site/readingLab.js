@@ -64,7 +64,7 @@ app.get("/readingLab", function (req, res, next) {
          							"GROUP BY S.studentNumber, LT.dateCompleted) AS temp2 " + 
     							"GROUP BY temp2.ID) AS temp " + 
 									"WHERE temp.w >= " + daysRequirement +
-									" ORDER BY temp.w DESC, temp.tp DESC";
+									" ORDER BY temp.w DESC, temp.tp DESC LIMIT 20";
 
 	console.log("\nSQLSTRING: " + sqlString + "\n\n");
 
