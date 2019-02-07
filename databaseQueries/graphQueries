@@ -1,0 +1,63 @@
+
+
+
+SELECT COUNT(*) as numberUniqueStudents,
+weekNumber FROM
+    (SELECT student_id as si,
+    ROUND(DATEDIFF('2019-01-22', dateCompleted)/7, 0) AS weekNumber
+    FROM `tbl_libraryTicket` 
+    GROUP BY si, weekNumber) AS part
+GROUP BY WeekNumber
+
+
+
+
+
+
+
+
+
+
+
+SELECT SUM(dayPoints) as weekPoints,
+WeekNumber FROM
+    (SELECT SUM(pointEarnedAmount) as dayPoints, 
+    dateCompleted as dte,
+    ROUND(DATEDIFF('2019-01-22', dateCompleted)/7, 0) AS WeekNumber
+    FROM `tbl_libraryTicket` 
+    GROUP BY dateCompleted
+    ORDER BY dateCompleted DESC
+    LIMIT 30) AS part
+GROUP BY WeekNumber
+
+
+
+
+
+
+SELECT SUM(pointEarnedAmount), dateCompleted as dte
+FROM `tbl_libraryTicket` 
+GROUP BY dateCompleted
+ORDER BY dateCompleted DESC
+LIMIT 30
+
+
+
+
+
+
+
+
+SELECT SUM(LT.pointEarnedAmount) 
+
+FROM `tbl_libraryTicket` LT 
+
+WHERE LT.dateCompleted 
+
+BETWEEN '2018-10-01' AND '2018-10-05'
+
+{{pagesMonday}}, etc...
+
+
+
+

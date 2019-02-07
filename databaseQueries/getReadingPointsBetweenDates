@@ -1,0 +1,9 @@
+SELECT SUM(LT.pointEarnedAmount) 
+
+FROM `tbl_libraryTicket` LT 
+
+WHERE LT.dateCompleted 
+
+BETWEEN '2018-10-01' AND '2018-10-05'
+
+{{pagesMonday}}, etc...

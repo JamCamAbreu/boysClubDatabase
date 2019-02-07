@@ -1,0 +1,163 @@
+
+
+
+-- Pages read today
+SELECT SUM(LT.pointEarnedAmount) FROM
+tbl_student S INNER JOIN
+tbl_libraryTicket LT on LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505 AND LT.dateCompleted = "2018-11-05"
+
+
+
+-- Pages read this week
+SELECT SUM(LT.pointEarnedAmount) FROM
+tbl_student S INNER JOIN
+tbl_libraryTicket LT on LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505 AND LT.dateCompleted BETWEEN "2018-10-29" AND "2018-11-02"
+
+
+
+-- Pages read this month
+SELECT SUM(LT.pointEarnedAmount) FROM
+tbl_student S INNER JOIN
+tbl_libraryTicket LT on LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505 AND LT.dateCompleted BETWEEN "2018-10-01" AND "2018-10-31"
+
+
+
+-- Pages read lifetime
+SELECT SUM(LT.pointEarnedAmount) FROM
+tbl_student S INNER JOIN
+tbl_libraryTicket LT on LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505
+
+
+
+
+-- HOW MANY DAYS READ ON (MONDAY)?
+SELECT COUNT(*) FROM
+tbl_student S INNER JOIN
+tbl_libraryTicket LT on LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505 AND DAYOFWEEK(LT.dateCompleted) = 2
+-- 2 is monday, 3 tuesday, etc..
+
+-- OOPS, it was this:
+SELECT COUNT(*) FROM
+	(SELECT LT.dateCompleted FROM 
+tbl_student S INNER JOIN
+tbl_libraryTicket LT on LT.student_id = S.studentNumber
+WHERE S.studentNumber = 7376 AND DAYOFWEEK(LT.dateCompleted) = 3
+GROUP BY LT.dateCompleted) AS temp
+
+
+
+
+-- HOW MANY DAYS READ TOTAL?
+SELECT COUNT(*) FROM
+tbl_student S INNER JOIN
+tbl_libraryTicket LT on LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505
+
+
+
+
+
+
+-- FIRST DAY
+SELECT LT.dateCompleted AS firstDate FROM tbl_student S INNER JOIN
+tbl_libraryTicket LT ON LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505
+ORDER BY LT.dateCompleted ASC LIMIT 1
+
+-- MOST RECENT DAY
+SELECT LT.dateCompleted AS mostRecentDate FROM tbl_student S INNER JOIN
+tbl_libraryTicket LT ON LT.student_id = S.studentNumber
+WHERE S.studentNumber = 6505
+ORDER BY LT.dateCompleted DESC LIMIT 1
+
+
+-- HOW MANY DAYS BETWEEN FIRST DAY READ AND MOST RECENT DAY READ?
+SELECT DATEDIFF(
+    (SELECT LT.dateCompleted AS mostRecentDate FROM tbl_student S INNER JOIN
+    tbl_libraryTicket LT ON LT.student_id = S.studentNumber
+    WHERE S.studentNumber = 6505
+    ORDER BY LT.dateCompleted DESC LIMIT 1), 
+    
+    (SELECT LT.dateCompleted AS firstDate FROM tbl_student S INNER JOIN
+    tbl_libraryTicket LT ON LT.student_id = S.studentNumber
+    WHERE S.studentNumber = 6505
+    ORDER BY LT.dateCompleted ASC LIMIT 1)
+) AS daysSinceStarted
+
+
+
+
+
+
+
+
+
+-- COMBINED:
+SELECT * FROM 
+
+	-- PAGES READ TODAY:
+	(SELECT SUM(LT.pointEarnedAmount) as pagesReadToday FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND LT.dateCompleted = "2018-11-05") AS PRT,
+
+	-- PAGES READ WEEK:
+	(SELECT SUM(LT.pointEarnedAmount) as pagesReadWeek FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND LT.dateCompleted BETWEEN "2018-10-29" AND "2018-11-02") AS PRW,
+ 
+ 	-- PAGES READ MONTH:
+	(SELECT SUM(LT.pointEarnedAmount) AS pagesReadMonth FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND LT.dateCompleted BETWEEN "2018-10-01" AND "2018-10-31") AS PRM,
+
+	-- PAGES READ LIFE:
+	(SELECT SUM(LT.pointEarnedAmount) AS pagesReadLife FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505) AS PRL,
+
+	-- DAYS READ MONDAY:
+	(SELECT COUNT(*) AS daysReadMonday FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND DAYOFWEEK(LT.dateCompleted) = 2) AS DR_MON,
+	
+	-- DAYS READ TUESDAY:
+	(SELECT COUNT(*) AS daysReadTuesday FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND DAYOFWEEK(LT.dateCompleted) = 3) AS DR_TUE,
+	
+	-- DAYS READ WEDNESDAY:
+	(SELECT COUNT(*) AS daysReadWednesday FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND DAYOFWEEK(LT.dateCompleted) = 4) AS DR_WED,
+
+	-- DAYS READ THURSDAY:
+	(SELECT COUNT(*) AS daysReadThursday FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND DAYOFWEEK(LT.dateCompleted) = 5) AS DR_THU,
+
+	-- DAYS READ FRIDAY:
+	(SELECT COUNT(*) AS daysReadFriday FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505 AND DAYOFWEEK(LT.dateCompleted) = 6) AS DR_FRI,
+	
+	-- DAYS READ TOTAL:
+	(SELECT COUNT(*) AS daysReadTotal FROM
+	tbl_student S INNER JOIN
+	tbl_libraryTicket LT on LT.student_id = S.studentNumber
+	WHERE S.studentNumber = 6505) AS DR_TOTAL
+
+

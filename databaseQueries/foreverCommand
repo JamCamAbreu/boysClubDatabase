@@ -1,0 +1,13 @@
+
+LOCATION FOR BOOT COMMANDS:
+/etc/rc.local
+
+
+
+All jobs are executed by a shell, so start that shell snippet by a command to change the directory.
+
+EXAMPLE:
+cd /path/to/directory && ./bin/myapp
+
+USED:
+cd /opt/c4bLibraryDB/boysClubDatabase/site/ && /usr/local/bin/forever start ./libraryServer.js

@@ -1,0 +1,17 @@
+
+// update the password with the correct password
+// save this as a .js file and import it into the project:
+
+var mysql = require('mysql');
+
+var pool = mysql.createPool({
+  connectionLimit : 10,
+      host            : 'localhost',
+      user            : 'root',
+      password        : '',
+      database        : 'c4bLibraryDB'
+});
+
+module.exports.pool = pool;
+
+

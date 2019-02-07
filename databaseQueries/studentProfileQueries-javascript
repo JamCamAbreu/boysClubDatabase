@@ -1,0 +1,109 @@
+var studentNum;
+var today;
+var begWeek;
+var endWeek;
+var begMonth;
+var endMonth;
+
+
+var allQueries = "SELECT * FROM " + 
+
+	// -- PAGES READ TODAY:
+	"(SELECT SUM(LT.pointEarnedAmount) as pagesReadToday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	"AND LT.dateCompleted = '" + today + "') AS PRT, " +
+
+	//-- PAGES READ WEEK:
+	"(SELECT SUM(LT.pointEarnedAmount) as pagesReadWeek FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	"AND LT.dateCompleted BETWEEN '" + begWeek + "' AND '" + endWeek + "') AS PRW, " +
+
+	//-- PAGES READ MONTH:
+	"(SELECT SUM(LT.pointEarnedAmount) AS pagesReadMonth FROM " + 
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	"AND LT.dateCompleted BETWEEN '" + begMonth + "' AND '" + endMonth + "') AS PRM, " +
+
+	//-- PAGES READ LIFE:
+	"(SELECT SUM(LT.pointEarnedAmount) AS pagesReadLife FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + ") AS PRL, " +
+
+	//-- DAYS READ MONDAY:
+	"(SELECT COUNT(*) AS daysReadMonday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 2) AS DR_MON, " +
+
+	//-- DAYS READ TUESDAY:
+	"(SELECT COUNT(*) AS daysReadTuesday FROM " + 
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 3) AS DR_TUE, " +
+
+	//-- DAYS READ WEDNESDAY:
+	"(SELECT COUNT(*) AS daysReadWednesday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber" +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 4) AS DR_WED, " +
+
+	//-- DAYS READ THURSDAY:
+	"(SELECT COUNT(*) AS daysReadThursday FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 5) AS DR_THU, " +
+
+	//-- DAYS READ FRIDAY:
+	"(SELECT COUNT(*) AS daysReadFriday FROM " + 
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	" AND DAYOFWEEK(LT.dateCompleted) = 6) AS DR_FRI, " +
+
+	//-- DAYS READ TOTAL:
+	"(SELECT COUNT(*) AS daysReadTotal FROM " +
+	"tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT on LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + 
+	") AS DR_TOTAL, ";
+
+	// FIRST DAY COMPLETED READING
+	"(SELECT LT.dateCompleted AS firstDate FROM tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"ORDER BY LT.dateCompleted ASC LIMIT 1) AS First_day, " +
+
+	// MOST RECENT DAY
+	"(SELECT LT.dateCompleted AS mostRecentDate FROM tbl_student S INNER JOIN " +
+	"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+	"WHERE S.studentNumber = " + studentNum + " " +
+	"ORDER BY LT.dateCompleted DESC LIMIT 1) AS recent_day, " +
+
+
+	// HOW MANY DAYS BETWEEN FIRST DAY READ AND MOST RECENT DAY READ?
+	"(SELECT DATEDIFF( " +
+		"(SELECT LT.dateCompleted AS mostRecentDate FROM tbl_student S INNER JOIN " +
+		"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+		"WHERE S.studentNumber = " + studentNum + " " +
+		"ORDER BY LT.dateCompleted DESC LIMIT 1), " +
+
+		"(SELECT LT.dateCompleted AS firstDate FROM tbl_student S INNER JOIN " +
+		"tbl_libraryTicket LT ON LT.student_id = S.studentNumber " +
+		"WHERE S.studentNumber = " + studentNum + " " + 
+		"ORDER BY LT.dateCompleted ASC LIMIT 1) " +
+	") AS daysSinceStarted) as days_since ";
+
+
+
+
+
