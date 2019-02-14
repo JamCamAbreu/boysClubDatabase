@@ -74,6 +74,17 @@ value="{{studentNum}}"></td></tr>
       </select></td></tr>
 
 
+    <!-- READING TYPE -->
+    <tr><th>Reading Type
+      <td><select name="readingType" id="readingType">
+    </select></td><tr>
+
+  <!-- Load types from mysql database -->
+  <script >
+    buildReadingType();
+  </script>
+
+
     <!-- Point Amount -->
     <tr><th><label for="amount">Amount</label></th>
       <td><input name="amount" id="amount" type="number"

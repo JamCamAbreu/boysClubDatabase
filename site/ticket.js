@@ -81,6 +81,50 @@ app.get("/newTicket", function (req, res, next) {
 
 
 
+// +==========================================+
+// |         GET READING TYPES (for form)     |
+// +==========================================+
+app.get("/getReadingTypes", function (req, res, next) {
+  
+  console.log("Getting reading types from database...");
+	var qString = "select * from tbl_readingType";
+  var inserts = [];
+  mysql.pool.query(qString, inserts, function(err, rows, results) {
+    if(err){
+      next(err);
+      return;
+    }
+
+    types = []
+    var i;
+    for (i = 0; i < rows.length; i++) {
+      row = rows[i];
+      types.push({
+        id : row.id,
+        name : row.name
+      });
+
+    }
+
+    res.setHeader("Content-Type", "application/json");
+    res.write(JSON.stringify(types));
+    res.end();
+  }); // end query
+});
+
+
+
+
+
+
+
+
+
+
+// +==========================================+
+// |             NEW LIBRARY TICKET           |
+// +==========================================+
+
 app.post("/newTicket", function (req, res, next) {
 
   var context = {
@@ -114,6 +158,7 @@ app.post("/newTicket", function (req, res, next) {
   // Get variables to be used for database Query:
   var date = req.body.date;
   var workType = req.body.workType;
+  var readingType = req.body.readingType;
   var amount = req.body.amount;
   var notes = req.body.notes;
 
@@ -125,6 +170,7 @@ app.post("/newTicket", function (req, res, next) {
     context.todayDate = req.body.date;
 
   context.workType = req.body.workType;
+  context.readingType = req.body.readingType;
   context.amount = parseInt(req.body.amount); // on load
   context.notes = req.body.notes;
 
@@ -170,17 +216,18 @@ app.post("/newTicket", function (req, res, next) {
     console.log("\tStudent Number: " + studentNum);
     console.log("\tDate: " + date);
     console.log("\tWork Type: " + workType);
+    console.log("\tReading Type: " + readingType);
     console.log("\tAmount: " + amount);
     console.log("\tNotes: " + notes);
 
     // Query the database (insert):
     var sqlString2 = "INSERT INTO tbl_libraryTicket " + 
-                    "(`student_id`, `libraryWorkType`, " +  
+                    "(`student_id`, `libraryWorkType`, `readingType`, " +  
                     "`pointEarnedAmount`, `dateCompleted`, `notes`) " + 
-                    "VALUES (?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
     // array of parameters:
-    var inserts2 = [studentNum, workType, amount, date, notes];
+    var inserts2 = [studentNum, workType, readingType, amount, date, notes];
 
     // SEND the query:
     mysql.pool.query(sqlString2, inserts2, function(err, results){
@@ -191,7 +238,6 @@ app.post("/newTicket", function (req, res, next) {
 
       console.log("Query sent successfully.");
       context.successList.push("Ticket for " + amount + " points added successfully to account: " + studentNum);
-
 
 
 
@@ -296,6 +342,16 @@ app.post("/newTicket", function (req, res, next) {
     } // END ELSE
   }); // end query for test student number
 });
+
+
+
+
+
+
+
+
+
+
 
 
 

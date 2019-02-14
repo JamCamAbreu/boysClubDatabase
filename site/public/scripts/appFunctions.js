@@ -11,7 +11,7 @@
 // NOTE: If I change these I also need to change in the javascript server
 var portUsed = 55850;
 
-var URL = "http://192.168.16.89:"; // BOYS CLUB IP
+var URL = "http://192.168.16.216:"; // BOYS CLUB IP
 //var URL = "http://192.168.0.22:"; // Cam's House IP
 
 
@@ -394,6 +394,52 @@ function getWeek(weekNum) {
 
 
 
+
+
+
+
+/* *******************************************
+ * Build up list of readingType from database
+ * ******************************************/
+
+function buildReadingType() {
+
+	var selectTag = document.getElementById("readingType");
+  
+
+
+  var req = new XMLHttpRequest();
+  req.open("GET", URL + portUsed + "/getReadingTypes", true);
+
+
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(null);
+  req.addEventListener("load", function() {
+
+  // success:
+  if (req.status >= 200 & req.status < 400) {
+
+    var types = JSON.parse(req.responseText);
+
+    //alert("There are" + (types.length).toString() + " types..");
+
+    var i;
+    for (i = 0; i < types.length; i++) {
+     $('#readingType')
+         .append($("<option></option>")
+                    .attr("value",types[i].id)
+                    .text(types[i].name)); 
+    }
+
+  }
+  // COULD NOT FIND ANY READING TYPES
+  else {
+    alert("Error: Failed to retrieve reading types from database");
+    console.log("responseRequest = " + responseRequest);
+  }
+});
+
+}
 
 
 
