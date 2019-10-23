@@ -1,1 +1,13 @@
 # boysClubDatabase
+![Screenshot1](/backup/Selection_003.bmp)
+![Screenshot2](/backup/Selection_004.bmp)
+![Screenshot3](/backup/Selection_005.bmp)
+![Screenshot4](/backup/Selection_006.bmp)
+![Screenshot5](/backup/Selection_007.bmp)
+![Screenshot6](/backup/Selection_008.bmp)
+![Screenshot7](/backup/Selection_009.bmp)
+![Screenshot8](/backup/Selection_010.bmp)
+![Screenshot9](/backup/Selection_011.bmp)
+![Screenshot10](/backup/Selection_012.bmp)
+![Screenshot11](/backup/Selection_013.bmp)
+![Screenshot12](/backup/Selection_014.bmp)
