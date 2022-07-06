@@ -18,7 +18,7 @@
     "express": "^4.13.2",
     "express-handlebars": "^2.0.1",
     "express-session": "^1.11.3",
-    "moment": "^2.20.1",
+    "moment": "^2.29.4",
     "mysql": "^2.8.0"
   },
   "bugs": {
