@@ -15,7 +15,7 @@
   "dependencies": {
     "body-parser": "^1.13.3",
     "chart.js": "^2.7.3",
-    "express": "^4.13.2",
+    "express": "^4.17.3",
     "express-handlebars": "^2.0.1",
     "express-session": "^1.11.3",
     "moment": "^2.20.1",
